@@ -1,4 +1,4 @@
-﻿//除非新加库，否则严谨私自上传
+﻿
 {
     "version": 3,
     "configurePresets": [
@@ -6,20 +6,20 @@
             "name": "LocalDebug64",
             "inherits": "x64-debug",
             "cacheVariables": {
-                //更改QT库位置
+
                 "Qt5_DIR": "D:/Qt/5.14.2/msvc2017_64/lib/cmake/Qt5",
                 "CMAKE_PREFIX_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64",
-                "RCC_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64/bin/rcc.exe" //rcc路径 用以qrc转换为rcc
-            }
+                "RCC_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64/bin/rcc.exe"
+                }
         },
         {
             "name": "LocalRelWithDbgInfo64",
             "inherits": "x64-releaseWithdbg",
             "cacheVariables": {
-                //更改QT库位置
+
                 "Qt5_DIR": "D:/Qt/5.14.2/msvc2017_64/lib/cmake/Qt5",
                 "CMAKE_PREFIX_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64",
-                "RCC_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64/bin/rcc.exe" //rcc路径 用以qrc转换为rcc
+                "RCC_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64/bin/rcc.exe" 
             }
         }
     ]
