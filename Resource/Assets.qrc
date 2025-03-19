@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Skin/MainWnd.ui</file>
+        <file>Skin/LoginDialog.ui</file>
+        <file>Skin/Registerdialog.ui</file>
+        <file>Skin/Image/Ice.png</file>
+    </qresource>
+</RCC>
