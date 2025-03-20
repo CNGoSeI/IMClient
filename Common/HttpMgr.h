@@ -4,11 +4,11 @@
 #include <QNetworkAccessManager>
 #include "SingletonTemplate.h"
 
-class SHttpMgr:public TSingleton<SHttpMgr>, public QObject
+class SHttpMgr:public QObject,public TSingleton<SHttpMgr>
 {
 	Q_OBJECT
 public:
-	~SHttpMgr();
+	~SHttpMgr() override;
 
 	/**
 	* 投递HTTP请求
@@ -21,6 +21,8 @@ public:
 public slots:
 	/**
 	* Http接到请求之后 会发送sig，sig链接了该slot。如蜜传如蜜了
+	* 该方法将请求完成的回调根据请求类型分发
+	* @Mod 请求方法类型
 	*/
 	void slotHttpFinish(const int ReqId, const QString& Res, const int ErrorCode , const int Mod);
 signals:
@@ -29,7 +31,7 @@ signals:
 	* @ReqId 见GlobalDefine中的Net::ReqID
 	* @ErrCode 见GlobalDefine中的Net::ErrCode
 	*/
-	void sigHttpFinish(const int ReqId, const QString& Res, const int ErrCode);
+	void sigHttpFinish(const int ReqId, const QString& Res, const int ErrCode, const int Mod);
 
 	/**
 	* QT信号 HTTP请求返回后转发MOD相关的处理

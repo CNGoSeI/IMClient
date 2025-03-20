@@ -55,12 +55,16 @@ void MainWindow::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         bDragging = true;
         DragPosition = event->globalPos() - frameGeometry().topLeft();
+
+        auto clickedWidget = QApplication::widgetAt(event->globalPos());
+        if (focusWidget() && !qobject_cast<QLineEdit*>(clickedWidget)) {
+            focusWidget()->clearFocus();  // 清除当前焦点控件
+        }
+
         event->accept();
+
     }
-    auto clickedWidget = QApplication::widgetAt(event->globalPos());
-    if (!qobject_cast<QLineEdit*>(clickedWidget)) {
-        focusWidget()->clearFocus();  // 清除当前焦点控件
-    }
+
 }
 
 // 鼠标移动时更新窗口位置

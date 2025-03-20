@@ -1,11 +1,15 @@
-﻿#include "RegisterWgt.h"
-#include "WidgetFilesHelper.h"
-#include "Common/GlobalDefine.h"
-#include "Common/HttpMgr.h"
-#include <QPushButton>
+﻿#include <QPushButton>
 #include <QLineEdit>
 #include <QLabel>
 #include <qregularexpression.h>
+#include <QJsonDocument>
+#include <QString>
+#include "WidgetFilesHelper.h"
+#include "Common/GlobalDefine.h"
+#include "Common/HttpMgr.h"
+#include "RegisterWgt.h"
+
+#include <QJsonObject>
 
 WRegisterWgt::WRegisterWgt(QWidget* parent):
 	WLoadUIWgtBase(WgtFile::RegDlgPath,parent)
@@ -16,18 +20,47 @@ WRegisterWgt::~WRegisterWgt()
 {
 }
 
-void WRegisterWgt::ShowErrTip(const QString& Tip)
+void WRegisterWgt::ShowTip(const QString& Tip, bool b_ok)
 {
+
+	if (b_ok) {
+		Lab_ErrTip->setProperty("state", "normal");
+	}
+	else {
+		Lab_ErrTip->setProperty("state", "err");
+	}
+
 	Lab_ErrTip->setText(Tip);
-	//设置状态之后高兴QSS
-	Lab_ErrTip->setProperty("state", "err");
+	//设置状态之后更新QSS
 	UIHelper::RePolish(Lab_ErrTip);
-	Lab_ErrTip->setVisible(true);
 }
 
 void WRegisterWgt::slotRegModFinish(const int ReqID, const QString& Res, const int ErrCode)
 {
+	if (ErrCode != ErrorCodes::SUCCESS) {
+		ShowTip(tr("网络请求错误"), false);
+		return;
+	}
 
+	// 解析 JSON 字符串,res需转化为QByteArray
+	QJsonDocument jsonDoc = QJsonDocument::fromJson(Res.toUtf8());
+	//json解析错误
+	if (jsonDoc.isNull()) {
+		ShowTip(tr("json解析错误"), false);
+		return;
+	}
+
+	//json解析错误
+	if (!jsonDoc.isObject()) {
+		ShowTip(tr("json解析错误"), false);
+		return;
+	}
+
+	QJsonObject jsonObj = jsonDoc.object();
+
+	//调用对应的逻辑
+	Handlers[ReqID](jsonDoc.object());
+	return;
 }
 
 void WRegisterWgt::InitControls()
@@ -71,9 +104,24 @@ void WRegisterWgt::ConnectSigSlot()
 			}
 			else {
 				//提示邮箱不正确
-				this->ShowErrTip(tr("邮箱地址不正确"));
+				this->ShowTip(tr("邮箱地址不正确"),false);
 			}
 	});
 
-	connect(SHttpMgr::GetInstance(), &SHttpMgr::sigRegModFinish, this, &WRegisterWgt::slotRegModFinish);
+	connect(&SHttpMgr::GetInstance(), &SHttpMgr::sigRegModFinish, this, &WRegisterWgt::slotRegModFinish);
+}
+
+void WRegisterWgt::InitHttpHandlers()
+{
+	Handlers.emplace(ReqID::ID_GET_VARIFY_CODE, [this](const QJsonObject& JsonObj)
+	{
+		int Error = JsonObj["error"].toInt();
+		if (Error != ErrorCodes::SUCCESS) {
+			ShowTip(tr("参数错误"), false);
+			return;
+		}
+		auto Email = JsonObj["email"].toString();
+		ShowTip(tr("验证码已发送到邮箱，注意查收"), true);
+		qDebug() << "email is " << Email;
+	});
 }
