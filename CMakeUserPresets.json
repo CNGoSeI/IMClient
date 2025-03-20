@@ -1,26 +1,23 @@
-﻿
-{
+﻿{
     "version": 3,
     "configurePresets": [
         {
-            "name": "LocalDebug64",
-            "inherits": "x64-debug",
+            "name": "qt5-msvc2017-base",
+            "hidden": true,
             "cacheVariables": {
-
                 "Qt5_DIR": "D:/Qt/5.14.2/msvc2017_64/lib/cmake/Qt5",
                 "CMAKE_PREFIX_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64",
-                "RCC_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64/bin/rcc.exe"
-                }
+                "RCC_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64/bin/rcc.exe",
+                "WINDEPLOYQT_EXE": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64/bin/windeployqt.exe"
+            }
+        },
+        {
+            "name": "LocalDebug64",
+            "inherits": [ "x64-debug", "qt5-msvc2017-base" ] // 多继承
         },
         {
             "name": "LocalRelWithDbgInfo64",
-            "inherits": "x64-releaseWithdbg",
-            "cacheVariables": {
-
-                "Qt5_DIR": "D:/Qt/5.14.2/msvc2017_64/lib/cmake/Qt5",
-                "CMAKE_PREFIX_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64",
-                "RCC_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64/bin/rcc.exe" 
-            }
+            "inherits": [ "x64-releaseWithdbg", "qt5-msvc2017-base" ] // 多继承
         }
     ]
 }

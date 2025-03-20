@@ -2,13 +2,13 @@
 #include "LoginDlg.h"
 #include "WidgetFilesHelper.h"
 
-DLoginDialog::DLoginDialog(const QString& Path, QWidget* parent):WLoadUIWgtBase::WLoadUIWgtBase(Path, parent)
+DLoginDialog::DLoginDialog(QWidget* parent):
+WLoadUIWgtBase::WLoadUIWgtBase(WgtFile::LoginDlgPath, parent)
 {
 }
 
 DLoginDialog::~DLoginDialog()
 {
-	UI->deleteLater();
 }
 
 void DLoginDialog::InitControls()

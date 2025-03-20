@@ -4,5 +4,6 @@
         <file>Skin/LoginDialog.ui</file>
         <file>Skin/Registerdialog.ui</file>
         <file>Skin/Image/Ice.png</file>
+        <file>Skin/StylesSheet.qss</file>
     </qresource>
 </RCC>

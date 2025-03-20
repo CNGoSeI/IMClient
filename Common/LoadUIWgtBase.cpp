@@ -9,6 +9,7 @@ WLoadUIWgtBase::WLoadUIWgtBase(const QString& path, QWidget* parent):UI(WgtFile:
 
 WLoadUIWgtBase::~WLoadUIWgtBase()
 {
+	UI->deleteLater();
 }
 
 const QWidget* WLoadUIWgtBase::GetUI() const

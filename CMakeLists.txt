@@ -23,6 +23,8 @@ if (MSVC)
 endif()
 
 find_package(Qt5 COMPONENTS Widgets UiTools REQUIRED)
+find_package(Qt5 COMPONENTS Core REQUIRED)
+
 
 #Widgets
 aux_source_directory(./Widgets WgtFiles)
@@ -30,6 +32,7 @@ aux_source_directory(./Widgets WgtFiles)
 #Common
 aux_source_directory(./Common CommonFiles)
 
+#OtherCMake
 add_subdirectory(./Resource)
 
 if(ANDROID)
@@ -48,3 +51,16 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::UiTools)
+
+#postCommond
+if(WIN32)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND "${CMAKE_COMMAND}" -E env PATH="${QT_BIN_DIR}" 
+        "${WINDEPLOYQT_EXE}"
+        "$<TARGET_FILE:${PROJECT_NAME}>"
+        --qmldir "${CMAKE_CURRENT_SOURCE_DIR}/qml"
+        --no-translations
+        --compiler-runtime
+        COMMENT "Deploying Qt dependencies..."
+    )
+endif()

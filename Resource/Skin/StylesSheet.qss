@@ -1,0 +1,69 @@
+/* 主窗口隐藏边框（需配合代码设置Qt::FramelessWindowHint） */
+QMainWindow {
+    background: transparent;
+     padding: 6px;
+}
+
+/* 所有Widget容器样式 */
+QWidget {
+    background-color:rgb(243, 250, 255); /* 乳白偏蓝 */
+    border-radius: 4px;
+   
+    border: none; /* 禁止子控件继承边框 */
+}
+
+/* 基础按钮样式 */
+QPushButton {
+    background-color: #FF69B4; /* 粉红基础色 */
+    border: 1px solid #FFB6C1; /* 浅粉色边框 */
+    border-radius: 4px;
+    color: white;
+    padding: 8px 15px;
+    min-width: 60px;
+}
+
+/* 悬停状态 */
+QPushButton:hover {
+    background-color: #FF1493; /* 深粉色 */
+    border-color: #FF69B4;
+}
+
+/* 按下状态 */
+QPushButton:pressed {
+    background-color: #C71585; /* 紫红色 */
+    border-color: #DB7093;
+    padding-top: 9px;
+    padding-bottom: 7px;
+}
+
+/* 禁用状态 */
+QPushButton:disabled {
+    background-color: #FFB6C1; /* 浅粉色 */
+    border-color: #DDA0DD;
+    color: #696969;
+}
+
+/* 特殊按钮状态标记 */
+QPushButton[state="warning"] { /* 自定义警告状态 */
+    background-color: #FF4500;
+    border-color: #FF6347;
+}
+
+/* 新增LineEdit专属样式 */
+QLineEdit {
+    border: 1px solid #2A2A2A;  /* 中性灰边框 */
+    border-radius: 4px;
+    padding: 1px;
+    background: rgba(255, 255, 255,0.8); /* 保持背景统一 */
+}
+
+/* 焦点状态强化 */
+QLineEdit:focus {
+    border: 1px solid #1F1F1F;
+    background: rgb(252, 242, 251);
+}
+
+/* 错误状态提示 */
+QLineEdit[error="true"] {
+    border: 2px solid #FF4500; /* 警告色 */
+}
