@@ -22,8 +22,7 @@ if (MSVC)
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 endif()
 
-find_package(Qt5 COMPONENTS Widgets UiTools REQUIRED)
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt5 COMPONENTS Widgets UiTools Core Network REQUIRED)
 
 
 #Widgets
@@ -49,8 +48,10 @@ else()
   )
 endif()
 
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::UiTools)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Network)
 
 #postCommond
 if(WIN32)

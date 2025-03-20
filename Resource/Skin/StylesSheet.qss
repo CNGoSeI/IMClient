@@ -67,3 +67,12 @@ QLineEdit:focus {
 QLineEdit[error="true"] {
     border: 2px solid #FF4500; /* 警告色 */
 }
+
+/* 提示文本 */
+#Lab_ErrTip[state='normal']{
+   color: green;
+}
+
+#Lab_ErrTip[state='err']{
+   color: red;
+}

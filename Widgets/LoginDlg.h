@@ -13,7 +13,7 @@ public:
 private:
     void InitControls() override;
     void ConnectSigSlot() override;
-    class QPushButton* Btn_Reg;//´ò¿ª×¢²á°´Å¥
+    class QPushButton* Btn_Reg{nullptr};//´ò¿ª×¢²á°´Å¥
 signals:
     void sigSwitchRegister();//ÇÐ»»×¢²á
 };

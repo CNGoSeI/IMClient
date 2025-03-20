@@ -11,7 +11,7 @@ set(CURRENT_ABS_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 get_filename_component(CURRENT_DIR_NAME ${CURRENT_ABS_DIR} NAME)
 message(STATUS "RCC构建当前目录名: ${CURRENT_DIR_NAME}")
 
-#保存一下就执行，因此每次执行之后都要构建这个任务
+#！！ 保存一下就执行，因此每次执行之后都要构建这个任务 ！！#
 file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}")
 
 #qrc资源文件
