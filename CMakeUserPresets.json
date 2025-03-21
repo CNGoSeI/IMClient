@@ -2,8 +2,16 @@
     "version": 3,
     "configurePresets": [
         {
+            "name": "CrossParams",
+            "hidden": true,
+            "cacheVariables": {
+                "JSONCPP_HEADER": "D:/ThirdPlugin/jsoncpp-1.9.6/include"
+            }
+        },
+        {
             "name": "qt5-msvc2017-base",
             "hidden": true,
+            "inherits": [ "CrossParams" ],
             "cacheVariables": {
                 "Qt5_DIR": "D:/Qt/5.14.2/msvc2017_64/lib/cmake/Qt5",
                 "CMAKE_PREFIX_PATH": "D:/Qt/Qt5.14.2/5.14.2/msvc2017_64",
@@ -12,11 +20,11 @@
             }
         },
         {
-            "name": "LocalDebug64",
+            "name": "WinDebug64",
             "inherits": [ "x64-debug", "qt5-msvc2017-base" ] // 多继承
         },
         {
-            "name": "LocalRelWithDbgInfo64",
+            "name": "WinRelWithDbgInfo64",
             "inherits": [ "x64-releaseWithdbg", "qt5-msvc2017-base" ] // 多继承
         }
     ]

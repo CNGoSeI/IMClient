@@ -24,7 +24,6 @@ endif()
 
 find_package(Qt5 COMPONENTS Widgets UiTools Core Network REQUIRED)
 
-
 #Widgets
 aux_source_directory(./Widgets WgtFiles)
 
@@ -32,7 +31,7 @@ aux_source_directory(./Widgets WgtFiles)
 aux_source_directory(./Common CommonFiles)
 
 #OtherCMake
-add_subdirectory(./Resource)
+add_subdirectory(./Resource) #资源文件
 
 if(ANDROID)
   add_library(${PROJECT_NAME} SHARED
