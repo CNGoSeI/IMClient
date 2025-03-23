@@ -14,6 +14,7 @@
 WRegisterWgt::WRegisterWgt(QWidget* parent):
 	WLoadUIWgtBase(WgtFile::RegDlgPath,parent)
 {
+	InitHttpHandlers();
 }
 
 WRegisterWgt::~WRegisterWgt()
@@ -59,6 +60,11 @@ void WRegisterWgt::slotRegModFinish(const int ReqID, const QString& Res, const i
 	QJsonObject jsonObj = jsonDoc.object();
 
 	//调用对应的逻辑
+	if(Handlers.find(ReqID)== Handlers.end())
+	{
+		ShowTip(tr("未找到相应处理方法 ID: %1").arg(ReqID),false);
+		return;
+	}
 	Handlers[ReqID](jsonDoc.object());
 	return;
 }
@@ -101,6 +107,10 @@ void WRegisterWgt::ConnectSigSlot()
 			bool match = regex.match(EmailStr).hasMatch(); // 执行正则表达式匹配
 			if (match) {
 				//发送http请求获取验证码
+				QJsonObject json_obj;
+				json_obj["email"] = EmailStr;
+				SHttpMgr::GetInstance().PostHttpReq(QUrl(Net::RequestMain()+Net::URI_GET_VERIFICATION), json_obj, ReqID::ID_GET_VARIFY_CODE, Modules::REGISTERMOD);
+
 			}
 			else {
 				//提示邮箱不正确

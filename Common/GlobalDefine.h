@@ -1,8 +1,8 @@
 ﻿#ifndef GLOBALDEFINE_H
 #define GLOBALDEFINE_H
 
-#include <QStyle>
 #include <QWidget>
+#include <QStyle>
 
 namespace UIHelper
 {
@@ -11,7 +11,12 @@ namespace UIHelper
 
 namespace Net
 {
+	const QString UrlBegin{ "http://" };//http 还是https
+	const QString& UrlHome();
+	const QString& NetPort();
+	const QString& RequestMain();//请求地址如 http://a.a.a.a:pppp/
 
+	const QString URI_GET_VERIFICATION{"/get_varifycode"};//获取验证码
 }
 
 namespace ReqID

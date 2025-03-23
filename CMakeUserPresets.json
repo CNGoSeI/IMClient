@@ -4,9 +4,9 @@
         {
             "name": "CrossParams",
             "hidden": true,
-            "cacheVariables": {
-                "JSONCPP_HEADER": "D:/ThirdPlugin/jsoncpp-1.9.6/include"
-            }
+          "cacheVariables": {
+
+          }
         },
         {
             "name": "qt5-msvc2017-base",

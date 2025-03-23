@@ -52,7 +52,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::UiTools)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Network)
 
-#postCommond
+#拷贝qt的运行依赖到编译路径
 if(WIN32)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E env PATH="${QT_BIN_DIR}" 
@@ -64,3 +64,22 @@ if(WIN32)
         COMMENT "Deploying Qt dependencies..."
     )
 endif()
+
+#包含所有需要拷贝的文件（相对路径）
+set(RESOURCE_FILES
+    "configs/config.ini"
+)
+
+# 循环遍历每个文件，为其添加拷贝命令
+foreach(file ${RESOURCE_FILES})
+    # 获取文件所在的目录，例如 "configs" 或 "texts"
+    get_filename_component(dir ${file} DIRECTORY)
+    message("拷贝文件：路径${dir} 文件${file}")
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        # 先确保目标目录存在
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/${dir}"
+        # 拷贝文件到对应目录下
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/${file}" "${CMAKE_BINARY_DIR}/${file}"
+        COMMENT "Copying ${file} to build directory"
+    )
+endforeach()
