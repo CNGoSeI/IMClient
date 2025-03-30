@@ -12,10 +12,18 @@ get_filename_component(CURRENT_DIR_NAME ${CURRENT_ABS_DIR} NAME)
 message(STATUS "RCC构建当前目录名: ${CURRENT_DIR_NAME}")
 
 #！！ 保存一下就执行，因此每次执行之后都要构建这个任务 ！！#
-file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}")
+#file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}")
 
 #qrc资源文件
 file(GLOB QRC_FILES "./*.qrc")
+
+#所有资产文件用以监测变化以决定是否编译
+#二进制文件存在bug，实在不行，手动重编该任务
+file(GLOB_RECURSE RESOURCE_FILES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/skin/*"
+)
+
+message("捕获的资产文件 ${RESOURCE_FILES}")
 
 # 遍历.qrc文件并生成.rcc
 foreach(QRC_FILE ${QRC_FILES})
@@ -25,7 +33,8 @@ foreach(QRC_FILE ${QRC_FILES})
     add_custom_command(
         OUTPUT ${RCC_OUTPUT}
         COMMAND ${RCC_EXECUTABLE} --binary ${QRC_FILE} -o ${RCC_OUTPUT}
-        DEPENDS ${QRC_FILE}
+        DEPENDS 
+        ${RESOURCE_FILES}
     )
     list(APPEND RCC_OUTPUTS ${RCC_OUTPUT})
 endforeach()
