@@ -1,4 +1,6 @@
 ﻿#include "GlobalDefine.h"
+
+#include <QLineEdit>
 #include <QSettings>
 
 const QSettings gSettings("./configs/config.ini", QSettings::IniFormat);
@@ -7,7 +9,18 @@ void UIHelper::RePolish(QWidget* TargetWgt) {
     //取消style状态之后再填入状态
     TargetWgt->style()->unpolish(TargetWgt);
     TargetWgt->style()->polish(TargetWgt);
-};
+}
+void UIHelper::SetLineEditError(QLineEdit* Target, bool IsError)
+{
+    if(!Target|| !Target->isVisible())
+    {
+        return;
+    }
+    Target->setProperty("error", IsError);
+    Target->style()->unpolish(Target);
+    Target->style()->polish(Target);
+}
+;
 
 const QString& Net::UrlHome()
 {

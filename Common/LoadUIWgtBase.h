@@ -1,4 +1,4 @@
-#ifndef LOADUIWGTBASE_H
+ï»¿#ifndef LOADUIWGTBASE_H
 #define LOADUIWGTBASE_H
 #include<QObject>
 
@@ -8,7 +8,7 @@ class WLoadUIWgtBase :public QObject
 public:
 	WLoadUIWgtBase(const QString& paht, QWidget* parent = nullptr);
 	virtual ~WLoadUIWgtBase();
-	void CreateWgt();//µ÷ÓÃÕâ¸ö´´½¨UI
+	void CreateWgt();//è°ƒç”¨è¿™ä¸ªåˆ›å»ºUI
 	const QWidget* GetUI()const;
 	QWidget* GetUI();
 

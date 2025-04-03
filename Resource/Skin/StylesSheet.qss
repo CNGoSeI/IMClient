@@ -60,12 +60,14 @@ QLineEdit {
 /* 焦点状态强化 */
 QLineEdit:focus {
     border: 1px solid #1F1F1F;
+    border-radius: 4px;
     background: rgb(252, 242, 251);
 }
 
 /* 错误状态提示 */
 QLineEdit[error="true"] {
     border: 2px solid #FF4500; /* 警告色 */
+    border-radius: 4px;
 }
 
 /* 提示文本 */

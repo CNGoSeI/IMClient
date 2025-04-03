@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget* parent)
     {
 	    MainStatck->setCurrentWidget(RegWnd->GetUI());
     });
-    connect(RegWnd.get(), &WRegisterWgt::sigBtnOkClicked, this, [this]()
+    connect(RegWnd.get(), &WRegisterWgt::sigBtnCancelClicked, this, [this]()
     {
 	    MainStatck->setCurrentWidget(LoginDlg->GetUI());
     });

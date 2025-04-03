@@ -4,9 +4,12 @@
 #include <QWidget>
 #include <QStyle>
 
+class QLineEdit;
+
 namespace UIHelper
 {
 	extern void RePolish(class QWidget* TargetWgt);//刷新对象的QSS
+	void SetLineEditError(QLineEdit* Target,bool IsError=false);//设置对象编辑框错误样式
 }
 
 namespace Net
@@ -17,6 +20,7 @@ namespace Net
 	const QString& RequestMain();//请求地址如 http://a.a.a.a:pppp/
 
 	const QString URI_GET_VERIFICATION{"/get_varifycode"};//获取验证码
+	const QString URI__USER_REGISTER{ "/user_register" };//注册请求
 }
 
 namespace ReqID

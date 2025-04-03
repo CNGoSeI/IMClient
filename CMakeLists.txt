@@ -47,10 +47,12 @@ else()
   )
 endif()
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Widgets)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::UiTools)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Network)
+target_link_libraries(${PROJECT_NAME} PRIVATE 
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::UiTools
+    Qt5::Network
+)
 
 #拷贝qt的运行依赖到编译路径
 if(WIN32)

@@ -3,6 +3,9 @@
 
 #include "Common/LoadUIWgtBase.h"
 
+class QLabel;
+class QLineEdit;
+
 class WRegisterWgt : public WLoadUIWgtBase
 {
     Q_OBJECT
@@ -20,19 +23,28 @@ public slots:
      * \param ErrCode 
      */
     void slotRegModFinish(const int ReqID, const QString& Res, const int ErrCode);
+
+private slots:
+    void slotRegister();//请求注册账号
 signals:
-   void sigBtnOkClicked();
+   void sigBtnCancelClicked();
 
 private:
     void InitControls() override;
     void ConnectSigSlot() override;
-    void InitHttpHandlers();
+    void InitHttpHandlers();//构建HTTP回调的键值对
+    void SetTotalControlToNormal();//将所有控件状态设为默认
+    bool IsAllEdtInputMatch();//所有需要本地判断的输入框内容是否合规
 
 private:
-    class QPushButton* Btn_Ok{nullptr};//确认注册
-    class QLineEdit* Edt_Password{ nullptr };//密码输入框
-    class QLineEdit* Edt_Confirm{ nullptr };//确认密码
-    class QLabel* Lab_ErrTip{ nullptr };
+    QPushButton* Btn_Ok{nullptr};//确认注册
+    QLineEdit* Edt_Password{ nullptr };//密码输入框
+    QLineEdit* Edt_Confirm{ nullptr };//确认密码
+    QLabel* Lab_ErrTip{ nullptr };//请求返回信息提示
+    QLineEdit* Edt_User{ nullptr };//用户名
+    QLineEdit* Edt_Email{ nullptr };//邮箱
+    QLineEdit* Edt_Verify{ nullptr };//验证码
+
     std::map<int, std::function<void(const QJsonObject&)>> Handlers;//ReqID对应执行操作
 };
 
