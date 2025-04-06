@@ -18,11 +18,14 @@ protected:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
+private:
+    void InitSigSlot();
 
 private:
    std::unique_ptr<class QStackedWidget> MainStatck{ nullptr };
    std::unique_ptr<class DLoginDialog> LoginDlg{nullptr};//登录界面
    std::unique_ptr<class WRegisterWgt>RegWnd{ nullptr };
+   std::unique_ptr<class WResetPasswordWgt>ResetPwdWgt{ nullptr };
 
    bool bDragging{ false };//拖动中？
    QPoint DragPosition;

@@ -11,6 +11,7 @@ namespace WgtFile
 	const QString MaingWndPath = WgtFileRoot + "MainWnd.ui";
 	const QString LoginDlgPath = WgtFileRoot + "LoginDialog.ui";
 	const QString RegDlgPath = WgtFileRoot+"Registerdialog.ui";//注册界面
+	const QString RestPasswd = WgtFileRoot + "ResetPwdWgt.ui";//重设密码界面
 
 	inline QWidget* LoadUI(const QString& UIFile, QWidget* parent = nullptr)
 	{

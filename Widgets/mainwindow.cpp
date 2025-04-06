@@ -9,6 +9,7 @@
 #include "LoginDlg.h"
 #include "mainwindow.h"
 #include "RegisterWgt.h"
+#include "ResetPasswordWgt.h"
 
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
@@ -17,23 +18,21 @@ MainWindow::MainWindow(QWidget* parent)
 
     LoginDlg =std::make_unique<DLoginDialog>();
     LoginDlg->CreateWgt();
+
     RegWnd = std::make_unique<WRegisterWgt>();
     RegWnd->CreateWgt();
 
+    ResetPwdWgt = std::make_unique<WResetPasswordWgt>();
+    ResetPwdWgt->CreateWgt();
+
     MainStatck->addWidget(LoginDlg->GetUI());
     MainStatck->addWidget(RegWnd->GetUI());
+    MainStatck->addWidget(ResetPwdWgt->GetUI());
 
     //QMainWindow 拥有 widget 指针的所有权，并会在适当的时候删除它
     setCentralWidget(MainStatck.get());//血泪史 切换centralwgt会导致界面释放
 
-    connect(LoginDlg.get(), &DLoginDialog::sigSwitchRegister, this, [this]()
-    {
-	    MainStatck->setCurrentWidget(RegWnd->GetUI());
-    });
-    connect(RegWnd.get(), &WRegisterWgt::sigBtnCancelClicked, this, [this]()
-    {
-	    MainStatck->setCurrentWidget(LoginDlg->GetUI());
-    });
+    InitSigSlot();
 
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
     setAttribute(Qt::WA_TranslucentBackground);//透明背景
@@ -81,4 +80,27 @@ void MainWindow::mouseReleaseEvent(QMouseEvent* event) {
         bDragging = false;
         event->accept();
     }
+}
+
+void MainWindow::InitSigSlot()
+{
+	connect(LoginDlg.get(), &DLoginDialog::sigSwitchRegister, this, [this]()
+	{
+		MainStatck->setCurrentWidget(RegWnd->GetUI());
+	});
+	connect(RegWnd.get(), &WRegisterWgt::sigBtnCancelClicked, this, [this]()
+	{
+		MainStatck->setCurrentWidget(LoginDlg->GetUI());
+	});
+
+	connect(LoginDlg->GetUI()->findChild<QPushButton*>("Btn_RestPwd"), &QPushButton::clicked, this, [this]()
+	{
+		this->MainStatck->setCurrentWidget(this->ResetPwdWgt->GetUI());
+        ResetPwdWgt->SetWgtToNormal();
+	});
+
+	connect(ResetPwdWgt->GetUI()->findChild<QPushButton*>("Btn_Cancel"), &QPushButton::clicked, this, [this]()
+	{
+		MainStatck->setCurrentWidget(LoginDlg->GetUI());
+	});
 }

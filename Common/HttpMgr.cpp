@@ -58,4 +58,8 @@ void SHttpMgr::slotHttpFinish(const int ReqId, const QString& Res, const int Err
 	{
 		emit sigRegModFinish(ReqId, Res, ErrorCode);
 	}
+	else if (Mod == Modules::RESETMOD)
+	{
+		emit sigResetPwdModFinish(ReqId, Res, ErrorCode);
+	}
 }

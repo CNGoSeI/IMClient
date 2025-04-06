@@ -214,7 +214,45 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="Lab_ForgotPassword">
+        <widget class="QPushButton" name="Btn_RestPwd">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>64</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>64</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    color: #FF69B4;              /* 基础文本颜色 */
+    background-color: transparent; /* 透明背景 */
+    border: none;                /* 消除默认边框 */
+    padding: 0px;                /* 零边距 */
+    margin: 0px;                 /* 消除默认外边距 */
+    font: bold 12px;             /* 字体样式示例 */
+}
+
+QPushButton:hover {
+    color: rgba(255,105,180,0.9); /* 90%透明度的高亮效果 */
+    text-decoration: underline;   /* 悬浮添加下划线(可选) */
+}
+
+QPushButton:pressed {
+    color: #D0468F;              /* 按压变暗色值 */
+    padding: 1px 0px -1px 0px;   /* 模拟按压位移效果 */
+}</string>
+         </property>
          <property name="text">
           <string>忘记密码</string>
          </property>

@@ -1,14 +1,15 @@
-﻿#include <QPushButton>
-#include <QLineEdit>
-#include <QLabel>
-#include <qregularexpression.h>
+﻿#include "RegisterWgt.h"
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <qregularexpression.h>
+#include <QTimer>
+#include <Common/PublicFun.h>
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
 #include "Common/HttpMgr.h"
-#include "RegisterWgt.h"
-#include <QJsonObject>
-#include <Common/PublicFun.h>
 
 WRegisterWgt::WRegisterWgt(QWidget* parent):
 	WLoadUIWgtBase(WgtFile::RegDlgPath,parent)
@@ -20,25 +21,11 @@ WRegisterWgt::~WRegisterWgt()
 {
 }
 
-void WRegisterWgt::ShowTip(const QString& Tip, bool b_ok)
-{
-
-	if (b_ok) {
-		Lab_ErrTip->setProperty("state", "normal");
-	}
-	else {
-		Lab_ErrTip->setProperty("state", "err");
-	}
-
-	Lab_ErrTip->setText(Tip);
-	//设置状态之后更新QSS
-	UIHelper::RePolish(Lab_ErrTip);
-}
-
 void WRegisterWgt::slotRegModFinish(const int ReqID, const QString& Res, const int ErrCode)
 {
+	
 	if (ErrCode != ErrorCodes::SUCCESS) {
-		ShowTip(tr("网络请求错误"), false);
+		UIHelper::SetTipState(Lab_ErrTip,tr("网络请求错误"), false);
 		return;
 	}
 
@@ -46,13 +33,13 @@ void WRegisterWgt::slotRegModFinish(const int ReqID, const QString& Res, const i
 	QJsonDocument jsonDoc = QJsonDocument::fromJson(Res.toUtf8());
 	//json解析错误
 	if (jsonDoc.isNull()) {
-		ShowTip(tr("json解析错误"), false);
+		UIHelper::SetTipState(Lab_ErrTip,tr("json解析错误"), false);
 		return;
 	}
 
 	//json解析错误
 	if (!jsonDoc.isObject()) {
-		ShowTip(tr("json解析错误"), false);
+		UIHelper::SetTipState(Lab_ErrTip,tr("json解析错误"), false);
 		return;
 	}
 
@@ -61,10 +48,12 @@ void WRegisterWgt::slotRegModFinish(const int ReqID, const QString& Res, const i
 	//调用对应的逻辑
 	if(Handlers.find(ReqID)== Handlers.end())
 	{
-		ShowTip(tr("未找到相应处理方法 ID: %1").arg(ReqID),false);
+		UIHelper::SetTipState(Lab_ErrTip,tr("未找到相应处理方法 ID: %1").arg(ReqID),false);
 		return;
 	}
+
 	Handlers[ReqID](jsonDoc.object());
+
 	return;
 }
 
@@ -91,13 +80,15 @@ void WRegisterWgt::InitControls()
 	Edt_Verify = UI->findChild<QLineEdit*>("Edt_Verify");
 	Q_ASSERT(!Edt_Verify);
 
+	Btn_GetCode = UI->findChild<QPushButton*>("Btn_GetCode");
+	Q_ASSERT(!Btn_GetCode);
+
 	//设置密码显示格式隐藏
 	Edt_Confirm->setEchoMode(QLineEdit::Password);
 	Edt_Password->setEchoMode(QLineEdit::Password);
 
 	Lab_ErrTip->setProperty("state", "normal");//设置属性状态，QSS存在指定
-	UIHelper::RePolish(Lab_ErrTip);
-	Lab_ErrTip->setText("");//保留布局又能隐藏
+	Lab_ErrTip->clear();//保留布局又能隐藏
 }
 
 void WRegisterWgt::ConnectSigSlot()
@@ -109,14 +100,13 @@ void WRegisterWgt::ConnectSigSlot()
 	});
 	connect(Btn_Ok, &QPushButton::clicked, this, &WRegisterWgt::slotRegister);
 
-	//获取验证码 验证邮箱输入框是否合规
-	connect(UI->findChild<QPushButton*>("Btn_GetCode"), &QPushButton::clicked, this, [this]()
+	//获取验证码
+	connect(Btn_GetCode, &QPushButton::clicked, this, [this]()
 	{
 			SetTotalControlToNormal();
 			
 			//验证邮箱的地址正则表达式
 			const auto& EmailStr = Edt_Email->text();
-			// 邮箱地址的正则表达式
 
 			if (IsAllEdtInputMatch()) {
 				//发送http请求获取验证码
@@ -124,6 +114,9 @@ void WRegisterWgt::ConnectSigSlot()
 				json_obj["email"] = EmailStr;
 				SHttpMgr::GetInstance().PostHttpReq(QUrl(Net::RequestMain()+Net::URI_GET_VERIFICATION), json_obj, ReqID::ID_GET_VARIFY_CODE, Modules::REGISTERMOD);
 
+				//验证码发送之后，相应控件进行禁用
+				SetRegControlEnable(false);
+				Btn_GetCode->setEnabled(false);
 			}
 	});
 
@@ -137,11 +130,17 @@ void WRegisterWgt::InitHttpHandlers()
 	{
 		int Error = JsonObj["error"].toInt();
 		if (Error != ErrorCodes::SUCCESS) {
-			ShowTip(tr("参数错误"), false);
+			UIHelper::SetTipState(Lab_ErrTip,tr("参数错误"), false);
+
+			//获取验证码失败，得重新启动一些控件
+			SetRegControlEnable(true);
+			Btn_GetCode->setEnabled(true);
+
 			return;
 		}
 		auto Email = JsonObj["email"].toString();
-		ShowTip(tr("验证码已发送到邮箱，注意查收"), true);
+		UIHelper::SetTipState(Lab_ErrTip,tr("验证码已发送到邮箱，注意查收"), true);
+		SetRegControlEnable(false);
 		qDebug() << "email is " << Email;
 	});
 
@@ -150,11 +149,21 @@ void WRegisterWgt::InitHttpHandlers()
 		int error = JsonObj["error"].toInt();
 		if (error != ErrorCodes::SUCCESS)
 		{
-			ShowTip(tr("参数错误"), false);
+			auto ErrorStr = ErrorCodes::GetErrorStr(error);
+			UIHelper::SetTipState(Lab_ErrTip,ErrorStr, false);
+			SetRegControlEnable(true);
+			Btn_GetCode->setEnabled(true);
 			return;
 		}
 		auto email = JsonObj["email"].toString();
-		ShowTip(tr("注册成功"), true);
+		UIHelper::SetTipState(Lab_ErrTip,tr("注册成功! 即将返回登陆界面"), true);
+
+		QTimer::singleShot(1000, this, [this]()
+			{
+				emit sigBtnCancelClicked();
+				SetTotalControlToNormal();
+			});
+
 		qDebug() << "email is " << email;
 	});
 }
@@ -163,43 +172,54 @@ void WRegisterWgt::SetTotalControlToNormal()
 {
 	Lab_ErrTip->setText("");
 
+	SetRegControlEnable();
+
 	UIHelper::SetLineEditError(Edt_Email);
 	UIHelper::SetLineEditError(Edt_User);
 	UIHelper::SetLineEditError(Edt_Password);
 	UIHelper::SetLineEditError(Edt_Confirm);
 	UIHelper::SetLineEditError(Edt_Verify);
+	
 }
 
 bool WRegisterWgt::IsAllEdtInputMatch()
 {
-	if (Edt_User->text().length() < 6)
+	if (!Tool::IsUserNameMatch(Edt_User->text()))
 	{
-		ShowTip("请输入6位以上的用户名", false);
+		UIHelper::SetTipState(Lab_ErrTip,"请输入6位以上的用户名", false);
 		UIHelper::SetLineEditError(Edt_User, true);
 		return false;
 	}
 
 	if (Edt_Email->text().isEmpty() || !Tool::IsStrMatchEmail(Edt_Email->text()))
 	{
-		ShowTip("邮箱格式不正确", false);
+		UIHelper::SetTipState(Lab_ErrTip,"邮箱格式不正确", false);
 		UIHelper::SetLineEditError(Edt_Email, true);
 		return false;
 	}
 
-	if (Edt_Password->text().length() < 8)
+	if (!Tool::IsPasswdMatch(Edt_Password->text()))
 	{
-		ShowTip("请输入8位以上的密码", false);
+		UIHelper::SetTipState(Lab_ErrTip,"请输入8位以上的密码，必须存在大小写字母", false);
 		UIHelper::SetLineEditError(Edt_Password, true);
 		return false;
 	}
 	if (Edt_Password->text() != Edt_Confirm->text())
 	{
-		ShowTip("密码不配对", false);
+		UIHelper::SetTipState(Lab_ErrTip,"密码不配对", false);
 		UIHelper::SetLineEditError(Edt_Confirm, true);
 		return false;
 	}
 
 	return true;
+}
+
+void WRegisterWgt::SetRegControlEnable(const bool bEnable)
+{
+	if (Edt_User)Edt_User->setEnabled(bEnable);
+	if (Edt_Email)Edt_Email->setEnabled(bEnable);
+	if (Edt_Password)Edt_Password->setEnabled(bEnable);
+	if (Edt_Confirm)Edt_Confirm->setEnabled(bEnable);
 }
 
 void WRegisterWgt::slotRegister()
@@ -210,7 +230,7 @@ void WRegisterWgt::slotRegister()
 	
 	if(Edt_Verify->text().length()<4)
 	{
-		ShowTip("验证码格式错误", false);
+		UIHelper::SetTipState(Lab_ErrTip,"验证码格式错误", false);
 		UIHelper::SetLineEditError(Edt_Verify, true);
 		return;
 	}
@@ -219,8 +239,8 @@ void WRegisterWgt::slotRegister()
 	QJsonObject JsonObj;
 	JsonObj["user"] = Edt_User->text();
 	JsonObj["email"] = Edt_Email->text();
-	JsonObj["passwd"] = Edt_Password->text();
-	JsonObj["confirm"] = Edt_Confirm->text();
+	JsonObj["passwd"] = Tool::EcryptionStr(Edt_Password->text());
+	JsonObj["confirm"] = Tool::EcryptionStr(Edt_Confirm->text());
 	JsonObj["varifycode"] = Edt_Verify->text();
 	SHttpMgr::GetInstance().PostHttpReq(QUrl(Net::RequestMain() + Net::URI__USER_REGISTER),
 		JsonObj, ReqID::ID_REG_USER, Modules::REGISTERMOD);

@@ -3,7 +3,10 @@
         <file>Skin/MainWnd.ui</file>
         <file>Skin/LoginDialog.ui</file>
         <file>Skin/Registerdialog.ui</file>
+        <file>Skin/ResetPwdWgt.ui</file>
         <file>Skin/Image/Ice.png</file>
+        <file>Skin/Image/Show.png</file>
+        <file>Skin/Image/Hide.png</file>
         <file>Skin/StylesSheet.qss</file>
     </qresource>
 </RCC>

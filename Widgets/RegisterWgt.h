@@ -5,6 +5,7 @@
 
 class QLabel;
 class QLineEdit;
+class QPushButton;
 
 class WRegisterWgt : public WLoadUIWgtBase
 {
@@ -13,7 +14,7 @@ public:
     explicit WRegisterWgt(QWidget* parent = nullptr);
     virtual ~WRegisterWgt() override;
 
-    void ShowTip(const QString& Tip, bool b_ok);
+    //void ShowTip(const QString& Tip, bool b_ok);
 
 public slots:
     /**
@@ -28,6 +29,7 @@ private slots:
     void slotRegister();//请求注册账号
 signals:
    void sigBtnCancelClicked();
+   //void sigRegSucessed();//注册成功
 
 private:
     void InitControls() override;
@@ -35,6 +37,7 @@ private:
     void InitHttpHandlers();//构建HTTP回调的键值对
     void SetTotalControlToNormal();//将所有控件状态设为默认
     bool IsAllEdtInputMatch();//所有需要本地判断的输入框内容是否合规
+    void SetRegControlEnable(const bool bEnable = true);//设置注册输入相关的控件是否启用
 
 private:
     QPushButton* Btn_Ok{nullptr};//确认注册
@@ -44,6 +47,7 @@ private:
     QLineEdit* Edt_User{ nullptr };//用户名
     QLineEdit* Edt_Email{ nullptr };//邮箱
     QLineEdit* Edt_Verify{ nullptr };//验证码
+    QPushButton* Btn_GetCode{ nullptr };//获取验证码
 
     std::map<int, std::function<void(const QJsonObject&)>> Handlers;//ReqID对应执行操作
 };

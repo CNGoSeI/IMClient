@@ -34,11 +34,14 @@ signals:
 	void sigHttpFinish(const int ReqId, const QString& Res, const int ErrCode, const int Mod);
 
 	/**
-	* QT信号 HTTP请求返回后转发MOD相关的处理
+	* QT信号 HTTP注册请求返回后转发MOD相关的处理
 	*/
 	void sigRegModFinish(const int ReqId, const QString& Res, const int ErrCode);
 
-
+	/**
+	 * QT信号 HTTP重置密码请求返回后转发MOD相关的处理
+	 */
+	void sigResetPwdModFinish(const int ReqId, const QString& Res, const int ErrCode);
 private:
 	friend class TSingleton<SHttpMgr>;
 	SHttpMgr();

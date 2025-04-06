@@ -71,10 +71,12 @@ QLineEdit[error="true"] {
 }
 
 /* 提示文本 */
-#Lab_ErrTip[state='normal']{
+#Lab_ErrTip[state='normal'],#Lab_MsgTip[state='normal']{
    color: green;
+   font-size: 12px;
 }
 
-#Lab_ErrTip[state='err']{
+#Lab_ErrTip[state='err'],#Lab_MsgTip[state='err']{
    color: red;
+   font-size: 12px;
 }
