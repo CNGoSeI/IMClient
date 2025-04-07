@@ -15,6 +15,7 @@ public:
 protected:
 	virtual void InitControls()=0;
 	virtual void ConnectSigSlot(){};
+	virtual void SetControlsToNormal() {};//设置控件们回归普通状态
 
 	QWidget* UI{ nullptr };
 };

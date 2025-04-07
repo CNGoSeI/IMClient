@@ -79,7 +79,7 @@ const QString& ErrorCodes::GetErrorStr(const int Code)
 		ErroCode2Str.emplace(VarifyCodeErr, "验证码错误");
 		ErroCode2Str.emplace(EmailNotMatch, "邮箱或者用户名错误");
 		ErroCode2Str.emplace(PasswdUpFailed, "重置密码失败");
-
+		ErroCode2Str.emplace(PasswdInvalid, "用户名或密码错误");
 		return std::move(ErroCode2Str);
 	}();
 

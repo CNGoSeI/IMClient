@@ -118,6 +118,38 @@
       </spacer>
      </item>
      <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="Lab_MsgTip">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Panel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Sunken</enum>
+         </property>
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <property name="sizeConstraint">
         <enum>QLayout::SetDefaultConstraint</enum>
@@ -142,7 +174,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="EDT_User">
+        <widget class="QLineEdit" name="Edt_User">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -181,7 +213,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="EDT_PassWord">
+        <widget class="QLineEdit" name="Edt_Passwd">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -292,8 +324,8 @@ QPushButton:pressed {
         <widget class="QPushButton" name="Btn_Login">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>30</height>
+           <width>130</width>
+           <height>40</height>
           </size>
          </property>
          <property name="text">
@@ -335,8 +367,8 @@ QPushButton:pressed {
         <widget class="QPushButton" name="Btn_Reg">
          <property name="minimumSize">
           <size>
-           <width>100</width>
-           <height>30</height>
+           <width>130</width>
+           <height>40</height>
           </size>
          </property>
          <property name="text">

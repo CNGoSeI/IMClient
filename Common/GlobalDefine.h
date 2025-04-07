@@ -23,8 +23,9 @@ namespace Net
 	const QString& RequestMain();//请求地址如 http://a.a.a.a:pppp/
 
 	const QString URI_GET_VERIFICATION{"/get_varifycode"};//获取验证码
-	const QString URI__USER_REGISTER{ "/user_register" };//注册请求
+	const QString URI_USER_REGISTER{ "/user_register" };//注册请求
 	const QString URI_RESET_PWD{"/reset_pwd"};//重置密码
+	const QString URI_USER_LOGIN{ "/user_login" };//登录
 }
 
 namespace ReqID
@@ -32,6 +33,7 @@ namespace ReqID
 	constexpr int ID_GET_VARIFY_CODE{ 1001 };//获取验证码
 	constexpr int ID_REG_USER{ ID_GET_VARIFY_CODE+1 }; //注册用户
 	constexpr int ID_RESET_PWD{ ID_GET_VARIFY_CODE+2 }; //重置密码
+	constexpr int ID_LOGIN_USER{ ID_GET_VARIFY_CODE + 3 }; //登录
 }
 
 namespace ErrorCodes
@@ -49,6 +51,7 @@ namespace ErrorCodes
 	constexpr int VarifyCodeErr{ Error_Json + 4 };//验证码不正确
 	constexpr int EmailNotMatch{ Error_Json + 5 };//邮箱对不上
 	constexpr int PasswdUpFailed{ Error_Json + 6 };//重制密码失败
+	constexpr int PasswdInvalid{ Error_Json + 7 };//用户或密码错误
 
 	const QString& GetErrorStr(const int);//获取错误码对应的错误提示
 
@@ -58,6 +61,7 @@ namespace Modules
 {
 	constexpr int REGISTERMOD{ 0 };//注册模式
 	constexpr int RESETMOD{ 1 };//重设密码模式
+	constexpr int LOGINMOD{ 2 };//登录模式
 }
 
 

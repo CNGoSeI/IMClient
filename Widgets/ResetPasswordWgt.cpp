@@ -44,7 +44,7 @@ void WResetPasswordWgt::InitControls()
 
 	Lab_MsgTip->setProperty("state", "normal");//设置属性状态，QSS存在指定
 
-	SetWgtToNormal();
+	SetControlsToNormal();
 }
 
 void WResetPasswordWgt::ConnectSigSlot()
@@ -61,7 +61,6 @@ void WResetPasswordWgt::ConnectSigSlot()
 		{
 			Btn_GetCode->setEnabled(false);
 			SetEdtControlsEnable(false);
-			Lab_MsgTip->clear();
 			//发送http请求获取验证码
 			const auto email = Edt_Email->text();
 			QJsonObject json_obj;
@@ -76,14 +75,17 @@ void WResetPasswordWgt::ConnectSigSlot()
 	connect(Btn_Ok, &QPushButton::clicked, this, [this]()
 	{
 		//发送http重置用户请求
-		QJsonObject json_obj;
-		json_obj["user"] = Edt_User->text();
-		json_obj["email"] = Edt_Email->text();
-		json_obj["passwd"] = Tool::EcryptionStr(Edt_Password->text());
-		json_obj["varifycode"] = Edt_Verify->text();
-		SHttpMgr::GetInstance().PostHttpReq(QUrl(Net::RequestMain() + Net::URI_RESET_PWD),
-		                                    json_obj, ReqID::ID_RESET_PWD, Modules::RESETMOD);
-		Btn_Ok->setEnabled(false);
+		if (IsAllEdtInputMatch())
+		{
+			QJsonObject json_obj;
+			json_obj["user"] = Edt_User->text();
+			json_obj["email"] = Edt_Email->text();
+			json_obj["passwd"] = Tool::EcryptionStr(Edt_Password->text());
+			json_obj["varifycode"] = Edt_Verify->text();
+			SHttpMgr::GetInstance().PostHttpReq(QUrl(Net::RequestMain() + Net::URI_RESET_PWD),
+			                                    json_obj, ReqID::ID_RESET_PWD, Modules::RESETMOD);
+			Btn_Ok->setEnabled(false);
+		}
 	});
 
 	connect(&SHttpMgr::GetInstance(), &SHttpMgr::sigResetPwdModFinish, this, &WResetPasswordWgt::slotRegModFinish);
@@ -152,10 +154,13 @@ bool WResetPasswordWgt::IsAllEdtInputMatch()
 		UIHelper::SetLineEditError(Edt_Password, true);
 		return false;
 	}
+
+	Lab_MsgTip->clear();
+	SetEdtControlsState();
 	return true;
 }
 
-void WResetPasswordWgt::SetWgtToNormal()
+void WResetPasswordWgt::SetControlsToNormal()
 {
 
 	Lab_MsgTip->clear();
@@ -198,31 +203,21 @@ void WResetPasswordWgt::SetEdtControlsEnable(const bool bEnable)
 
 void WResetPasswordWgt::slotRegModFinish(const int ReqID, const QString& Res, const int ErrCode)
 {
-	if (ErrCode != ErrorCodes::SUCCESS) {
+	Btn_Ok->setEnabled(true);
+
+	QJsonObject jsonObj;
+	if (!Tool::ParserResponJson(Res, jsonObj, ErrCode))
+	{
 		UIHelper::SetTipState(Lab_MsgTip, ErrorCodes::GetErrorStr(ErrCode), false);
-		return;
 	}
 
-	// 解析 JSON 字符串,res需转化为QByteArray
-	QJsonDocument jsonDoc = QJsonDocument::fromJson(Res.toUtf8());
-	//json解析错误
-	if (jsonDoc.isNull()) {
-		UIHelper::SetTipState(Lab_MsgTip, ErrorCodes::GetErrorStr(ErrCode), false);
-		return;
-	}
 
-	//json解析错误
-	if (!jsonDoc.isObject()) {
-		UIHelper::SetTipState(Lab_MsgTip, ErrorCodes::GetErrorStr(ErrCode), false);
-		return;
-	}
-
-	QJsonObject jsonObj = jsonDoc.object();
 	const auto it = Handlers.find(ReqID);
 	if(it==Handlers.end())
 	{
 
-		UIHelper::SetTipState(Lab_MsgTip, tr("未找到对应方法: %1").arg(ReqID), false);
+		UIHelper::SetTipState(Lab_MsgTip, tr("重置密码获取返回，但未找到对应方法: %1").arg(ReqID), false);
+		qDebug("重置密码请求返回，未找到对应的执行方法！ID:%d", ReqID);
 		return;
 	}
 

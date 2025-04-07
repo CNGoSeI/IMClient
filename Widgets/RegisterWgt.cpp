@@ -23,38 +23,22 @@ WRegisterWgt::~WRegisterWgt()
 
 void WRegisterWgt::slotRegModFinish(const int ReqID, const QString& Res, const int ErrCode)
 {
-	
-	if (ErrCode != ErrorCodes::SUCCESS) {
-		UIHelper::SetTipState(Lab_ErrTip,tr("网络请求错误"), false);
-		return;
+	QJsonObject jsonObj;
+	if(!Tool::ParserResponJson(Res, jsonObj, ErrCode))
+	{
+		UIHelper::SetTipState(Lab_ErrTip, ErrorCodes::GetErrorStr(ErrCode), false);
 	}
-
-	// 解析 JSON 字符串,res需转化为QByteArray
-	QJsonDocument jsonDoc = QJsonDocument::fromJson(Res.toUtf8());
-	//json解析错误
-	if (jsonDoc.isNull()) {
-		UIHelper::SetTipState(Lab_ErrTip,tr("json解析错误"), false);
-		return;
-	}
-
-	//json解析错误
-	if (!jsonDoc.isObject()) {
-		UIHelper::SetTipState(Lab_ErrTip,tr("json解析错误"), false);
-		return;
-	}
-
-	QJsonObject jsonObj = jsonDoc.object();
 
 	//调用对应的逻辑
 	if(Handlers.find(ReqID)== Handlers.end())
 	{
-		UIHelper::SetTipState(Lab_ErrTip,tr("未找到相应处理方法 ID: %1").arg(ReqID),false);
+		UIHelper::SetTipState(Lab_ErrTip, tr("注册收到返回，但未找到对应方法: %1").arg(ReqID), false);
+		qDebug("注册请求的返回，未找到对应的执行方法！ID:%d", ReqID);
 		return;
 	}
 
-	Handlers[ReqID](jsonDoc.object());
+	Handlers[ReqID](jsonObj);
 
-	return;
 }
 
 void WRegisterWgt::InitControls()
@@ -95,7 +79,7 @@ void WRegisterWgt::ConnectSigSlot()
 {
 	connect(UI->findChild<QPushButton*>("Btn_Cancel"),&QPushButton::clicked,this,[this]()
 	{
-		SetTotalControlToNormal();
+		SetControlsToNormal();
 		emit sigBtnCancelClicked();
 	});
 	connect(Btn_Ok, &QPushButton::clicked, this, &WRegisterWgt::slotRegister);
@@ -103,7 +87,7 @@ void WRegisterWgt::ConnectSigSlot()
 	//获取验证码
 	connect(Btn_GetCode, &QPushButton::clicked, this, [this]()
 	{
-			SetTotalControlToNormal();
+			SetControlsToNormal();
 			
 			//验证邮箱的地址正则表达式
 			const auto& EmailStr = Edt_Email->text();
@@ -161,14 +145,14 @@ void WRegisterWgt::InitHttpHandlers()
 		QTimer::singleShot(1000, this, [this]()
 			{
 				emit sigBtnCancelClicked();
-				SetTotalControlToNormal();
+				SetControlsToNormal();
 			});
 
 		qDebug() << "email is " << email;
 	});
 }
 
-void WRegisterWgt::SetTotalControlToNormal()
+void WRegisterWgt::SetControlsToNormal()
 {
 	Lab_ErrTip->setText("");
 
@@ -211,6 +195,14 @@ bool WRegisterWgt::IsAllEdtInputMatch()
 		return false;
 	}
 
+	Lab_ErrTip->clear();
+
+	UIHelper::SetLineEditError(Edt_Email);
+	UIHelper::SetLineEditError(Edt_User);
+	UIHelper::SetLineEditError(Edt_Password);
+	UIHelper::SetLineEditError(Edt_Confirm);
+	UIHelper::SetLineEditError(Edt_Verify);
+
 	return true;
 }
 
@@ -224,7 +216,7 @@ void WRegisterWgt::SetRegControlEnable(const bool bEnable)
 
 void WRegisterWgt::slotRegister()
 {
-	SetTotalControlToNormal();
+	SetControlsToNormal();
 
 	if(!IsAllEdtInputMatch()) return;
 	
@@ -242,7 +234,7 @@ void WRegisterWgt::slotRegister()
 	JsonObj["passwd"] = Tool::EcryptionStr(Edt_Password->text());
 	JsonObj["confirm"] = Tool::EcryptionStr(Edt_Confirm->text());
 	JsonObj["varifycode"] = Edt_Verify->text();
-	SHttpMgr::GetInstance().PostHttpReq(QUrl(Net::RequestMain() + Net::URI__USER_REGISTER),
+	SHttpMgr::GetInstance().PostHttpReq(QUrl(Net::RequestMain() + Net::URI_USER_REGISTER),
 		JsonObj, ReqID::ID_REG_USER, Modules::REGISTERMOD);
 }
 

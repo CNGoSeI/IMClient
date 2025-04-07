@@ -13,7 +13,7 @@ class WResetPasswordWgt : public WLoadUIWgtBase
 public:
     explicit WResetPasswordWgt(QWidget* parent = nullptr);
     virtual ~WResetPasswordWgt() override=default;
-    void SetWgtToNormal();    //设置各个控件显示回归默认
+    void SetControlsToNormal() override;    //设置各个控件显示回归默认
 private:
     void InitControls() override;
     void ConnectSigSlot() override;

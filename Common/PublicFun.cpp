@@ -1,8 +1,9 @@
 ﻿#include "PublicFun.h"
-
 #include <qcryptographichash.h>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <qregularexpression.h>
-
+#include "GlobalDefine.h"
 
 bool Tool::IsStrMatchEmail(const QString& Email)
 {
@@ -35,4 +36,23 @@ bool Tool::IsPasswdMatch(const QString& Pwd)
     // 规则2：必须包含大小写字母
     QRegularExpression pwdRule("^(?=.*[a-z])(?=.*[A-Z]).*$");
     return pwdRule.match(Pwd).hasMatch();
+}
+
+bool Tool::ParserResponJson(const QString& Res, QJsonObject& OutJsonObj, const int ErrCode)
+{
+	if (ErrCode != ErrorCodes::SUCCESS) {
+		return false;
+	}
+
+	// 解析 JSON 字符串,res需转化为QByteArray
+	QJsonDocument jsonDoc = QJsonDocument::fromJson(Res.toUtf8());
+
+	//json解析错误
+	if (jsonDoc.isNull()|| !jsonDoc.isObject()) {
+	
+		return false;
+	}
+
+	OutJsonObj = jsonDoc.object();
+	return true;
 }

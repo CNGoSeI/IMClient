@@ -42,12 +42,16 @@ signals:
 	 * QT信号 HTTP重置密码请求返回后转发MOD相关的处理
 	 */
 	void sigResetPwdModFinish(const int ReqId, const QString& Res, const int ErrCode);
+
+	/* QT信号 HTTP登录请求返回后转发相关的处理 */
+	void sigLoginModFinish(const int ReqId, const QString& Res, const int ErrCode);
 private:
 	friend class TSingleton<SHttpMgr>;
 	SHttpMgr();
+	void RegModelSigFunc();//初始化各个模式对应的信号函数
 
 	QNetworkAccessManager Managger;
-
+	std::map<int, std::function<void(const int ReqId, const QString& Res, const int ErrCode)>> Method2Signal;//不同方法模式对应的发送信号
 };
 
 #endif // !HTTPMGR_H

@@ -7,10 +7,24 @@
 #include <QNetworkReply>
 #include "GlobalDefine.h"
 
+#define EMPLACE_MODE_SIGNAL(MODE,SIGNAL_NAME)\
+	Method2Signal.emplace(MODE, [this](const int ReqId, const QString& Res, const int ErrCode)\
+	{\
+		emit SIGNAL_NAME(ReqId, Res, ErrCode);\
+	})
+
 SHttpMgr::SHttpMgr()
 {
 	//连接http请求和完成信号，信号槽机制保证队列消费
 	connect(this, &SHttpMgr::sigHttpFinish, this, &SHttpMgr::slotHttpFinish);
+	RegModelSigFunc();
+}
+
+void SHttpMgr::RegModelSigFunc()
+{
+	EMPLACE_MODE_SIGNAL(Modules::REGISTERMOD, sigRegModFinish);
+	EMPLACE_MODE_SIGNAL(Modules::RESETMOD, sigResetPwdModFinish);
+	EMPLACE_MODE_SIGNAL(Modules::LOGINMOD, sigLoginModFinish);
 }
 
 SHttpMgr::~SHttpMgr()
@@ -54,12 +68,11 @@ void SHttpMgr::PostHttpReq(const QUrl& url, const QJsonObject& Json, const int R
 
 void SHttpMgr::slotHttpFinish(const int ReqId, const QString& Res, const int ErrorCode, const int Mod)
 {
-	if (Mod == Modules::REGISTERMOD)
+
+	if(Method2Signal.find(Mod)== Method2Signal.end())
 	{
-		emit sigRegModFinish(ReqId, Res, ErrorCode);
+		qDebug("Http未找到分发的模式 ID:%d", Mod);
 	}
-	else if (Mod == Modules::RESETMOD)
-	{
-		emit sigResetPwdModFinish(ReqId, Res, ErrorCode);
-	}
+
+	Method2Signal[Mod](ReqId, Res, ErrorCode);
 }

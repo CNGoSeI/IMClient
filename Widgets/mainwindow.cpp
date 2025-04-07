@@ -91,16 +91,18 @@ void MainWindow::InitSigSlot()
 	connect(RegWnd.get(), &WRegisterWgt::sigBtnCancelClicked, this, [this]()
 	{
 		MainStatck->setCurrentWidget(LoginDlg->GetUI());
+        LoginDlg->SetControlsToNormal();
 	});
 
 	connect(LoginDlg->GetUI()->findChild<QPushButton*>("Btn_RestPwd"), &QPushButton::clicked, this, [this]()
 	{
 		this->MainStatck->setCurrentWidget(this->ResetPwdWgt->GetUI());
-        ResetPwdWgt->SetWgtToNormal();
+        ResetPwdWgt->SetControlsToNormal();
 	});
 
 	connect(ResetPwdWgt->GetUI()->findChild<QPushButton*>("Btn_Cancel"), &QPushButton::clicked, this, [this]()
 	{
 		MainStatck->setCurrentWidget(LoginDlg->GetUI());
+        LoginDlg->SetControlsToNormal();
 	});
 }

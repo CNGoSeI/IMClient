@@ -35,7 +35,7 @@ private:
     void InitControls() override;
     void ConnectSigSlot() override;
     void InitHttpHandlers();//构建HTTP回调的键值对
-    void SetTotalControlToNormal();//将所有控件状态设为默认
+    void SetControlsToNormal() override;//将所有控件状态设为默认
     bool IsAllEdtInputMatch();//所有需要本地判断的输入框内容是否合规
     void SetRegControlEnable(const bool bEnable = true);//设置注册输入相关的控件是否启用
 
