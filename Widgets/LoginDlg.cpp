@@ -5,11 +5,13 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
+#include <QTimer>
 
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
 #include "Common/HttpMgr.h"
 #include "Common/PublicFun.h"
+#include "Common/TcpMgr.h"
 
 DLoginDialog::DLoginDialog(QWidget* parent):
 WLoadUIWgtBase::WLoadUIWgtBase(WgtFile::LoginDlgPath, parent)
@@ -28,6 +30,9 @@ void DLoginDialog::InitControls()
 
 	Btn_Login = UI->findChild<QPushButton*>("Btn_Login");
 	Q_ASSERT(Btn_Login != nullptr);
+
+	Btn_RestPwd = UI->findChild<QPushButton*>("Btn_RestPwd");
+	Q_ASSERT(Btn_RestPwd != nullptr);
 
 	Lab_MsgTip = UI->findChild<QLabel*>("Lab_MsgTip");
 	Q_ASSERT(!Lab_MsgTip);
@@ -51,7 +56,7 @@ void DLoginDialog::ConnectSigSlot()
 	{
 		if(IsAllEdtInputMatch())
 		{
-			Btn_Login->setEnabled(false);
+			SetAllActionControlEnable(false);
 			auto user = Edt_User->text();
 			auto pwd = Edt_Passwd->text();
 			//发送http请求登录
@@ -64,6 +69,11 @@ void DLoginDialog::ConnectSigSlot()
 	});
 
 	connect(&SHttpMgr::GetInstance(), &SHttpMgr::sigLoginModFinish, this,&DLoginDialog::slotLoginFinish);
+
+	//连接tcp连接请求的信号和槽函数
+	connect(this, &DLoginDialog::sigConnectTcp, &STcpMgr::GetInstance(), &STcpMgr::slotTcpConnect);
+	//连接tcp管理者发出的连接成功信号
+	connect(&STcpMgr::GetInstance(), &STcpMgr::sigConSuccess, this, &DLoginDialog::slotTcpConFinish);
 }
 
 void DLoginDialog::SetControlsToNormal()
@@ -120,18 +130,33 @@ void DLoginDialog::InitHttpHandlers()
 		if (error != ErrorCodes::SUCCESS)
 		{
 			UIHelper::SetTipState(Lab_MsgTip, ErrorCodes::GetErrorStr(error), false);
+			SetAllActionControlEnable(true);
 			return;
 		}
-		auto user = jsonObj["user"].toString();
-		UIHelper::SetTipState(Lab_MsgTip, tr("登陆成功！"), true);
-		qDebug() << "用户登录 User: " << user;
+
+		Net::ServerInfo si;
+		si.Uid = jsonObj["uid"].toInt();
+		si.Host = jsonObj["host"].toString();
+		si.Port = jsonObj["port"].toString();
+		si.Token = jsonObj["token"].toString();
+		UIHelper::SetTipState(Lab_MsgTip, tr("连接聊天服务中"), true);
+
+		//登录成功返回数据，将拿到的数据通知TCP链接聊天室
+		emit sigConnectTcp(si);
 	});
 
 }
 
+void DLoginDialog::SetAllActionControlEnable(bool bEnable)
+{
+	SetEditeLinesEnabale(bEnable);
+	Btn_Login->setEnabled(bEnable);
+	Btn_Reg->setEnabled(bEnable);
+	Btn_RestPwd->setEnabled(bEnable);
+}
+
 void DLoginDialog::slotLoginFinish(const int ReqId, const QString& Res, const int ErrCode)
 {
-	Btn_Login->setEnabled(true);
 
 	QJsonObject jsonObj;
 	if (!Tool::ParserResponJson(Res, jsonObj, ErrCode))
@@ -149,4 +174,28 @@ void DLoginDialog::slotLoginFinish(const int ReqId, const QString& Res, const in
 
 	Handlers[ReqId](jsonObj);
 
+}
+
+void DLoginDialog::slotTcpConFinish(bool bsuccess)
+{
+	SetAllActionControlEnable(true);
+
+	if (bsuccess)
+	{
+		UIHelper::SetTipState(Lab_MsgTip, tr("聊天服务连接成功，正在登录..."), true);
+		QJsonObject jsonObj;
+
+		jsonObj["uid"] = this->UId;
+		jsonObj["token"] = this->Token;
+
+		QJsonDocument doc(jsonObj);
+		QString jsonString = doc.toJson(QJsonDocument::Indented);
+
+		//发送tcp请求给chat server
+		emit STcpMgr::GetInstance().sigSendData(ReqID::ID_CHAT_LOGIN, jsonString);
+	}
+	else
+	{
+		UIHelper::SetTipState(Lab_MsgTip, tr("网络异常"), false);
+	}
 }

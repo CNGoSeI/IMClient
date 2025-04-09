@@ -26,6 +26,13 @@ namespace Net
 	const QString URI_USER_REGISTER{ "/user_register" };//注册请求
 	const QString URI_RESET_PWD{"/reset_pwd"};//重置密码
 	const QString URI_USER_LOGIN{ "/user_login" };//登录
+
+	struct ServerInfo {
+		QString Host;
+		QString Port;
+		QString Token;
+		int  Uid;
+	};
 }
 
 namespace ReqID
@@ -34,6 +41,7 @@ namespace ReqID
 	constexpr int ID_REG_USER{ ID_GET_VARIFY_CODE+1 }; //注册用户
 	constexpr int ID_RESET_PWD{ ID_GET_VARIFY_CODE+2 }; //重置密码
 	constexpr int ID_LOGIN_USER{ ID_GET_VARIFY_CODE + 3 }; //登录
+	constexpr int ID_CHAT_LOGIN{ ID_GET_VARIFY_CODE + 4 }; //连接聊天服务器
 }
 
 namespace ErrorCodes
