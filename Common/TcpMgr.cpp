@@ -26,6 +26,27 @@ STcpMgr::STcpMgr()
 
 	QObject::connect(&Socket, static_cast<void (QTcpSocket::*)(QTcpSocket::SocketError)>(&QTcpSocket::error), this,
 	                 &STcpMgr::slotGetConnectError);
+
+	InitHandlers();
+}
+
+void STcpMgr::InitHandlers()
+{
+	ReqId2Callback.emplace(ReqID::ID_CHAT_LOGIN_RSP, [](int Id, int Len, QByteArray& Data)
+	{
+		
+	});
+}
+
+void STcpMgr::HandleMsg(int ReqId, int len, QByteArray& data)
+{
+	auto find_iter = ReqId2Callback.find(ReqId);
+	if (find_iter == ReqId2Callback.end()) {
+		qDebug() << "Tcp回调未找到 [" << ReqId << "] ";
+		return;
+	}
+
+	find_iter->second(ReqId, len, data);
 }
 
 
@@ -50,7 +71,7 @@ void STcpMgr::slotSendData(int reqId, const QString& data)
 
 	out.setByteOrder(QDataStream::BigEndian);// 设置数据流使用网络字节序
 	out << id << len;// 写入ID和长度为头
-	block.append(data);// 再添加字符串数据
+	block.append(dataBytes);// 再添加字符串数据
 
 	// 发送数据
 	Socket.write(block);
@@ -58,6 +79,14 @@ void STcpMgr::slotSendData(int reqId, const QString& data)
 
 void STcpMgr::slotReadReceived()
 {
+	/**
+	 * TCP没有数据边界，按流传输，因此存在粘包现象，读取buff需要：
+	 *	- Buff至少能够解析出包头，不然直接返回。等待下一次收到的数据，进行追加拼接
+	 *	- Buff能够解析出ID、和消息体大小的时候，将包头去掉，并且读取消息大小的数据
+	 *		* 如果Buff剩下的大小没有解析的消息体大小大，说明这一轮的数据不完全，直接返回，拼接下一轮数据
+	 *	- 成功解析完一个包之后，将BUFF的首个位置裁剪到本轮解析完的包体之后，重新开始准备解析下一个包
+	 */
+
 	// 读取所有数据并追加到缓冲区
 	Buffer.append(Socket.readAll());
 
@@ -94,7 +123,9 @@ void STcpMgr::slotReadReceived()
 		QByteArray messageBody = Buffer.mid(0, MessageLen);// 从第0个开始读n个字节，相当于去头的消息体
 		qDebug() << "收到的信息本体为： " << messageBody;
 
-		Buffer = Buffer.mid(MessageLen);//到第n字节之后
+		Buffer = Buffer.mid(MessageLen);//到第n字节之后,这里相当于移到了一个完整的包之后
+
+		HandleMsg(MessageId, MessageLen, messageBody);//触发回调
 	}
 }
 

@@ -42,6 +42,7 @@ namespace ReqID
 	constexpr int ID_RESET_PWD{ ID_GET_VARIFY_CODE+2 }; //重置密码
 	constexpr int ID_LOGIN_USER{ ID_GET_VARIFY_CODE + 3 }; //登录
 	constexpr int ID_CHAT_LOGIN{ ID_GET_VARIFY_CODE + 4 }; //连接聊天服务器
+	constexpr int ID_CHAT_LOGIN_RSP{ ID_GET_VARIFY_CODE + 5}; //登陆聊天服务器回包
 }
 
 namespace ErrorCodes
