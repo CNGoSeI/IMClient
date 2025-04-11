@@ -1,8 +1,11 @@
 ﻿#include "TcpMgr.h"
 
 #include <qdatastream.h>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "GlobalDefine.h"
+#include "UserMgr.h"
 
 STcpMgr::STcpMgr()
 {
@@ -32,9 +35,38 @@ STcpMgr::STcpMgr()
 
 void STcpMgr::InitHandlers()
 {
-	ReqId2Callback.emplace(ReqID::ID_CHAT_LOGIN_RSP, [](int Id, int Len, QByteArray& Data)
+	ReqId2Callback.emplace(ReqID::ID_CHAT_LOGIN_RSP, [this](int Id, int Len, QByteArray& Data)
 	{
-		
+			qDebug() << "回调ID：" << Id << " 数据：" << Data;
+			// 将QByteArray转换为QJsonDocument
+			QJsonDocument jsonDoc = QJsonDocument::fromJson(Data);
+
+			// 检查转换是否成功
+			if (jsonDoc.isNull()) {
+				qDebug() << "QJsonDocument 转换异常.";
+				return;
+			}
+
+			QJsonObject jsonObj = jsonDoc.object();
+
+			if (!jsonObj.contains("error")) {
+				int err = ErrorCodes::ERR_JSON;
+				qDebug() << "Json解析异常" << err;
+				emit sigLoginFailed(err);
+				return;
+			}
+
+			int err = jsonObj["error"].toInt();
+			if (err != ErrorCodes::SUCCESS) {
+				qDebug() << "登陆错误：" << err;
+				emit sigLoginFailed(err);
+				return;
+			}
+
+			SUserMgr::GetInstance().SetUid(jsonObj["uid"].toInt());
+			SUserMgr::GetInstance().SetName(jsonObj["name"].toString());
+			SUserMgr::GetInstance().SetToken(jsonObj["token"].toString());
+			emit sigSwitchChatWgt();
 	});
 }
 
@@ -53,9 +85,10 @@ void STcpMgr::HandleMsg(int ReqId, int len, QByteArray& data)
 void STcpMgr::slotTcpConnect(const Net::ServerInfo& si)
 {
 	// 尝试连接到服务器
-	qDebug() << "链接服务器...";
+
 	Host = si.Host;
 	Port = static_cast<uint16_t>(si.Port.toUInt());
+	qDebug() << "链接服务器..." << "host: " << Host<<" Port: "<<Port;
 	Socket.connectToHost(si.Host, Port);
 }
 

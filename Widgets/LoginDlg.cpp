@@ -74,6 +74,9 @@ void DLoginDialog::ConnectSigSlot()
 	connect(this, &DLoginDialog::sigConnectTcp, &STcpMgr::GetInstance(), &STcpMgr::slotTcpConnect);
 	//连接tcp管理者发出的连接成功信号
 	connect(&STcpMgr::GetInstance(), &STcpMgr::sigConSuccess, this, &DLoginDialog::slotTcpConFinish);
+
+	//连接tcp管理者发出的登陆失败信号
+	connect(&STcpMgr::GetInstance(), &STcpMgr::sigLoginFailed, this, &DLoginDialog::slotLoginFailed);
 }
 
 void DLoginDialog::SetControlsToNormal()
@@ -140,7 +143,7 @@ void DLoginDialog::InitHttpHandlers()
 		si.Port = jsonObj["port"].toString();
 		si.Token = jsonObj["token"].toString();
 		UIHelper::SetTipState(Lab_MsgTip, tr("连接聊天服务中"), true);
-
+		qDebug("拿到状态服务器返回的数据，UID: %d Token: %s", si.Uid, si.Token.toUtf8().data());
 		//登录成功返回数据，将拿到的数据通知TCP链接聊天室
 		emit sigConnectTcp(si);
 	});
@@ -198,4 +201,11 @@ void DLoginDialog::slotTcpConFinish(bool bsuccess)
 	{
 		UIHelper::SetTipState(Lab_MsgTip, tr("网络异常"), false);
 	}
+}
+
+void DLoginDialog::slotLoginFailed(int err)
+{
+	QString result = QString("登录失败, tcp处理错误 %1").arg(err);
+	UIHelper::SetTipState(Lab_MsgTip, result, true);
+	SetAllActionControlEnable(true);
 }

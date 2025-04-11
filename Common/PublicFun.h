@@ -1,4 +1,4 @@
-#ifndef PUBLICFUN_H
+ï»¿#ifndef PUBLICFUN_H
 #define PUBLICFUN_H
 class QString;
 class QJsonObject;
@@ -6,11 +6,11 @@ namespace Tool
 {
 	bool IsStrMatchEmail(const QString& Email);
 
-	QString EcryptionStr(const QString& Str);//¶ÔÎÄ±¾½øĞĞ¼ÓÃÜ
+	QString EcryptionStr(const QString& Str);//å¯¹æ–‡æœ¬è¿›è¡ŒåŠ å¯†
 
-	bool IsUserNameMatch(const QString& Str);//ÓÃ»§ÃûÊÇ·ñºÏ¸ñ
+	bool IsUserNameMatch(const QString& Str);//ç”¨æˆ·åæ˜¯å¦åˆæ ¼
 
-	bool IsPasswdMatch(const QString& Pwd);//ÃÜÂëÊÇ·ñºÏ¹æ
+	bool IsPasswdMatch(const QString& Pwd);//å¯†ç æ˜¯å¦åˆè§„
 
 	bool ParserResponJson(const QString& Res, QJsonObject& OutJsonObj, const int ErrCode);
 }

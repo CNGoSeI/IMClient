@@ -31,6 +31,8 @@ private:
 private slots:
     void slotLoginFinish(const int ReqId, const QString& Res, const int ErrCode);
     void slotTcpConFinish(bool bSuccess);
+    void slotLoginFailed(int err);
+
 private:
     std::map<int, std::function<void(const QJsonObject&)>> Handlers;//ReqID对应执行操作
 

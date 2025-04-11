@@ -20,10 +20,12 @@ public slots:
 private slots:
     void slotSendData(int reqId, const QString& data);
     void slotReadReceived();//读取收到的buff
-    void slotGetConnectError(const QTcpSocket::SocketError& socketError);
+    void slotGetConnectError(const QTcpSocket::SocketError& socketError);//该错误为QT套接字回调调用
 signals:
-    void sigConSuccess(bool bSuccess);
+    void sigConSuccess(bool bSuccess);//该错误为QT套接字连接中错误回调转发的信号
     void sigSendData(int reqId, const QString& data);
+    void sigLoginFailed(int);//登录请求回调的错误
+    void sigSwitchChatWgt();
 private:
     STcpMgr();
 
