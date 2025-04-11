@@ -43,7 +43,7 @@ void STcpMgr::InitHandlers()
 
 			// 检查转换是否成功
 			if (jsonDoc.isNull()) {
-				qDebug() << "QJsonDocument 转换异常.";
+				qDebug() << "QJsonDocument 转换异常 于登录聊天室获取回复时.";
 				return;
 			}
 
@@ -51,14 +51,14 @@ void STcpMgr::InitHandlers()
 
 			if (!jsonObj.contains("error")) {
 				int err = ErrorCodes::ERR_JSON;
-				qDebug() << "Json解析异常" << err;
+				qDebug() << "Json解析异常 于登录聊天室获取回复时" << err;
 				emit sigLoginFailed(err);
 				return;
 			}
 
 			int err = jsonObj["error"].toInt();
 			if (err != ErrorCodes::SUCCESS) {
-				qDebug() << "登陆错误：" << err;
+				qDebug() << "于登录聊天室获取回复时 登陆错误：" << err;
 				emit sigLoginFailed(err);
 				return;
 			}
@@ -66,6 +66,12 @@ void STcpMgr::InitHandlers()
 			SUserMgr::GetInstance().SetUid(jsonObj["uid"].toInt());
 			SUserMgr::GetInstance().SetName(jsonObj["name"].toString());
 			SUserMgr::GetInstance().SetToken(jsonObj["token"].toString());
+
+			qDebug("于登录聊天室获取回复时 登陆成功,uid: %d Name %s Token: %s",
+			       SUserMgr::GetInstance().GetUid(),
+			       SUserMgr::GetInstance().GetName().toUtf8().data(),
+			       SUserMgr::GetInstance().GetToken().toUtf8().data());
+
 			emit sigSwitchChatWgt();
 	});
 }

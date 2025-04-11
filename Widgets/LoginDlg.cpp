@@ -142,6 +142,10 @@ void DLoginDialog::InitHttpHandlers()
 		si.Host = jsonObj["host"].toString();
 		si.Port = jsonObj["port"].toString();
 		si.Token = jsonObj["token"].toString();
+
+		this->UId = si.Uid;
+		this->Token = si.Token;
+
 		UIHelper::SetTipState(Lab_MsgTip, tr("连接聊天服务中"), true);
 		qDebug("拿到状态服务器返回的数据，UID: %d Token: %s", si.Uid, si.Token.toUtf8().data());
 		//登录成功返回数据，将拿到的数据通知TCP链接聊天室
@@ -181,7 +185,6 @@ void DLoginDialog::slotLoginFinish(const int ReqId, const QString& Res, const in
 
 void DLoginDialog::slotTcpConFinish(bool bsuccess)
 {
-	SetAllActionControlEnable(true);
 
 	if (bsuccess)
 	{
@@ -193,12 +196,13 @@ void DLoginDialog::slotTcpConFinish(bool bsuccess)
 
 		QJsonDocument doc(jsonObj);
 		QString jsonString = doc.toJson(QJsonDocument::Indented);
-
+		
 		//发送tcp请求给chat server
 		emit STcpMgr::GetInstance().sigSendData(ReqID::ID_CHAT_LOGIN, jsonString);
 	}
 	else
 	{
+		SetAllActionControlEnable(true);
 		UIHelper::SetTipState(Lab_MsgTip, tr("网络异常"), false);
 	}
 }
@@ -206,6 +210,6 @@ void DLoginDialog::slotTcpConFinish(bool bsuccess)
 void DLoginDialog::slotLoginFailed(int err)
 {
 	QString result = QString("登录失败, tcp处理错误 %1").arg(err);
-	UIHelper::SetTipState(Lab_MsgTip, result, true);
+	UIHelper::SetTipState(Lab_MsgTip, result, false);
 	SetAllActionControlEnable(true);
 }

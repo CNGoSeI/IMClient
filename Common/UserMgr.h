@@ -14,6 +14,10 @@ public:
     void SetName(const QString& name);
     void SetUid(int uid);
     void SetToken(const QString& token);
+
+    const QString& GetName() const { return Name; };
+    int GetUid() const { return UId; };
+    const QString& GetToken() const { return Token; };
 private:
     SUserMgr()=default;
     QString Name;
