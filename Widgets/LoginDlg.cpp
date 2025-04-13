@@ -14,7 +14,7 @@
 #include "Common/TcpMgr.h"
 
 DLoginDialog::DLoginDialog(QWidget* parent):
-WLoadUIWgtBase::WLoadUIWgtBase(WgtFile::LoginDlgPath, parent)
+ILoadUIWgtBase::ILoadUIWgtBase(WgtFile::LoginDlgPath, parent)
 {
 	InitHttpHandlers();
 }

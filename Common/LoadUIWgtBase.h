@@ -2,12 +2,12 @@
 #define LOADUIWGTBASE_H
 #include<QObject>
 
-class WLoadUIWgtBase :public QObject
+class ILoadUIWgtBase :public QObject
 {
 	Q_OBJECT
 public:
-	WLoadUIWgtBase(const QString& paht, QWidget* parent = nullptr);
-	virtual ~WLoadUIWgtBase();
+	ILoadUIWgtBase(const QString& paht, QWidget* parent = nullptr);
+	virtual ~ILoadUIWgtBase();
 	void CreateWgt();//调用这个创建UI
 	const QWidget* GetUI()const;
 	QWidget* GetUI();

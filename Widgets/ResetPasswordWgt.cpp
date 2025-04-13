@@ -11,7 +11,7 @@
 #include <Common/PublicFun.h>
 
 WResetPasswordWgt::WResetPasswordWgt(QWidget* parent) :
-	WLoadUIWgtBase(WgtFile::RestPasswd, parent)
+	ILoadUIWgtBase(WgtFile::RestPasswd, parent)
 {
 	InitHttpHandlers();
 }

@@ -12,7 +12,7 @@
 #include "Common/HttpMgr.h"
 
 WRegisterWgt::WRegisterWgt(QWidget* parent):
-	WLoadUIWgtBase(WgtFile::RegDlgPath,parent)
+	ILoadUIWgtBase(WgtFile::RegDlgPath,parent)
 {
 	InitHttpHandlers();
 }

@@ -13,6 +13,15 @@ namespace UIHelper
 
 	void SetTipState(QLabel* TipWgt,const QString& Tip,const bool bOk=true);//设置提示框文本和状态
 	void SetLineEditError(QLineEdit* Target,bool IsError=false);//设置对象编辑框错误样式
+
+	template <typename T>
+	T AssertFindChild(QWidget* UI, const QString& ControlName)
+	{
+		if (!UI)return nullptr;
+		T ControlP = UI->findChild<T>(ControlName);
+		Q_ASSERT(ControlP);
+		return ControlP;
+	}
 }
 
 namespace Net

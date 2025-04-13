@@ -2,29 +2,29 @@
 #include <QWidget>
 #include "Widgets/WidgetFilesHelper.h"
 
-WLoadUIWgtBase::WLoadUIWgtBase(const QString& path, QWidget* parent):UI(WgtFile::LoadUI(path, parent))
+ILoadUIWgtBase::ILoadUIWgtBase(const QString& path, QWidget* parent):UI(WgtFile::LoadUI(path, parent))
 {
 
 }
 
-WLoadUIWgtBase::~WLoadUIWgtBase()
+ILoadUIWgtBase::~ILoadUIWgtBase()
 {
 	UI->deleteLater();
 }
 
-const QWidget* WLoadUIWgtBase::GetUI() const
+const QWidget* ILoadUIWgtBase::GetUI() const
 {
 	return UI;
 }
 
-QWidget* WLoadUIWgtBase::GetUI()
+QWidget* ILoadUIWgtBase::GetUI()
 {
 	return UI;
 }
 
-void WLoadUIWgtBase::CreateWgt()
+void ILoadUIWgtBase::CreateWgt()
 {
-	Q_ASSERT(UI != nullptr, "WLoadUIWgtBase", "WLoadUIWgtBase::UI Load ERROR");
+	Q_ASSERT(UI != nullptr, "ILoadUIWgtBase", "ILoadUIWgtBase::UI Load ERROR");
 	InitControls();
 	ConnectSigSlot();
 }

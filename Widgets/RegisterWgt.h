@@ -7,7 +7,7 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 
-class WRegisterWgt : public WLoadUIWgtBase
+class WRegisterWgt : public ILoadUIWgtBase
 {
     Q_OBJECT
 public:

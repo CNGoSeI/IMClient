@@ -12,7 +12,7 @@ class QPushButton;
 class QLineEdit;
 class QLabel;
 
-class DLoginDialog : public WLoadUIWgtBase
+class DLoginDialog : public ILoadUIWgtBase
 {
     Q_OBJECT
 public:

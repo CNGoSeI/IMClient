@@ -1,7 +1,7 @@
 /* 主窗口隐藏边框（需配合代码设置Qt::FramelessWindowHint） */
 QMainWindow {
     background: transparent;
-     padding: 6px;
+   padding: 4px;
 }
 
 /* 所有Widget容器样式 */
@@ -18,8 +18,8 @@ QPushButton {
     border: 1px solid #FFB6C1; /* 浅粉色边框 */
     border-radius: 4px;
     color: white;
-    padding: 8px 15px;
-    min-width: 60px;
+	padding:4px;
+
 }
 
 /* 悬停状态 */
@@ -32,8 +32,7 @@ QPushButton:hover {
 QPushButton:pressed {
     background-color: #C71585; /* 紫红色 */
     border-color: #DB7093;
-    padding-top: 9px;
-    padding-bottom: 7px;
+	/*padding:4px;*/
 }
 
 /* 禁用状态 */

@@ -1,7 +1,30 @@
 ﻿#include <QApplication>
 #include <QFile>
 #include <QResource>
+
+#include "Common/TcpMgr.h"
 #include "Widgets/mainwindow.h"
+#include "Widgets/MainChatWgt.h"
+
+
+
+// 设置全局样式表
+void SetTotalQss(QApplication& A)
+{
+    QFile qssFile(":/Skin/StylesSheet.qss");
+    qssFile.open(QFile::ReadOnly);
+
+	A.setStyleSheet(qssFile.readAll());
+}
+
+void ConnectSigSlot(QWidget& Main,QWidget& Chat)
+{
+	QObject::connect(&STcpMgr::GetInstance(), &STcpMgr::sigSwitchChatWgt, [&Main,&Chat]()
+	{
+		Main.close();
+		Chat.show();
+	});
+}
 
 int main(int argc, char *argv[])
 {
@@ -16,11 +39,18 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    // 设置全局样式表
-    QFile qssFile(":/Skin/StylesSheet.qss");
-    qssFile.open(QFile::ReadOnly);
-    a.setStyleSheet(qssFile.readAll());
+    SetTotalQss(a);
+
     MainWindow w;
+    WChatWgt ChatWgt;
+    ChatWgt.CreateWgt();
+
+    ConnectSigSlot(w, *ChatWgt.GetUI());
+
     w.show();
+    ChatWgt.GetUI()->close();
+
+    emit STcpMgr::GetInstance().sigSwitchChatWgt();
+
     return a.exec();
 }

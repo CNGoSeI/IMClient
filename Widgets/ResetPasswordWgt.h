@@ -6,7 +6,7 @@ class QLabel;
 class QLineEdit;
 class QPushButton;
 
-class WResetPasswordWgt : public WLoadUIWgtBase
+class WResetPasswordWgt : public ILoadUIWgtBase
 {
     Q_OBJECT
 
