@@ -1,6 +1,7 @@
 /* 主窗口隐藏边框（需配合代码设置Qt::FramelessWindowHint） */
 QMainWindow {
     background: transparent;
+	border-radius: 4px;
    padding: 4px;
 }
 
@@ -8,7 +9,6 @@ QMainWindow {
 QWidget {
     background-color:rgb(243, 250, 255); /* 乳白偏蓝 */
     border-radius: 4px;
-   
     border: none; /* 禁止子控件继承边框 */
 }
 
@@ -78,4 +78,26 @@ QLineEdit[error="true"] {
 #Lab_ErrTip[state='err'],#Lab_MsgTip[state='err']{
    color: red;
    font-size: 12px;
+}
+
+QScrollBar:vertical {
+    background: transparent; /* 将轨道背景设置为透明 */
+    width: 8px; /* 滚动条宽度，根据需要调整 */
+    margin: 0px; /* 移除滚动条与滑块之间的间距 */
+}
+
+QScrollBar::handle:vertical {
+    background: rgb(173,170,169); /* 滑块颜色 */
+    min-height: 10px; /* 滑块最小高度，根据需要调整 */
+    border-radius: 4px; /* 滑块边缘圆角，调整以形成椭圆形状 */
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px; /* 移除上下按钮 */
+    border: none; /* 移除边框 */
+    background: transparent; /* 背景透明 */
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none; /* 页面滚动部分背景透明 */
 }

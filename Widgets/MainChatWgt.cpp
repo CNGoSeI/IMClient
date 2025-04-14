@@ -44,7 +44,8 @@ std::vector<QString> names = {
 WChatWgt::WChatWgt(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::MainChatUI, parent)
 {
-
+    //UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint);
+	//UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
 }
 
 WChatWgt::~WChatWgt()
@@ -118,7 +119,7 @@ void WChatWgt::addChatUserList()
         int head_i = randomValue % heads.size();
         int name_i = randomValue % names.size();
 
-        auto* chat_user_wid = new WChatUserWid();
+        auto* chat_user_wid = new WChatUserWid(List_ChatUser->ListWgt);
         chat_user_wid->CreateWgt();
         chat_user_wid->SetInfo(names[name_i], heads[head_i], strs[str_i]);
         QListWidgetItem* item = new QListWidgetItem();
