@@ -10,6 +10,17 @@ WChatUserWid::WChatUserWid(QWidget* parent) :
 	IListItemWgt(WgtFile::ChatUserItem, parent)
 {
 
+	static auto GetUserItemQss = []()
+	{
+		QFile qssFile(":/Skin/UserItemWgt.qss");
+		qssFile.open(QFile::ReadOnly);
+		return qssFile.readAll();
+	}();
+
+	UI->setStyleSheet(GetUserItemQss);
+	//UI->setMouseTracking(true);  // 启用悬停检测
+	//UI->setAttribute(Qt::WA_Hover);  // 强制启用悬停事件
+	UI->setAttribute(Qt::WA_StyledBackground);
 }
 
 void WChatUserWid::InitControls()

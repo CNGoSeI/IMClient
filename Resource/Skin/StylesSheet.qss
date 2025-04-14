@@ -60,7 +60,7 @@ QLineEdit {
 QLineEdit:focus {
     border: 1px solid #1F1F1F;
     border-radius: 4px;
-    background: rgb(252, 242, 251);
+    background: rgb(232, 242, 251);
 }
 
 /* 错误状态提示 */
@@ -80,6 +80,7 @@ QLineEdit[error="true"] {
    font-size: 12px;
 }
 
+/* 滚动条 */
 QScrollBar:vertical {
     background: transparent; /* 将轨道背景设置为透明 */
     width: 8px; /* 滚动条宽度，根据需要调整 */
@@ -100,4 +101,23 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     background: none; /* 页面滚动部分背景透明 */
+}
+
+/* 用户列表相关 */
+#Wgt_ChatSearch,#Wgt_ChatSearchTitle{
+    background-color: rgb(250, 253, 255); /* 提高亮度，乳白偏蓝更纯净 */
+    border-radius: 0; /* 取消圆角 */
+    border: n
+}
+
+/* 列表控件容器 */
+QListWidget {
+    background-color: rgb(250, 253, 255);/* 提高亮度，乳白偏蓝更纯净 */
+    border-radius: 0; /* 取消圆角 */
+    border: 0;
+}
+
+/* 完全隐藏的控件 */
+#Btn_ResizeSizeFlag{
+	background: transparent; border: none;
 }

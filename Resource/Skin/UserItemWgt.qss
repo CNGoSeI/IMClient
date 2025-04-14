@@ -1,0 +1,31 @@
+/**/
+QWidget
+{
+	background-color: rgb(250, 253, 255); /* 提高亮度，乳白偏蓝更纯净 */
+    border-radius: 0; /* 取消圆角 */
+    border: none;
+}
+
+QWidget:hover {
+    background-color: #f0f8ff;
+	border: none;
+}
+
+#Lab_UserMsg{
+    color:rgb(153,153,153);
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
+}
+
+#Lab_UserName{
+    color:rgb(0,0,0);
+    font-size: 14px;
+    font-weight: normal;
+    font-family: "Microsoft YaHei";
+}
+
+#Wgt_Time #Lab_Time{
+   color:rgb(140,140,140);
+   font-size: 12px;
+   font-family: "Microsoft YaHei";
+}

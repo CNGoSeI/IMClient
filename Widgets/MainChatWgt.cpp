@@ -3,7 +3,9 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QAction>
+#include <qcoreevent.h>
 #include <qlistwidget.h>
+#include <QMouseEvent>
 #include <QStackedWidget>
 #include "ChatUserList.h"
 #include "WidgetFilesHelper.h"
@@ -44,13 +46,70 @@ std::vector<QString> names = {
 WChatWgt::WChatWgt(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::MainChatUI, parent)
 {
-    UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint);
-	UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
+
 }
 
 WChatWgt::~WChatWgt()
 {
 
+}
+
+bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == Btn_ResizeSizeFlag)
+    {
+        switch (event->type())
+        {
+        case QEvent::Enter:
+	        {
+		        Btn_ResizeSizeFlag->setCursor(Qt::SizeFDiagCursor); // 右下角缩放光标
+		        QEnterEvent* enterEvent = static_cast<QEnterEvent*>(event); // 注意类型转换
+                OriginalGeometry = UI->geometry();
+		        DragStartPos = enterEvent->globalPos(); // 直接获取全局坐标[3,6](@ref)
+		        bInDragBtn = true;
+		        return true;
+	        }
+        case QEvent::Leave:
+            Btn_ResizeSizeFlag->unsetCursor(); // 恢复默认光标
+            bInDragBtn = false;
+            return true;
+        }
+    }
+
+	if (watched == UI)
+	{
+		switch (event->type())
+		{
+		case QEvent::MouseButtonPress:
+			{
+				QMouseEvent* me = static_cast<QMouseEvent*>(event);
+				DragStartPos = me->globalPos();
+                qDebug() << "点击按钮时 全局坐标：" << DragStartPos;
+				OriginalGeometry = UI->geometry();
+				return false;
+			}
+		case QEvent::MouseMove:
+			{
+				QMouseEvent* me = static_cast<QMouseEvent*>(event);
+
+				if (me->buttons() & Qt::LeftButton)
+				{
+					if (bInDragBtn) //缩放界面
+					{
+						HandleWindowResize(me->globalPos());
+					}
+					else //移动界面
+					{
+						QPoint delta = me->globalPos() - DragStartPos;
+						UI->move(OriginalGeometry.topLeft() + delta);
+					}
+				}
+				return false;
+			}
+		}
+	}
+
+	return QObject::eventFilter(watched, event);
 }
 
 void WChatWgt::InitControls()
@@ -79,8 +138,14 @@ void WChatWgt::InitControls()
 
     Btn_LineEdtClear= UIHelper::AssertFindChild<QPushButton*>(Edt_Search, "clearButton");
 
-   
+    Btn_ResizeSizeFlag = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_ResizeSizeFlag");
 
+    UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint);
+    UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
+    UI->installEventFilter(this);  // 关键：将UI的鼠标事件传递到当前对象
+    UI->setMouseTracking(true);    // 启用鼠标移动追踪
+
+    Btn_ResizeSizeFlag->installEventFilter(this);
 }
 
 void WChatWgt::ConnectSigSlot()
@@ -91,7 +156,7 @@ void WChatWgt::ConnectSigSlot()
 		ShowSearch(false);
 	});
 
-    addChatUserList();
+    AddChatUserList();
 }
 
 void WChatWgt::ShowSearch(bool bsearch)
@@ -110,7 +175,7 @@ void WChatWgt::ShowSearch(bool bsearch)
     }
 }
 
-void WChatWgt::addChatUserList()
+void WChatWgt::AddChatUserList()
 {
     // 创建QListWidgetItem，并设置自定义的widget
     for (int i = 0; i < 13; i++) {
@@ -129,4 +194,15 @@ void WChatWgt::addChatUserList()
         List_ChatUser->ListWgt->addItem(item);
         List_ChatUser->ListWgt->setItemWidget(item, chat_user_wid->GetUI());
     }
+}
+
+void WChatWgt::HandleWindowResize(const QPoint& globalPos) {
+    QRect newGeo = OriginalGeometry;
+    QPoint delta = globalPos - DragStartPos;
+
+    // 调整右下角坐标
+    newGeo.setRight(newGeo.right() + delta.x());
+    newGeo.setBottom(newGeo.bottom() + delta.y());
+
+    UI->setGeometry(newGeo);
 }

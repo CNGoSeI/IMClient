@@ -21,5 +21,6 @@
 		<file>Skin/Image/HeadIcon08.jpg</file>
 		<file>Skin/Image/HeadIcon09.jpg</file>
         <file>Skin/StylesSheet.qss</file>
+		<file>Skin/UserItemWgt.qss</file>
     </qresource>
 </RCC>

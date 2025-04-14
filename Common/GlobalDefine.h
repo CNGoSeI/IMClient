@@ -82,5 +82,10 @@ namespace Modules
 	constexpr int LOGINMOD{ 2 };//登录模式
 }
 
+enum class EResizeArea {
+	None, Left, Right, Top, Bottom,
+	TopLeft, TopRight, BottomLeft, BottomRight
+};
+
 
 #endif
