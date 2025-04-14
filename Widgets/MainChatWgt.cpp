@@ -44,8 +44,8 @@ std::vector<QString> names = {
 WChatWgt::WChatWgt(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::MainChatUI, parent)
 {
-    //UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint);
-	//UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
+    UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint);
+	UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
 }
 
 WChatWgt::~WChatWgt()
