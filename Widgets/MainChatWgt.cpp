@@ -4,18 +4,21 @@
 #include <QPushButton>
 #include <QAction>
 #include <qcoreevent.h>
+#include <qeventloop.h>
 #include <qlistwidget.h>
 #include <QMouseEvent>
 #include <QStackedWidget>
 #include <QRandomGenerator>
 #include <QSplitter>
 #include <QLayout>
+#include <QTimer>
 
 #include "ChatUserWid.h"
 #include "Common/GlobalDefine.h"
 #include "ChatUserList.h"
 #include "WidgetFilesHelper.h"
 #include "CloseTitleWgt.h"
+#include "LoadingWgt.h"
 
 std::vector<QString>  strs = { "hello world !",
                              "nice to meet u",
@@ -64,15 +67,16 @@ void WChatWgt::slotLoadingChatUser()
     }
 
     bLoading = true;
-    LoadingDlg* loadingDialog = new LoadingDlg(this);
-    loadingDialog->setModal(true);
-    loadingDialog->show();
+    SLoadingWgt::Instance().PopShow(UI);
     qDebug() << "添加新的用户Item.....";
     AddChatUserList();
-    // 加载完成后关闭对话框
-    loadingDialog->deleteLater();
 
+    // 添加2秒延时后关闭加载动画
+    //QTimer::singleShot(6000, this, [this](){});
+
+    SLoadingWgt::Instance().HideStop();
     bLoading = false;
+
 }
 
 bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
@@ -184,6 +188,8 @@ void WChatWgt::InitControls()
     Splitter->setStretchFactor(0, 5);
     Splitter->setStretchFactor(1, 3);
     Btn_ResizeSizeFlag->installEventFilter(this);
+
+    AddChatUserList();
 }
 
 void WChatWgt::ConnectSigSlot()
@@ -194,7 +200,7 @@ void WChatWgt::ConnectSigSlot()
 		ShowSearch(false);
 	});
 
-    AddChatUserList();
+    connect(List_ChatUser.get(), &CChatUserList::sigLoadingChatUser, this, &WChatWgt::slotLoadingChatUser);
 }
 
 void WChatWgt::ShowSearch(bool bsearch)

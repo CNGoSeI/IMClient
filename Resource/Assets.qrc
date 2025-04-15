@@ -7,6 +7,7 @@
 		<file>Skin/ChatWgt.ui</file>
 		<file>Skin/Chatuserwid.ui</file>
 		<file>Skin/CloseTitle.ui</file>
+		<file>Skin/Loading.ui</file>
         <file>Skin/Image/Ice.png</file>
 		<file>Skin/Image/Search.png</file>
 		<file>Skin/Image/AddUser.png</file>
@@ -24,6 +25,7 @@
 		<file>Skin/Image/HeadIcon07.jpg</file>
 		<file>Skin/Image/HeadIcon08.jpg</file>
 		<file>Skin/Image/HeadIcon09.jpg</file>
+		<file>Skin/Image/loading.gif</file>
         <file>Skin/StylesSheet.qss</file>
 		<file>Skin/UserItemWgt.qss</file>
     </qresource>

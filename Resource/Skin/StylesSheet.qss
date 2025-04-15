@@ -2,7 +2,7 @@
 QMainWindow {
     background: transparent;
 	border-radius: 4px;
-   padding: 4px;
+    padding: 4px;
 }
 
 /* 所有Widget容器样式 */
@@ -113,10 +113,14 @@ QLineEdit[error="true"] {
 }
 
 /* 滚动条 */
+QScrollBar
+{
+	background: transparent; /* 将轨道背景设置为透明 */
+	border: none;
+	margin: 0px; /* 移除滚动条与滑块之间的间距 */
+}
 QScrollBar:vertical {
-    background: transparent; /* 将轨道背景设置为透明 */
     width: 8px; /* 滚动条宽度，根据需要调整 */
-    margin: 0px; /* 移除滚动条与滑块之间的间距 */
 }
 
 QScrollBar::handle:vertical {
@@ -127,19 +131,19 @@ QScrollBar::handle:vertical {
 
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     height: 0px; /* 移除上下按钮 */
-    border: none; /* 移除边框 */
-    background: transparent; /* 背景透明 */
-}
-
-QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
-    background: none; /* 页面滚动部分背景透明 */
 }
 
 /* 用户列表相关 */
-#Wgt_ChatSearch,#Wgt_ChatSearchTitle,#List_ChatUser{
+#Wgt_ChatSearch,#Wgt_ChatSearchTitle
+{
     background-color: rgb(250, 253, 255); /* 提高亮度，乳白偏蓝更纯净 */
     border-radius: 0; /* 取消圆角 */
-    border: n
+    border: none;
+}
+
+#List_ChatUser,#Wgt_UserLst,#Stacke_List
+{
+	background: transparent;
 }
 
 /* 列表控件容器 */

@@ -16,7 +16,7 @@ protected:
 	bool eventFilter(QObject* watched, QEvent* event) override;
 
 signals:
-	void sigLoadingChatUser();
+	void sigLoadingChatUser();//通知控件加载子项
 
 public:
 	QListWidget* ListWgt{nullptr};
