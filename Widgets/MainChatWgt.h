@@ -6,6 +6,7 @@
 #include "Common/GlobalDefine.h"
 #include "Common/LoadUIWgtBase.h"
 
+class WCloseTitle;
 class QPushButton;
 class QStackedWidget;
 class QListWidget;
@@ -29,6 +30,9 @@ public:
     explicit WChatWgt(QWidget* parent = nullptr);
     virtual ~WChatWgt();
 
+public slots:
+    void slotLoadingChatUser();
+
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 
@@ -51,14 +55,18 @@ private:
     QWidget* Wgt_ConLst{ nullptr };
     QPushButton* Btn_LineEdtClear{ nullptr };
     QPushButton* Btn_ResizeSizeFlag{ nullptr };//用来辅助界面缩放的按钮
+    QWidget* Wgt_WndTitle{ nullptr };
+
+    WCloseTitle* Wgt_CloseTitle{ nullptr };
 
     EChatUIMode Mode{EChatUIMode::ChatMode };//当前界面显示的模式，聊天界面，联系人界面
     EChatUIMode State{ EChatUIMode::ChatMode };//不同模式(聊天界面、联系人界面)下存在搜索状态
-    QPoint DragStartPos;
-    QRect OriginalGeometry;
+    QPoint DragStartPos;//拖动操作在点击时的坐标
+    QRect OriginalGeometry;//缩放操作开始时的窗口大小信息
 
     const int ResizeBorderWidth = 20;//光标检测区域补正
-    bool bInDragBtn{ false };
+    bool bInDragBtn{ false };//在拖拽按钮中
+    bool bLoading{ false };//是否在加载用户信息中
 };
 
 

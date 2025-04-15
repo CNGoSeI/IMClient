@@ -51,7 +51,7 @@
     <number>4</number>
    </property>
    <property name="rightMargin">
-    <number>8</number>
+    <number>4</number>
    </property>
    <property name="bottomMargin">
     <number>6</number>
@@ -80,8 +80,7 @@
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgba(255, 255, 255, 0);
-bord:none;</string>
+      <string notr="true"/>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="spacing">
@@ -157,8 +156,7 @@ bord:none;</string>
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgba(255, 255, 255, 0);
-bord:none;</string>
+      <string notr="true"/>
      </property>
      <widget class="QLabel" name="Lab_UserName">
       <property name="geometry">
@@ -249,8 +247,7 @@ bord:none;</string>
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgba(255, 255, 255, 0);
-bord:none;</string>
+      <string notr="true"/>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">

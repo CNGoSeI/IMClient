@@ -19,7 +19,8 @@ QPushButton {
     border-radius: 4px;
     color: white;
 	padding:4px;
-
+	font-size: 12px;
+    font-family: "Microsoft YaHei";
 }
 
 /* 悬停状态 */
@@ -46,6 +47,37 @@ QPushButton:disabled {
 QPushButton[state="warning"] { /* 自定义警告状态 */
     background-color: #FF4500;
     border-color: #FF6347;
+}
+
+/* 透明图片按钮 */
+QPushButton#Btn_Add,#Btn_Close,#Btn_Max,#Btn_Min,#Btn_Add {
+    background: transparent;  /* 完全透明背景*/
+    border: none;             /* 消除默认边框[1](@ref) */
+    outline: none;            /* 移除焦点边框[6](@ref) */
+	 border-radius: 4px;         /* 圆角 */
+}
+/* 悬浮灰色背景的按钮 */
+QPushButton#Btn_Max:hover,#Btn_Min:hover,#Btn_Add:hover{
+	background-color: #F0F0F0;   /* 浅灰色背景 */
+    border: none;  /* 边框颜色 */
+}
+/* 按下灰色背景的按钮 */
+QPushButton#Btn_Max:pressed,#Btn_Min:pressed,#Btn_Add:pressed{
+    background-color: #DfDfDf;  /* 深灰色 */
+}
+
+/* 按下灰色背景的按钮 */
+QPushButton#Btn_Max:pressed,#Btn_Min:pressed,#Btn_Add:pressed{
+    background-color: #DfDfDf;  /* 深灰色 */
+}
+
+/* 悬浮红色背景的按钮 */
+QPushButton#Btn_Close:hover{
+	background-color: #CCFF6666;
+}
+
+QPushButton#Btn_Close:pressed{
+	background-color: #FAFF6666;
 }
 
 /* 新增LineEdit专属样式 */
@@ -104,17 +136,32 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 }
 
 /* 用户列表相关 */
-#Wgt_ChatSearch,#Wgt_ChatSearchTitle{
+#Wgt_ChatSearch,#Wgt_ChatSearchTitle,#List_ChatUser{
     background-color: rgb(250, 253, 255); /* 提高亮度，乳白偏蓝更纯净 */
     border-radius: 0; /* 取消圆角 */
     border: n
 }
 
 /* 列表控件容器 */
-QListWidget {
-    background-color: rgb(250, 253, 255);/* 提高亮度，乳白偏蓝更纯净 */
-    border-radius: 0; /* 取消圆角 */
-    border: 0;
+QListView {
+    background: transparent;
+    border-radius: 0;
+    outline: none; /* 移除焦点虚线框 */
+}
+
+/* 项基础样式 */
+QListView::item {
+    background-color: rgb(250, 253, 255);
+}
+
+/* 选中状态 */
+QListView::item:selected {
+	background-color: #f0f8ff;
+    border: none;
+}
+QListView::item:hover{
+	background-color: #f0f8ff;
+    border: none;
 }
 
 /* 完全隐藏的控件 */

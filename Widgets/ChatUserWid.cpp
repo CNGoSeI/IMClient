@@ -16,10 +16,11 @@ WChatUserWid::WChatUserWid(QWidget* parent) :
 		qssFile.open(QFile::ReadOnly);
 		return qssFile.readAll();
 	}();
-
+	/*
+	 * 该界面只是显示控件，样式交由listItem进行显示，背景透明
+	 */
 	UI->setStyleSheet(GetUserItemQss);
-	//UI->setMouseTracking(true);  // 启用悬停检测
-	//UI->setAttribute(Qt::WA_Hover);  // 强制启用悬停事件
+	UI->setAttribute(Qt::WA_TransparentForMouseEvents, true); // 鼠标事件穿透
 	UI->setAttribute(Qt::WA_StyledBackground);
 }
 

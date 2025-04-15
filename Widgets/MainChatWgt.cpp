@@ -7,12 +7,15 @@
 #include <qlistwidget.h>
 #include <QMouseEvent>
 #include <QStackedWidget>
-#include "ChatUserList.h"
-#include "WidgetFilesHelper.h"
 #include <QRandomGenerator>
+#include <QSplitter>
+#include <QLayout>
 
 #include "ChatUserWid.h"
 #include "Common/GlobalDefine.h"
+#include "ChatUserList.h"
+#include "WidgetFilesHelper.h"
+#include "CloseTitleWgt.h"
 
 std::vector<QString>  strs = { "hello world !",
                              "nice to meet u",
@@ -54,6 +57,24 @@ WChatWgt::~WChatWgt()
 
 }
 
+void WChatWgt::slotLoadingChatUser()
+{
+    if (bLoading) {
+        return;
+    }
+
+    bLoading = true;
+    LoadingDlg* loadingDialog = new LoadingDlg(this);
+    loadingDialog->setModal(true);
+    loadingDialog->show();
+    qDebug() << "添加新的用户Item.....";
+    AddChatUserList();
+    // 加载完成后关闭对话框
+    loadingDialog->deleteLater();
+
+    bLoading = false;
+}
+
 bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
 {
     if (watched == Btn_ResizeSizeFlag)
@@ -86,6 +107,9 @@ bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
 				DragStartPos = me->globalPos();
                 qDebug() << "点击按钮时 全局坐标：" << DragStartPos;
 				OriginalGeometry = UI->geometry();
+                auto rect = GetTitleRect(UI->width(), UIHelper::TITLE_BAR_HEIGHT);
+                qDebug() << "返回的标题Rect:" << rect;
+                bMouseInTitle= rect.contains(me->globalPos());
 				return false;
 			}
 		case QEvent::MouseMove:
@@ -98,13 +122,13 @@ bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
 					{
 						HandleWindowResize(me->globalPos());
 					}
-					else //移动界面
+					else if(bMouseInTitle) //移动界面
 					{
 						QPoint delta = me->globalPos() - DragStartPos;
 						UI->move(OriginalGeometry.topLeft() + delta);
 					}
 				}
-				return false;
+				return true;
 			}
 		}
 	}
@@ -140,11 +164,25 @@ void WChatWgt::InitControls()
 
     Btn_ResizeSizeFlag = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_ResizeSizeFlag");
 
-    UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint);
+    Wgt_WndTitle= UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_WndTitle");
+
+    if(auto LayoutTitle = Wgt_WndTitle->layout())
+    {
+        Wgt_CloseTitle = new WCloseTitle(UI);
+        Wgt_CloseTitle->GetUI()->setParent(UI);
+        Wgt_CloseTitle->CreateWgt();
+        LayoutTitle->addWidget(Wgt_CloseTitle->GetUI());
+    }
+
+    UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint|Qt::Window);
     UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
     UI->installEventFilter(this);  // 关键：将UI的鼠标事件传递到当前对象
     UI->setMouseTracking(true);    // 启用鼠标移动追踪
 
+    auto Splitter= UIHelper::AssertFindChild<QSplitter*>(UI, "splitter");
+
+    Splitter->setStretchFactor(0, 5);
+    Splitter->setStretchFactor(1, 3);
     Btn_ResizeSizeFlag->installEventFilter(this);
 }
 

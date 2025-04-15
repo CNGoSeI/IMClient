@@ -14,6 +14,8 @@ namespace UIHelper
 	void SetTipState(QLabel* TipWgt,const QString& Tip,const bool bOk=true);//设置提示框文本和状态
 	void SetLineEditError(QLineEdit* Target,bool IsError=false);//设置对象编辑框错误样式
 
+	constexpr uint8_t TITLE_BAR_HEIGHT{ 30 };//定义标题栏高度
+
 	template <typename T>
 	T AssertFindChild(QWidget* UI, const QString& ControlName)
 	{

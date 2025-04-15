@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>976</width>
-    <height>888</height>
+    <width>688</width>
+    <height>498</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -23,6 +23,12 @@
    <double>1.000000000000000</double>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="topMargin">
+    <number>6</number>
+   </property>
+   <property name="bottomMargin">
+    <number>6</number>
+   </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -62,7 +68,7 @@
          <item>
           <widget class="QWidget" name="side_bar" native="true">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -103,7 +109,7 @@
               <property name="minimumSize">
                <size>
                 <width>45</width>
-                <height>150</height>
+                <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
@@ -130,6 +136,12 @@
                </property>
                <item>
                 <widget class="QLabel" name="Lab_ContactSide">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>35</width>
@@ -149,6 +161,12 @@
                </item>
                <item>
                 <widget class="QLabel" name="Lab_Head">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>35</width>
@@ -168,6 +186,12 @@
                </item>
                <item>
                 <widget class="QLabel" name="Lab_ChatSide">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>35</width>
@@ -192,6 +216,9 @@
              <spacer name="verticalSpacer">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Expanding</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -242,8 +269,14 @@
               <property name="frameShadow">
                <enum>QFrame::Raised</enum>
               </property>
+              <property name="midLineWidth">
+               <number>0</number>
+              </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="handleWidth">
+               <number>4</number>
               </property>
               <widget class="QFrame" name="Wgt_ChatSearch">
                <property name="sizePolicy">
@@ -254,7 +287,7 @@
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
+                 <width>100</width>
                  <height>0</height>
                 </size>
                </property>
@@ -292,7 +325,7 @@
                 <item>
                  <widget class="QWidget" name="Wgt_ChatSearchTitle" native="true">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
@@ -300,7 +333,7 @@
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>60</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -311,19 +344,19 @@
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_2">
                    <property name="spacing">
-                    <number>6</number>
+                    <number>2</number>
                    </property>
                    <property name="leftMargin">
                     <number>8</number>
                    </property>
                    <property name="topMargin">
-                    <number>4</number>
+                    <number>20</number>
                    </property>
                    <property name="rightMargin">
                     <number>6</number>
                    </property>
                    <property name="bottomMargin">
-                    <number>4</number>
+                    <number>20</number>
                    </property>
                    <item>
                     <widget class="QLineEdit" name="Edt_Search">
@@ -363,32 +396,18 @@
                      </property>
                      <property name="minimumSize">
                       <size>
-                       <width>25</width>
-                       <height>25</height>
+                       <width>30</width>
+                       <height>30</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>25</width>
-                       <height>25</height>
+                       <width>30</width>
+                       <height>30</height>
                       </size>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">/* 强制覆盖所有父类样式 */
-QWidget &gt; QPushButton {
-    background-color: rgba(255,255,255,0) !important;  /* 完全透明背景[1,3](@ref) */
-    border: none !important;                           /* 消除默认边框[1](@ref) */
-    padding: 0px;                                      /* 消除内边距 */
-    margin: 0px;                                       /* 消除外边距 */
-    outline: none;                                     /* 移除焦点边框[6](@ref) */
-}
-
-/* 悬浮状态 */
-QPushButton:hover {
-    background-color: rgba(227,93,151,0.15);          /* 半透明粉色背景[7](@ref) */
-    transform: translateY(-1px);                       /* 上移1像素模拟浮动效果[8](@ref) */
-    qproperty-icon: url(:/images/btn_hover.png);       /* 更换悬停图标[4](@ref) */
-}</string>
+                      <string notr="true"/>
                      </property>
                      <property name="text">
                       <string/>
@@ -399,8 +418,8 @@ QPushButton:hover {
                      </property>
                      <property name="iconSize">
                       <size>
-                       <width>18</width>
-                       <height>18</height>
+                       <width>22</width>
+                       <height>22</height>
                       </size>
                      </property>
                     </widget>
@@ -545,17 +564,59 @@ QPushButton:hover {
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>25</height>
+                    <height>30</height>
                    </size>
                   </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_9">
+                   <property name="spacing">
+                    <number>2</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>2</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>2</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <spacer name="horizontalSpacer_6">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>478</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                 <item>
                  <widget class="QWidget" name="title_wid" native="true">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>60</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
@@ -592,16 +653,34 @@ QPushButton:hover {
                 </item>
                 <item>
                  <widget class="QWidget" name="data_wid" native="true">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
-                    <width>560</width>
-                    <height>450</height>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>65536</height>
                    </size>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QWidget" name="tool_wid" native="true">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -683,16 +762,22 @@ QPushButton:hover {
                 </item>
                 <item>
                  <widget class="QTextEdit" name="Edt_Chat">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
-                    <height>150</height>
+                    <height>0</height>
                    </size>
                   </property>
                   <property name="maximumSize">
                    <size>
                     <width>16777215</width>
-                    <height>150</height>
+                    <height>550</height>
                    </size>
                   </property>
                   <property name="frameShape">

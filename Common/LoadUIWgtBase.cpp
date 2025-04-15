@@ -1,4 +1,6 @@
 #include "LoadUIWgtBase.h"
+
+#include <QPainter>
 #include <QWidget>
 #include "Widgets/WidgetFilesHelper.h"
 
@@ -20,6 +22,12 @@ const QWidget* ILoadUIWgtBase::GetUI() const
 QWidget* ILoadUIWgtBase::GetUI()
 {
 	return UI;
+}
+
+QRect ILoadUIWgtBase::GetTitleRect(int W, int H) const
+{
+	QPoint parentTopLeft = UI->mapToParent(QPoint(0, 0));
+	return QRect(parentTopLeft.x(), parentTopLeft.y(), W, H);
 }
 
 void ILoadUIWgtBase::CreateWgt()
