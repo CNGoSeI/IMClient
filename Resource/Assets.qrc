@@ -8,6 +8,7 @@
 		<file>Skin/Chatuserwid.ui</file>
 		<file>Skin/CloseTitle.ui</file>
 		<file>Skin/Loading.ui</file>
+		<file>Skin/ChatPage.ui</file>
         <file>Skin/Image/Ice.png</file>
 		<file>Skin/Image/Search.png</file>
 		<file>Skin/Image/AddUser.png</file>
@@ -16,6 +17,8 @@
 		<file>Skin/Image/Close.png</file>
         <file>Skin/Image/Maximize.png</file>
         <file>Skin/Image/Min_32.png</file>
+		<file>Skin/Image/Emoj.png</file>
+        <file>Skin/Image/File.png</file>
 		<file>Skin/Image/HeadIcon01.jpg</file>
 		<file>Skin/Image/HeadIcon02.jpg</file>
 		<file>Skin/Image/HeadIcon03.jpg</file>

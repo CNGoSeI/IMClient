@@ -12,6 +12,13 @@ QWidget {
     border: none; /* 禁止子控件继承边框 */
 }
 
+/* 透明背景 */
+#List_ChatUser,#Wgt_UserLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_Resize
+{
+	background: transparent;
+	
+}
+
 /* 基础按钮样式 */
 QPushButton {
     background-color: #FF69B4; /* 粉红基础色 */
@@ -50,26 +57,24 @@ QPushButton[state="warning"] { /* 自定义警告状态 */
 }
 
 /* 透明图片按钮 */
-QPushButton#Btn_Add,#Btn_Close,#Btn_Max,#Btn_Min,#Btn_Add {
+QPushButton#Btn_Add,#Btn_Close,#Btn_Max,#Btn_Min,#Btn_Add,#Btn_Emoj,#Btn_File {
     background: transparent;  /* 完全透明背景*/
     border: none;             /* 消除默认边框[1](@ref) */
     outline: none;            /* 移除焦点边框[6](@ref) */
 	 border-radius: 4px;         /* 圆角 */
 }
 /* 悬浮灰色背景的按钮 */
-QPushButton#Btn_Max:hover,#Btn_Min:hover,#Btn_Add:hover{
+QPushButton#Btn_Max:hover,#Btn_Min:hover,#Btn_Add:hover,#Btn_Emoj:hover,#Btn_File:hover
+{
 	background-color: #F0F0F0;   /* 浅灰色背景 */
     border: none;  /* 边框颜色 */
 }
 /* 按下灰色背景的按钮 */
-QPushButton#Btn_Max:pressed,#Btn_Min:pressed,#Btn_Add:pressed{
+QPushButton#Btn_Max:pressed,#Btn_Min:pressed,#Btn_Add:pressed,#Btn_Emoj:pressed,#Btn_File:pressed
+{
     background-color: #DfDfDf;  /* 深灰色 */
 }
 
-/* 按下灰色背景的按钮 */
-QPushButton#Btn_Max:pressed,#Btn_Min:pressed,#Btn_Add:pressed{
-    background-color: #DfDfDf;  /* 深灰色 */
-}
 
 /* 悬浮红色背景的按钮 */
 QPushButton#Btn_Close:hover{
@@ -141,9 +146,10 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     border: none;
 }
 
-#List_ChatUser,#Wgt_UserLst,#Stacke_List
-{
-	background: transparent;
+QSplitter::handle {
+    background: transparent;  /* 透明背景 */
+    width: 0px;              /* 完全隐藏分隔条 */
+    margin: 0px;             /* 消除边距 */
 }
 
 /* 列表控件容器 */
@@ -168,6 +174,19 @@ QListView::item:hover{
     border: none;
 }
 
+#wgt_input
+{
+	background-color: #F9FEFF;
+	border-radius: 0px;
+    padding: 4px;
+}
+
+#tool_wid{
+	border-radius:0px;
+	background: transparent;
+    border-bottom: 1px solid #EFEFEF; /* 设置下边框颜色和宽度 */
+	border-top: 1px solid #EFEFEF;
+}
 /* 完全隐藏的控件 */
 #Btn_ResizeSizeFlag{
 	background: transparent; border: none;

@@ -16,6 +16,7 @@ namespace WgtFile
 	const QString ChatUserItem = WgtFileRoot + "Chatuserwid.ui";//聊天界面消息模式用户消息框
 	const QString CloseTitle = WgtFileRoot + "CloseTitle.ui";
 	const QString LoadingWgt = WgtFileRoot + "Loading.ui";
+	const QString ChatPageWgt = WgtFileRoot + "ChatPage.ui";
 
 	inline QWidget* LoadUI(const QString& UIFile, QWidget* parent = nullptr)
 	{

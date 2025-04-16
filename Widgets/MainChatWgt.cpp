@@ -19,6 +19,7 @@
 #include "WidgetFilesHelper.h"
 #include "CloseTitleWgt.h"
 #include "LoadingWgt.h"
+#include "ChatPageWgt.h"
 
 std::vector<QString>  strs = { "hello world !",
                              "nice to meet u",
@@ -62,6 +63,7 @@ WChatWgt::~WChatWgt()
 
 void WChatWgt::slotLoadingChatUser()
 {
+    //TODO::最大加载数量了不再加载
     if (bLoading) {
         return;
     }
@@ -142,6 +144,13 @@ bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
 
 void WChatWgt::InitControls()
 {
+    ChatPage = new WChatPage(UI);
+    ChatPage->CreateWgt();
+
+    Stacked_Right= UIHelper::AssertFindChild<QStackedWidget*>(UI, "Stacked_Right");
+    Stacked_Right->addWidget(ChatPage->GetUI());
+    Stacked_Right->setCurrentWidget(ChatPage->GetUI());
+
     Edt_Search = UI->findChild<QLineEdit*>("Edt_Search");
     Q_ASSERT(Edt_Search);
 

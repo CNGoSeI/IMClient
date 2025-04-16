@@ -6,6 +6,7 @@
 #include "Common/GlobalDefine.h"
 #include "Common/LoadUIWgtBase.h"
 
+class WChatPage;
 class WCloseTitle;
 class QPushButton;
 class QStackedWidget;
@@ -56,8 +57,9 @@ private:
     QPushButton* Btn_LineEdtClear{ nullptr };
     QPushButton* Btn_ResizeSizeFlag{ nullptr };//用来辅助界面缩放的按钮
     QWidget* Wgt_WndTitle{ nullptr };
-
+    WChatPage* ChatPage{ nullptr };//ChatPage.ui
     WCloseTitle* Wgt_CloseTitle{ nullptr };
+    QStackedWidget* Stacked_Right{ nullptr };
 
     EChatUIMode Mode{EChatUIMode::ChatMode };//当前界面显示的模式，聊天界面，联系人界面
     EChatUIMode State{ EChatUIMode::ChatMode };//不同模式(聊天界面、联系人界面)下存在搜索状态
