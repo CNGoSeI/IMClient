@@ -9,6 +9,7 @@
 		<file>Skin/CloseTitle.ui</file>
 		<file>Skin/Loading.ui</file>
 		<file>Skin/ChatPage.ui</file>
+		<file>Skin/ChatArea.ui</file>
         <file>Skin/Image/Ice.png</file>
 		<file>Skin/Image/Search.png</file>
 		<file>Skin/Image/AddUser.png</file>

@@ -2,6 +2,7 @@
 #define WGT_CHATPAGEWGT_H
 #include "Common/LoadUIWgtBase.h"
 
+class WChatArea;
 class QSplitter;
 
 class WChatPage:public ILoadUIWgtBase
@@ -15,6 +16,8 @@ protected:
 	void ConnectSigSlot() override;
 
 private:
+	QWidget* Wgt_ChatArea{ nullptr };
 	QSplitter* splitter{nullptr};
+	WChatArea* ChatAreaControl{ nullptr };
 };
 #endif // WGT_CHATPAGEWGT_H

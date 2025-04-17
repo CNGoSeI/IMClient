@@ -6,6 +6,7 @@
 #include "Common/GlobalDefine.h"
 #include "Common/LoadUIWgtBase.h"
 
+class WChatArea;
 class WChatPage;
 class WCloseTitle;
 class QPushButton;
