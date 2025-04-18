@@ -7,8 +7,10 @@
 #include <QScrollBar>
 #include <QTimer>
 
+#include "MsgItem.h"
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
+#include "Common/LoadUIWgtBase.h"
 
 WChatArea::WChatArea(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::ChatDataArea,parent)
@@ -32,15 +34,18 @@ void WChatArea::InitControls()
 	ScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	//ScrollArea->installEventFilter(this);
 
-	for(int i=0;i<50;++i)
-	{
-		Layout_Scroll->addWidget(new QPushButton());
-	}
 }
 
 void WChatArea::ConnectSigSlot()
 {
 	connect(ScrollArea->verticalScrollBar(), &QScrollBar::rangeChanged, this, &WChatArea::slotVScrollBarMoved);
+}
+
+void WChatArea::AddMsgItem(bool bIsSelf, const QByteArray& HtmlContent)
+{
+	auto tempWgt = new WMsgItem(true, HtmlContent, Wgt_Scroll);
+	tempWgt->CreateWgt();
+	Layout_Scroll->addWidget(tempWgt->GetUI());
 }
 
 void WChatArea::slotVScrollBarMoved(int min, int max)

@@ -1,8 +1,10 @@
 ﻿#include "ChatPageWgt.h"
 
 #include <qboxlayout.h>
+#include <QPushButton>
 #include <QWidget>
 #include <QSplitter>
+#include <QTextEdit>
 
 #include "ChatArea.h"
 #include "WidgetFilesHelper.h"
@@ -21,6 +23,10 @@ void WChatPage::InitControls()
 	ChatAreaControl->CreateWgt();
 	Wgt_ChatArea->layout()->addWidget(ChatAreaControl->GetUI());
 
+	Btn_Send = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_Send");
+
+	Edt_Chat= UIHelper::AssertFindChild<QTextEdit*>(UI, "Edt_Chat");
+
 	splitter = UIHelper::AssertFindChild<QSplitter*>(UI,"splitter");
 	splitter->setStretchFactor(0, 1);
 	splitter->setStretchFactor(1, 3);
@@ -28,5 +34,10 @@ void WChatPage::InitControls()
 
 void WChatPage::ConnectSigSlot()
 {
-	ILoadUIWgtBase::ConnectSigSlot();
+	connect(Btn_Send, &QPushButton::clicked, this, [this]()
+	{
+		QString htmlContent = Edt_Chat->toHtml();
+		if (htmlContent.isEmpty())return;
+		ChatAreaControl->AddMsgItem(true, htmlContent.toUtf8());
+	});
 }

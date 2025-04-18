@@ -337,6 +337,15 @@
          <property name="lineWidth">
           <number>1</number>
          </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="horizontalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="acceptRichText">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item>

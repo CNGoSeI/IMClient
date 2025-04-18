@@ -18,6 +18,8 @@ namespace WgtFile
 	const QString LoadingWgt = WgtFileRoot + "Loading.ui";
 	const QString ChatPageWgt = WgtFileRoot + "ChatPage.ui";
 	const QString ChatDataArea = WgtFileRoot + "ChatArea.ui";
+	const QString SelfMsgItem = WgtFileRoot + "MessageItemSelf.ui";
+	const QString OtherMsgItem = WgtFileRoot + "MessageItemSelf.ui";
 
 	inline QWidget* LoadUI(const QString& UIFile, QWidget* parent = nullptr)
 	{

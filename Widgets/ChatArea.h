@@ -18,6 +18,8 @@ protected:
 	void InitControls() override;
 	void ConnectSigSlot() override;
 
+public:
+	void AddMsgItem(bool bIsSelf,const QByteArray& HtmlContent);
 private slots:
 	void slotVScrollBarMoved(int min, int max);
 private:
