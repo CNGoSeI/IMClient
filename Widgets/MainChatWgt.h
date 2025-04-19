@@ -35,6 +35,9 @@ public:
 public slots:
     void slotLoadingChatUser();
 
+signals:
+    void sigMainChatWgtSizeChanged();
+
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
 

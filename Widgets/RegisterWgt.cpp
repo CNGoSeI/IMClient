@@ -56,16 +56,16 @@ void WRegisterWgt::InitControls()
 	Q_ASSERT(Lab_ErrTip != nullptr);
 
 	Edt_Email = UI->findChild<QLineEdit*>("Edt_Email");
-	Q_ASSERT(!Edt_Email);
+	Q_ASSERT(Edt_Email);
 
 	Edt_User = UI->findChild<QLineEdit*>("Edt_User");
-	Q_ASSERT(!Edt_User);
+	Q_ASSERT(Edt_User);
 
 	Edt_Verify = UI->findChild<QLineEdit*>("Edt_Verify");
-	Q_ASSERT(!Edt_Verify);
+	Q_ASSERT(Edt_Verify);
 
 	Btn_GetCode = UI->findChild<QPushButton*>("Btn_GetCode");
-	Q_ASSERT(!Btn_GetCode);
+	Q_ASSERT(Btn_GetCode);
 
 	//设置密码显示格式隐藏
 	Edt_Confirm->setEchoMode(QLineEdit::Password);

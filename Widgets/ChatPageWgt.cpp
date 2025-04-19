@@ -9,10 +9,17 @@
 #include "ChatArea.h"
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
+#include "InputTextEdit.h"
 
 WChatPage::WChatPage(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::ChatPageWgt,parent)
 {
+}
+
+void WChatPage::slotMainChatSizeChanged()
+{
+	ChatAreaControl->slotChangeSizeed();
+
 }
 
 void WChatPage::InitControls()
@@ -25,7 +32,12 @@ void WChatPage::InitControls()
 
 	Btn_Send = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_Send");
 
-	Edt_Chat= UIHelper::AssertFindChild<QTextEdit*>(UI, "Edt_Chat");
+	Wgt_EditChat = UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_EditChat");
+	Wgt_EditChat->setLayout(new QVBoxLayout);
+	
+	Edt_Chat= new CInputTextEdit(UI);
+	Edt_Chat->setObjectName("Edt_Chat");
+	Wgt_EditChat->layout()->addWidget(Edt_Chat);
 
 	splitter = UIHelper::AssertFindChild<QSplitter*>(UI,"splitter");
 	splitter->setStretchFactor(0, 1);

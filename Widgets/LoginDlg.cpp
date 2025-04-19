@@ -35,14 +35,14 @@ void DLoginDialog::InitControls()
 	Q_ASSERT(Btn_RestPwd != nullptr);
 
 	Lab_MsgTip = UI->findChild<QLabel*>("Lab_MsgTip");
-	Q_ASSERT(!Lab_MsgTip);
+	Q_ASSERT(Lab_MsgTip);
 	Lab_MsgTip->clear();
 
 	Edt_User = UI->findChild<QLineEdit*>("Edt_User");
-	Q_ASSERT(!Edt_User);
+	Q_ASSERT(Edt_User);
 
 	Edt_Passwd = UI->findChild<QLineEdit*>("Edt_Passwd");
-	Q_ASSERT(!Edt_Passwd);
+	Q_ASSERT(Edt_Passwd);
 
 	Lab_MsgTip->setProperty("state", "normal");//设置属性状态，QSS存在指定
 	

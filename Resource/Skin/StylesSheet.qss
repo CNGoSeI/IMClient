@@ -13,7 +13,7 @@ QWidget {
 }
 
 /* 透明背景 */
-#List_ChatUser,#Wgt_UserLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_Resize
+#List_ChatUser,#Wgt_UserLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_EditChat
 {
 	background: transparent;
 	
@@ -146,6 +146,11 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     border: none;
 }
 
+QTextBrowser 
+{
+ padding: 8px;
+}
+
 QSplitter::handle {
     background: transparent;  /* 透明背景 */
     width: 0px;              /* 完全隐藏分隔条 */
@@ -174,10 +179,11 @@ QListView::item:hover{
     border: none;
 }
 
-#wgt_input
+/* 输入框部分 */
+#wgt_input,#Wgt_Resize
 {
 	background-color: #F9FEFF;
-	border-radius: 0px;
+	border-radius: 4px;
     padding: 4px;
 }
 

@@ -28,19 +28,19 @@ void WResetPasswordWgt::InitControls()
 	Q_ASSERT(Lab_MsgTip != nullptr);
 
 	Edt_Email = UI->findChild<QLineEdit*>("Edt_Email");
-	Q_ASSERT(!Edt_Email);
+	Q_ASSERT(Edt_Email);
 
 	Edt_User = UI->findChild<QLineEdit*>("Edt_User");
-	Q_ASSERT(!Edt_User);
+	Q_ASSERT(Edt_User);
 
 	Edt_Verify = UI->findChild<QLineEdit*>("Edt_Verify");
-	Q_ASSERT(!Edt_Verify);
+	Q_ASSERT(Edt_Verify);
 
 	Btn_GetCode = UI->findChild<QPushButton*>("Btn_GetCode");
-	Q_ASSERT(!Btn_GetCode);
+	Q_ASSERT(Btn_GetCode);
 
 	Btn_SwitchPwdShow=UI->findChild<QPushButton*>("Btn_SwitchPwdShow");
-	Q_ASSERT(!Btn_SwitchPwdShow);
+	Q_ASSERT(Btn_SwitchPwdShow);
 
 	Lab_MsgTip->setProperty("state", "normal");//设置属性状态，QSS存在指定
 

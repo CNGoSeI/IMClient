@@ -28,11 +28,10 @@ bool WChatArea::eventFilter(QObject* watched, QEvent* event)
 
 void WChatArea::InitControls()
 {
-	Wgt_Scroll=UIHelper::AssertFindChild<QScrollArea*>(UI, "Wgt_Scroll");
-	Layout_Scroll = UIHelper::AssertFindChild<QVBoxLayout*>(UI, "Layout_Scroll");
+	Wgt_Scroll=UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_Scroll");
+
 	ScrollArea = UIHelper::AssertFindChild<QScrollArea*>(UI, "ScrollArea");
 	ScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	//ScrollArea->installEventFilter(this);
 
 }
 
@@ -45,7 +44,29 @@ void WChatArea::AddMsgItem(bool bIsSelf, const QByteArray& HtmlContent)
 {
 	auto tempWgt = new WMsgItem(true, HtmlContent, Wgt_Scroll);
 	tempWgt->CreateWgt();
-	Layout_Scroll->addWidget(tempWgt->GetUI());
+	bAppended = true;
+
+	auto* vl = qobject_cast<QVBoxLayout*>(Wgt_Scroll->layout());
+	vl->insertWidget(ChirdenMsgItems.size(), tempWgt->GetUI());
+	ChirdenMsgItems.emplace(tempWgt);
+
+	connect(tempWgt, &WMsgItem::sigDie, this, [this](WMsgItem* Dieder)
+	{
+		auto it = ChirdenMsgItems.find(Dieder);
+		if (it != ChirdenMsgItems.end())
+		{
+			ChirdenMsgItems.erase(it);
+		}
+	});
+}
+
+void WChatArea::slotChangeSizeed()
+{
+	for(auto it: ChirdenMsgItems)
+	{
+		it->ResizeRect();
+	}
+
 }
 
 void WChatArea::slotVScrollBarMoved(int min, int max)
@@ -55,10 +76,12 @@ void WChatArea::slotVScrollBarMoved(int min, int max)
 		QScrollBar* pVScrollBar = ScrollArea->verticalScrollBar();
 		pVScrollBar->setSliderPosition(pVScrollBar->maximum());
 		pVScrollBar->setVisible(max > 0);
+
 		//500毫秒内可能调用多次
 		QTimer::singleShot(500, [this]()
 		{
 			bAppended = false;
 		});
 	}
+
 }

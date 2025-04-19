@@ -16,12 +16,14 @@ namespace UIHelper
 
 	constexpr uint8_t TITLE_BAR_HEIGHT{ 30 };//定义标题栏高度
 
+	QColor GetTargetColor(const QString& ColorTag);//获取配置颜色
+
 	template <typename T>
 	T AssertFindChild(QWidget* UI, const QString& ControlName)
 	{
 		if (!UI)return nullptr;
 		T ControlP = UI->findChild<T>(ControlName);
-		Q_ASSERT(ControlP);
+		Q_ASSERT_X(ControlP,"AssertFindChild",qPrintable(QString("控件[%1]未找到").arg(ControlName)));
 		return ControlP;
 	}
 }

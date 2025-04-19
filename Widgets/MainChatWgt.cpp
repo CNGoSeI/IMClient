@@ -173,7 +173,7 @@ void WChatWgt::InitControls()
 
     List_ChatUser->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "List_ChatUser"));
 
-    Btn_LineEdtClear= UIHelper::AssertFindChild<QPushButton*>(Edt_Search, "clearButton");
+    //Btn_LineEdtClear= UIHelper::AssertFindChild<QPushButton*>(Edt_Search, "clearButton");
 
     Btn_ResizeSizeFlag = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_ResizeSizeFlag");
 
@@ -210,6 +210,8 @@ void WChatWgt::ConnectSigSlot()
 	});
 
     connect(List_ChatUser.get(), &CChatUserList::sigLoadingChatUser, this, &WChatWgt::slotLoadingChatUser);
+
+	connect(this, &WChatWgt::sigMainChatWgtSizeChanged, ChatPage, &WChatPage::slotMainChatSizeChanged);
 }
 
 void WChatWgt::ShowSearch(bool bsearch)
@@ -258,4 +260,5 @@ void WChatWgt::HandleWindowResize(const QPoint& globalPos) {
     newGeo.setBottom(newGeo.bottom() + delta.y());
 
     UI->setGeometry(newGeo);
+    emit sigMainChatWgtSizeChanged();
 }

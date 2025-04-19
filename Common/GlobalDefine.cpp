@@ -41,7 +41,17 @@ void UIHelper::SetLineEditError(QLineEdit* Target, bool IsError)
 	Target->style()->unpolish(Target);
 	Target->style()->polish(Target);
 }
-;
+
+QColor UIHelper::GetTargetColor(const QString& ColorTag)
+{
+	QColor color;
+	static QString root = "UI/";
+	QString Tag = root+ ColorTag+"%1";
+	color.setRed(gSettings.value(Tag.arg("R")).toInt());
+	color.setGreen(gSettings.value(Tag.arg("G")).toInt());
+	color.setBlue(gSettings.value(Tag.arg("B")).toInt());
+	return color;
+}
 
 const QString& Net::UrlHome()
 {
