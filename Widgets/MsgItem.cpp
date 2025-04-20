@@ -32,19 +32,22 @@ WMsgItem::~WMsgItem()
 
 double WMsgItem::ResizeRect()
 {
-	QTextDocument* doc = Edit_MsgContent->document();
-	doc->adjustSize(); // 强制更新文档布局[6,8](@ref)
+	//下次消息循环再执行
+	QTimer::singleShot(0, this, [this]
+	{
+		QTextDocument* doc = Edit_MsgContent->document();
+		doc->adjustSize(); // 强制更新文档布局[6,8](@ref)
 
-	// 设置文档宽度与控件可视宽度一致（排除滚动条和边距）
-	int viewportWidth = Edit_MsgContent->viewport()->width();
-	doc->setTextWidth(viewportWidth);
+		// 设置文档宽度与控件可视宽度一致（排除滚动条和边距）
+		int viewportWidth = Edit_MsgContent->viewport()->width();
+		doc->setTextWidth(viewportWidth);
 
-	// 计算实际内容高度（包含边距）
-	qreal doc_margin = Edit_MsgContent->document()->documentMargin();
-	int vMargin = UI->layout()->contentsMargins().top();
-	auto DocH = Edit_MsgContent->document()->size().height();
-	UI->setFixedHeight(DocH + doc_margin * 2 + vMargin * 2 + 35);
-
+		// 计算实际内容高度（包含边距）
+		qreal doc_margin = Edit_MsgContent->document()->documentMargin();
+		int vMargin = UI->layout()->contentsMargins().top();
+		auto DocH = Edit_MsgContent->document()->size().height();
+		UI->setFixedHeight(DocH + doc_margin * 2 + vMargin * 2 + 35);
+	});
 
 	return 0.0;
 }
@@ -76,6 +79,7 @@ void WMsgItem::InitControls()
 	{
 		ResizeRect();
 	});
+	
 	//不让滚动
 	Edit_MsgContent->verticalScrollBar()->setEnabled(false);
 	Edit_MsgContent->horizontalScrollBar()->setEnabled(false);

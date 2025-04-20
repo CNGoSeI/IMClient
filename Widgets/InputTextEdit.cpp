@@ -2,6 +2,7 @@
 
 #include <qimagereader.h>
 #include <QMimeData>
+#include <QBuffer>
 
 CInputTextEdit::CInputTextEdit(QWidget* parent):
 	QTextEdit(parent)
@@ -27,7 +28,6 @@ CInputTextEdit::CInputTextEdit(QWidget* parent):
     charFormat.setForeground(Qt::black);  // 固定文本颜色
 
     setCurrentCharFormat(charFormat);
-    //setStyleSheet("{background: transparent;}");
 
     // 动态格式修正
     connect(this, &QTextEdit::textChanged, [=]
@@ -77,11 +77,19 @@ void CInputTextEdit::insertImageFromFile(const QString& path)
 
 void CInputTextEdit::insertImageFromData(const QImage& img)
 {
-    QUrl uri(QString("img_%1").arg(++m_imgCounter));
-    document()->addResource(QTextDocument::ImageResource, uri, img);
+    // 将QImage转为Base64
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    buffer.open(QIODevice::WriteOnly);
+    img.save(&buffer, "PNG"); // 格式可选JPEG等
 
+    // 生成Base64嵌入的HTML
+    auto html = std::make_unique<QString>(QString("<img src='data:image/png;base64,%1'/>")
+        .arg(*std::make_unique<QString>(byteArray.toBase64())));
+
+    // 插入到文档
     QTextCursor cursor = textCursor();
-    cursor.insertImage(uri.toString());
+    cursor.insertHtml(*html);
 }
 
 

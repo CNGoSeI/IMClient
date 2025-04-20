@@ -42,7 +42,7 @@ void WChatArea::ConnectSigSlot()
 
 void WChatArea::AddMsgItem(bool bIsSelf, const QByteArray& HtmlContent)
 {
-	auto tempWgt = new WMsgItem(true, HtmlContent, Wgt_Scroll);
+	auto tempWgt = new WMsgItem(bIsSelf, HtmlContent, Wgt_Scroll);
 	tempWgt->CreateWgt();
 	bAppended = true;
 

@@ -28,6 +28,7 @@ private:
 	QSplitter* splitter{ nullptr };
 	WChatArea* ChatAreaControl{ nullptr };
 	QPushButton* Btn_Send{ nullptr };
+	QPushButton* Btn_Recive{ nullptr };
 	CInputTextEdit* Edt_Chat{ nullptr };//聊天输入框
 };
 #endif // WGT_CHATPAGEWGT_H

@@ -31,6 +31,7 @@ void WChatPage::InitControls()
 	Wgt_ChatArea->layout()->addWidget(ChatAreaControl->GetUI());
 
 	Btn_Send = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_Send");
+	Btn_Recive = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_Recive");
 
 	Wgt_EditChat = UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_EditChat");
 	Wgt_EditChat->setLayout(new QVBoxLayout);
@@ -51,5 +52,14 @@ void WChatPage::ConnectSigSlot()
 		QString htmlContent = Edt_Chat->toHtml();
 		if (htmlContent.isEmpty())return;
 		ChatAreaControl->AddMsgItem(true, htmlContent.toUtf8());
+		Edt_Chat->clear();
+	});
+
+	connect(Btn_Recive, &QPushButton::clicked, this, [this]()
+	{
+		QString htmlContent = Edt_Chat->toHtml();
+		if (htmlContent.isEmpty())return;
+		ChatAreaControl->AddMsgItem(false, htmlContent.toUtf8());
+		Edt_Chat->clear();
 	});
 }
