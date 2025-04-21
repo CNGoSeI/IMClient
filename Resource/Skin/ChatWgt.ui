@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>662</width>
-    <height>561</height>
+    <width>676</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -355,7 +355,7 @@
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>100</width>
+                 <width>195</width>
                  <height>0</height>
                 </size>
                </property>
@@ -597,7 +597,7 @@
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QListWidget" name="List_ConUserr"/>
+                     <widget class="QListWidget" name="List_ConUser"/>
                     </item>
                    </layout>
                   </widget>

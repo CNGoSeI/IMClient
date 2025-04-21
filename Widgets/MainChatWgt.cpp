@@ -152,6 +152,11 @@ void WChatWgt::InitControls()
     Edt_Search = UI->findChild<QLineEdit*>("Edt_Search");
     Q_ASSERT(Edt_Search);
 
+    auto Splitter = UIHelper::AssertFindChild<QSplitter*>(UI, "splitter");
+
+    Splitter->setStretchFactor(0, 5);
+    Splitter->setStretchFactor(1, 3);
+
     //添加搜索按钮
     SearchAction = new QAction(QIcon(":/Skin/Image/Search.png"), "搜索", Edt_Search);
     Edt_Search->addAction(SearchAction, QLineEdit::LeadingPosition);
@@ -173,6 +178,7 @@ void WChatWgt::InitControls()
 
     List_Search = std::make_unique<CSearchList>();
     List_Search->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser"));
+    UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser")->adjustSize();
 
     Btn_ResizeSizeFlag = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_ResizeSizeFlag");
 
@@ -191,13 +197,10 @@ void WChatWgt::InitControls()
     UI->installEventFilter(this);  // 关键：将UI的鼠标事件传递到当前对象
     UI->setMouseTracking(true);    // 启用鼠标移动追踪
 
-    auto Splitter= UIHelper::AssertFindChild<QSplitter*>(UI, "splitter");
-
-    Splitter->setStretchFactor(0, 5);
-    Splitter->setStretchFactor(1, 3);
     Btn_ResizeSizeFlag->installEventFilter(this);
 
     AddChatUserList();
+    StateWgt_List->setCurrentWidget(Wgt_UserLst);
 }
 
 void WChatWgt::ConnectSigSlot()
@@ -214,7 +217,12 @@ void WChatWgt::ConnectSigSlot()
 
 	connect(SearchAction, &QAction::triggered, [this]()
 	{
-		StateWgt_List->setCurrentWidget(List_Search->ListWgt->parentWidget());
+		ShowSearch(true);
+	});
+
+	connect(Edt_Search, &QLineEdit::textChanged, [this]()
+	{
+		ShowSearch(false);
 	});
 }
 
@@ -252,6 +260,7 @@ void WChatWgt::AddChatUserList()
 
         List_ChatUser->ListWgt->addItem(item);
         List_ChatUser->ListWgt->setItemWidget(item, chat_user_wid->GetUI());
+        //TODO::项目采用的UI不包含逻辑，因此添加一个QListWidgetItem到IListItemWgt的映射
     }
 }
 
