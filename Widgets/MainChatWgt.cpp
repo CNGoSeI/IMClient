@@ -222,7 +222,7 @@ void WChatWgt::ConnectSigSlot()
 
 	connect(Edt_Search, &QLineEdit::textChanged, [this]()
 	{
-		ShowSearch(false);
+		ShowSearch(!Edt_Search->text().isEmpty());
 	});
 }
 
