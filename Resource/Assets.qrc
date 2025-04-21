@@ -12,6 +12,7 @@
 		<file>Skin/ChatArea.ui</file>
 		<file>Skin/MessageItemSelf.ui</file>
 		<file>Skin/MessageItemOther.ui</file>
+		<file>Skin/AddUserItem.ui</file>
         <file>Skin/Image/Ice.png</file>
 		<file>Skin/Image/Search.png</file>
 		<file>Skin/Image/AddUser.png</file>
@@ -22,6 +23,9 @@
         <file>Skin/Image/Min_32.png</file>
 		<file>Skin/Image/Emoj.png</file>
         <file>Skin/Image/File.png</file>
+		<file>Skin/Image/UserModel.png</file>
+        <file>Skin/Image/MessageModel.png</file>
+		<file>Skin/Image/AddUserItemTitle.png</file>
 		<file>Skin/Image/HeadIcon01.jpg</file>
 		<file>Skin/Image/HeadIcon02.jpg</file>
 		<file>Skin/Image/HeadIcon03.jpg</file>

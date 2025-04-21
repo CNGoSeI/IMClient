@@ -20,6 +20,7 @@
 #include "CloseTitleWgt.h"
 #include "LoadingWgt.h"
 #include "ChatPageWgt.h"
+#include "SearchList.h"
 
 std::vector<QString>  strs = { "hello world !",
                              "nice to meet u",
@@ -72,9 +73,6 @@ void WChatWgt::slotLoadingChatUser()
     SLoadingWgt::Instance().PopShow(UI);
     qDebug() << "添加新的用户Item.....";
     AddChatUserList();
-
-    // 添加2秒延时后关闭加载动画
-    //QTimer::singleShot(6000, this, [this](){});
 
     SLoadingWgt::Instance().HideStop();
     bLoading = false;
@@ -154,6 +152,7 @@ void WChatWgt::InitControls()
     Edt_Search = UI->findChild<QLineEdit*>("Edt_Search");
     Q_ASSERT(Edt_Search);
 
+    //添加搜索按钮
     SearchAction = new QAction(QIcon(":/Skin/Image/Search.png"), "搜索", Edt_Search);
     Edt_Search->addAction(SearchAction, QLineEdit::LeadingPosition);
 
@@ -170,10 +169,10 @@ void WChatWgt::InitControls()
     Q_ASSERT(Wgt_SearchLst);
 
     List_ChatUser = std::make_unique<CChatUserList>();
-
     List_ChatUser->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "List_ChatUser"));
 
-    //Btn_LineEdtClear= UIHelper::AssertFindChild<QPushButton*>(Edt_Search, "clearButton");
+    List_Search = std::make_unique<CSearchList>();
+    List_Search->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser"));
 
     Btn_ResizeSizeFlag = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_ResizeSizeFlag");
 
@@ -209,9 +208,14 @@ void WChatWgt::ConnectSigSlot()
 		ShowSearch(false);
 	});
 
-    connect(List_ChatUser.get(), &CChatUserList::sigLoadingChatUser, this, &WChatWgt::slotLoadingChatUser);
+    connect(List_ChatUser.get(), &ICustomList::sigLoadingItems, this, &WChatWgt::slotLoadingChatUser);
 
 	connect(this, &WChatWgt::sigMainChatWgtSizeChanged, ChatPage, &WChatPage::slotMainChatSizeChanged);
+
+	connect(SearchAction, &QAction::triggered, [this]()
+	{
+		StateWgt_List->setCurrentWidget(List_Search->ListWgt->parentWidget());
+	});
 }
 
 void WChatWgt::ShowSearch(bool bsearch)

@@ -13,15 +13,26 @@ QWidget {
 }
 
 /* 透明背景 */
-#List_ChatUser,#Wgt_UserLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_EditChat
+#List_ChatUser,#Lst_SearchUser,#Wgt_UserLst,#Wgt_SearchLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_EditChat
 {
 	background: transparent;
 	
 }
 
+/* 侧边栏 */
+#side_bar{
+	background-color:#FA6594;
+	/*background: transparent;*/
+	border-top-left-radius: 4px;    /* 左上角半径 */
+    border-bottom-left-radius: 4px; /* 左下角半径 */
+    border-top-right-radius: 0px;   /* 右上角归零 */
+    border-bottom-right-radius: 0px;/* 右下角归零 */
+	border: none;                   /* 去除默认边框 */
+}
+
 /* 基础按钮样式 */
 QPushButton {
-    background-color: #FF69B4; /* 粉红基础色 */
+    background-color: #FA6594; /* 粉红基础色 */
     border: 1px solid #FFB6C1; /* 浅粉色边框 */
     border-radius: 4px;
     color: white;
@@ -57,14 +68,15 @@ QPushButton[state="warning"] { /* 自定义警告状态 */
 }
 
 /* 透明图片按钮 */
-QPushButton#Btn_Add,#Btn_Close,#Btn_Max,#Btn_Min,#Btn_Add,#Btn_Emoj,#Btn_File {
+QPushButton#Btn_Add,#Btn_Close,#Btn_Max,#Btn_Min,#Btn_Add,#Btn_Emoj,#Btn_File,#Btn_MsgModel,#Btn_UserModel {
     background: transparent;  /* 完全透明背景*/
     border: none;             /* 消除默认边框[1](@ref) */
     outline: none;            /* 移除焦点边框[6](@ref) */
 	 border-radius: 4px;         /* 圆角 */
 }
 /* 悬浮灰色背景的按钮 */
-QPushButton#Btn_Max:hover,#Btn_Min:hover,#Btn_Add:hover,#Btn_Emoj:hover,#Btn_File:hover
+QPushButton#Btn_Max:hover,#Btn_Min:hover,#Btn_Add:hover,#Btn_Emoj:hover
+,#Btn_File:hover
 {
 	background-color: #F0F0F0;   /* 浅灰色背景 */
     border: none;  /* 边框颜色 */
@@ -73,6 +85,18 @@ QPushButton#Btn_Max:hover,#Btn_Min:hover,#Btn_Add:hover,#Btn_Emoj:hover,#Btn_Fil
 QPushButton#Btn_Max:pressed,#Btn_Min:pressed,#Btn_Add:pressed,#Btn_Emoj:pressed,#Btn_File:pressed
 {
     background-color: #DfDfDf;  /* 深灰色 */
+}
+
+/* 侧边栏按下悬浮 */
+QPushButton#Btn_MsgModel:hover,#Btn_UserModel:hover ,#Btn_MsgModel:checked,#Btn_UserModel:checked 
+{
+	background-color: #2ADCF0FF;   /* 浅灰色背景 */
+    border: none;  /* 边框颜色 */
+}
+
+QPushButton#Btn_MsgModel:pressed,#Btn_UserModel:pressed
+{
+    background-color: #3FC7E7FF;  /* 深灰色 */
 }
 
 

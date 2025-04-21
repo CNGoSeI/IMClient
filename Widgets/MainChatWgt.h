@@ -12,7 +12,7 @@ class WCloseTitle;
 class QPushButton;
 class QStackedWidget;
 class QListWidget;
-class CChatUserList;
+class ICustomList;
 class QAction;
 class QLineEdit;
 
@@ -51,7 +51,8 @@ private:
 private:
     QLineEdit* Edt_Search{ nullptr };
     QAction* SearchAction{ nullptr };
-    std::unique_ptr<CChatUserList>List_ChatUser{ nullptr };
+    std::unique_ptr<ICustomList>List_ChatUser{ nullptr };
+    std::unique_ptr<ICustomList>List_Search{ nullptr };//搜索用户列表
     QListWidget* List_ConUserr{ nullptr };//联系人列表
     QListWidget* Lst_SearchUser{ nullptr };
     QStackedWidget* StateWgt_List{ nullptr };
@@ -60,6 +61,8 @@ private:
     QWidget* Wgt_ConLst{ nullptr };
     QPushButton* Btn_LineEdtClear{ nullptr };
     QPushButton* Btn_ResizeSizeFlag{ nullptr };//用来辅助界面缩放的按钮
+    QPushButton* Btn_MsgModel{ nullptr };
+    QPushButton* Btn_UserModel{ nullptr };
     QWidget* Wgt_WndTitle{ nullptr };
     WChatPage* ChatPage{ nullptr };//ChatPage.ui
     WCloseTitle* Wgt_CloseTitle{ nullptr };

@@ -19,12 +19,12 @@ class IListItemWgt: public ILoadUIWgtBase
 {
     Q_OBJECT
 public:
-    explicit IListItemWgt(const QString& UIRes,QWidget* parent = nullptr);
+    explicit IListItemWgt(const QString& UIRes, EListItemType InItemType,QWidget* parent = nullptr);
     ~IListItemWgt() override = default;
     void SetItemType(EListItemType itemType) { ItemType = itemType;};
     EListItemType GetItemType() const { return ItemType; };
 
-private:
+protected:
     EListItemType ItemType;
 };
 #endif // LISTITEMWGT_H

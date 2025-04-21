@@ -1,6 +1,9 @@
 ﻿#ifndef CHATUSERWID_H
 #define CHATUSERWID_H
 
+/*
+ *  聊天列表联系人的显示控件
+ */
 #include "ListItemWgt.h"
 
 class QLabel;
