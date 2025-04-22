@@ -153,9 +153,11 @@ void WChatWgt::InitControls()
     Q_ASSERT(Edt_Search);
 
     auto Splitter = UIHelper::AssertFindChild<QSplitter*>(UI, "splitter");
-
     Splitter->setStretchFactor(0, 5);
     Splitter->setStretchFactor(1, 3);
+
+    Btn_MsgModel = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_MsgModel");
+    Btn_UserModel= UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_UserModel");
 
     //添加搜索按钮
     SearchAction = new QAction(QIcon(":/Skin/Image/Search.png"), "搜索", Edt_Search);
@@ -214,6 +216,18 @@ void WChatWgt::ConnectSigSlot()
     connect(List_ChatUser.get(), &ICustomList::sigLoadingItems, this, &WChatWgt::slotLoadingChatUser);
 
 	connect(this, &WChatWgt::sigMainChatWgtSizeChanged, ChatPage, &WChatPage::slotMainChatSizeChanged);
+
+	connect(Btn_MsgModel, &QPushButton::clicked, [this]()
+	{
+		State = EChatUIMode::ChatMode;
+		ShowSearch(false);
+	});
+
+	connect(Btn_UserModel, &QPushButton::clicked, [this]()
+	{
+		State = EChatUIMode::ContactMode;
+		ShowSearch(false);
+	});
 
 	connect(SearchAction, &QAction::triggered, [this]()
 	{
