@@ -99,3 +99,11 @@ const QString& ErrorCodes::GetErrorStr(const int Code)
 	if (it != ErroCode2Str.end()) return it->second;
 	return gNoneErrorStr;
 }
+
+Infos::FSearchInfo::FSearchInfo(int uid, QString name, QString nick, QString desc, int sex):
+	UID(uid),
+	Name(name),
+	Desc(desc),
+	Sex(sex)
+{
+}

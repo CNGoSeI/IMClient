@@ -91,5 +91,18 @@ enum class EResizeArea {
 	TopLeft, TopRight, BottomLeft, BottomRight
 };
 
+namespace Infos
+{
+	struct FSearchInfo {
+		FSearchInfo(int uid, QString name, QString nick, QString desc, int sex);
+		FSearchInfo(){};
+		int UID{0};
+		QString Name{""};
+		QString Nick{ "" };
+		QString Desc{ "" };
+		int Sex{ 0 };
+	};
+
+}
 
 #endif

@@ -3,6 +3,7 @@
 #include <QResource>
 
 #include "Common/TcpMgr.h"
+#include "Widgets/ApplyFriend.h"
 #include "Widgets/mainwindow.h"
 #include "Widgets/MainChatWgt.h"
 
@@ -49,6 +50,9 @@ int main(int argc, char *argv[])
 
     w.show();
     ChatWgt.GetUI()->close();
+
+    WApplyFriend AddFr;
+    AddFr.GetUI()->show();
 
     emit STcpMgr::GetInstance().sigSwitchChatWgt();
 

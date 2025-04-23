@@ -21,6 +21,7 @@ namespace WgtFile
 	const QString SelfMsgItem = WgtFileRoot + "MessageItemSelf.ui";
 	const QString OtherMsgItem = WgtFileRoot + "MessageItemOther.ui";
 	const QString AddUserItem = WgtFileRoot + "AddUserItem.ui";
+	const QString AddFriendWgt = WgtFileRoot + "AddFriend.ui";
 
 	inline QWidget* LoadUI(const QString& UIFile, QWidget* parent = nullptr)
 	{

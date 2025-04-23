@@ -2,18 +2,10 @@
 #define CONTROL_SEARCHLIST_H
 
 #include "CustomList.h"
+#include "Common/GlobalDefine.h"
 
 class QListWidgetItem;
-
-struct FSearchInfo {
-    FSearchInfo(int uid, QString name, QString nick, QString desc, int sex);
-    int UID;
-    QString Name;
-    QString Nick;
-    QString Desc;
-    int Sex;
-};
-
+using namespace Infos;
 class CSearchList: public ICustomList
 {
     Q_OBJECT

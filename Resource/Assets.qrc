@@ -13,6 +13,9 @@
 		<file>Skin/MessageItemSelf.ui</file>
 		<file>Skin/MessageItemOther.ui</file>
 		<file>Skin/AddUserItem.ui</file>
+		<file>Skin/AddFriend.ui</file>
+		<file>Skin/AddLstUserItem.ui</file>
+		<file>Skin/ConLstUserItem.ui</file>
         <file>Skin/Image/Ice.png</file>
 		<file>Skin/Image/Search.png</file>
 		<file>Skin/Image/AddUser.png</file>

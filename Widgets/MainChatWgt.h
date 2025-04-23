@@ -37,10 +37,11 @@ public slots:
 
 signals:
     void sigMainChatWgtSizeChanged();
+    void sigClickedAddFriendArear();
 
 protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
-
+    bool AddFriendEvent(QObject* watched, QEvent* event);
 private:
     void InitControls() override;
     void ConnectSigSlot() override;
@@ -56,9 +57,11 @@ private:
     QListWidget* List_ConUserr{ nullptr };//联系人列表
     QListWidget* Lst_SearchUser{ nullptr };
     QStackedWidget* StateWgt_List{ nullptr };
+    QStackedWidget* Stacked_Right{ nullptr };
     QWidget* Wgt_UserLst{ nullptr };
     QWidget* Wgt_SearchLst{ nullptr };
     QWidget* Wgt_ConLst{ nullptr };
+    QWidget* Wgt_AddFriendAear{ nullptr };
     QPushButton* Btn_LineEdtClear{ nullptr };
     QPushButton* Btn_ResizeSizeFlag{ nullptr };//用来辅助界面缩放的按钮
     QPushButton* Btn_MsgModel{ nullptr };
@@ -66,7 +69,6 @@ private:
     QWidget* Wgt_WndTitle{ nullptr };
     WChatPage* ChatPage{ nullptr };//ChatPage.ui
     WCloseTitle* Wgt_CloseTitle{ nullptr };
-    QStackedWidget* Stacked_Right{ nullptr };
 
     EChatUIMode Mode{EChatUIMode::ChatMode };//当前界面显示的模式，聊天界面，联系人界面
     EChatUIMode State{ EChatUIMode::ChatMode };//不同模式(聊天界面、联系人界面)下存在搜索状态

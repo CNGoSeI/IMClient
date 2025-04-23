@@ -13,7 +13,7 @@ QWidget {
 }
 
 /* 透明背景 */
-#List_ChatUser,#Lst_SearchUser,#Wgt_UserLst,#Wgt_SearchLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_EditChat
+#List_ChatUser,#Lst_SearchUser,#Wgt_UserLst,#Wgt_SearchLst,#Wgt_ConLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_EditChat
 {
 	background: transparent;
 	
@@ -28,6 +28,16 @@ QWidget {
     border-top-right-radius: 0px;   /* 右上角归零 */
     border-bottom-right-radius: 0px;/* 右下角归零 */
 	border: none;                   /* 去除默认边框 */
+}
+
+/* 大背景中的小背景 */
+#Lab_Splitter2,#Lab_Splitter1
+{
+	background-color:#F6F6F6;
+	color:#000000;
+	border-radius:none;
+	border-bottom: 1px solid #EFEFEF; /* 设置下边框颜色和宽度 */
+	border-top: 1px solid #EFEFEF;
 }
 
 /* 基础按钮样式 */
@@ -58,7 +68,7 @@ QPushButton:pressed {
 QPushButton:disabled {
     background-color: #FFB6C1; /* 浅粉色 */
     border-color: #DDA0DD;
-    color: #696969;
+    color: #2C2C2C;
 }
 
 /* 特殊按钮状态标记 */
@@ -189,18 +199,23 @@ QListView {
 }
 
 /* 项基础样式 */
-QListView::item {
+QListView::item,#Wgt_AddFriendAear[state='normal'] {
     background-color: rgb(250, 253, 255);
+	border: none;
+	border-radius: none;
 }
 
 /* 选中状态 */
-QListView::item:selected {
-	background-color: #f0f8ff;
+QListView::item:selected,#Wgt_AddFriendAear[state='selected'] {
+	background-color:  #DCF0FF;
     border: none;
+	border-radius: none;
 }
-QListView::item:hover{
+QListView::item:hover,#Wgt_AddFriendAear[state='hover']
+{
 	background-color: #f0f8ff;
     border: none;
+	border-radius: none;
 }
 
 /* 输入框部分 */

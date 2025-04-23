@@ -137,7 +137,49 @@ bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
 		}
 	}
 
+    if (watched == Wgt_AddFriendAear)
+    {
+	    return AddFriendEvent(watched, event);
+    }
+
 	return QObject::eventFilter(watched, event);
+}
+
+bool WChatWgt::AddFriendEvent(QObject* watched, QEvent* event)
+{
+	// 鼠标悬停事件处理 [1,2](@ref)
+	if (event->type() == QEvent::Enter)
+	{
+		watched->setProperty("state", "hover");
+		UIHelper::RePolish(Wgt_AddFriendAear);
+		return true;
+	}
+	// 鼠标点击事件处理 [6,7](@ref)
+	else if (event->type() == QEvent::MouseButtonPress)
+	{
+		watched->setProperty("state", "selected");
+		emit sigClickedAddFriendArear(); // 触发点击信号
+		UIHelper::RePolish(Wgt_AddFriendAear);
+
+		QTimer::singleShot(300, [watched]()
+		{
+			// 500ms后恢复
+			if (watched)
+			{
+				watched->setProperty("state", "normal");
+				UIHelper::RePolish(qobject_cast<QWidget*>(watched));
+			}
+		});
+
+		return true;
+	}
+	// 鼠标离开事件处理 [1,8](@ref)
+	else if (event->type() == QEvent::HoverLeave || event->type() == QEvent::Leave)
+	{
+		watched->setProperty("state", "normal");
+		UIHelper::RePolish(Wgt_AddFriendAear);
+		return true;
+	}
 }
 
 void WChatWgt::InitControls()
@@ -194,12 +236,16 @@ void WChatWgt::InitControls()
         LayoutTitle->addWidget(Wgt_CloseTitle->GetUI());
     }
 
+    Wgt_AddFriendAear= UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_AddFriendAear");
+    Wgt_AddFriendAear->setProperty("state", "normal");
+
     UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint|Qt::Window);
     UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
     UI->installEventFilter(this);  // 关键：将UI的鼠标事件传递到当前对象
     UI->setMouseTracking(true);    // 启用鼠标移动追踪
 
     Btn_ResizeSizeFlag->installEventFilter(this);
+    Wgt_AddFriendAear->installEventFilter(this);
 
     AddChatUserList();
     StateWgt_List->setCurrentWidget(Wgt_UserLst);
