@@ -6,15 +6,17 @@
 #include "Common/GlobalDefine.h"
 #include "Common/LoadUIWgtBase.h"
 
+class CSearchList;
+class CChatUserList;
 class WChatArea;
 class WChatPage;
 class WCloseTitle;
 class QPushButton;
 class QStackedWidget;
 class QListWidget;
-class ICustomList;
 class QAction;
 class QLineEdit;
+class CContactUserList;
 
 enum class EChatUIMode
 {
@@ -33,7 +35,6 @@ public:
     virtual ~WChatWgt();
 
 public slots:
-    void slotLoadingChatUser();
 
 signals:
     void sigMainChatWgtSizeChanged();
@@ -52,8 +53,10 @@ private:
 private:
     QLineEdit* Edt_Search{ nullptr };
     QAction* SearchAction{ nullptr };
-    std::unique_ptr<ICustomList>List_ChatUser{ nullptr };
-    std::unique_ptr<ICustomList>List_Search{ nullptr };//搜索用户列表
+    std::unique_ptr<CChatUserList>List_ChatUser{ nullptr };
+    std::unique_ptr<CSearchList>List_Search{ nullptr };//搜索用户列表
+    std::unique_ptr<CContactUserList> LstContactUser{ nullptr };
+
     QListWidget* List_ConUserr{ nullptr };//联系人列表
     QListWidget* Lst_SearchUser{ nullptr };
     QStackedWidget* StateWgt_List{ nullptr };

@@ -27,4 +27,5 @@ public:
 protected:
     EListItemType ItemType;
 };
+
 #endif // LISTITEMWGT_H

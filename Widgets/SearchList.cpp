@@ -10,6 +10,10 @@ CSearchList::CSearchList(QWidget* parent):
 {
 }
 
+void CSearchList::CloseFindDlg()
+{
+}
+
 void CSearchList::AfterSetListFunc()
 {
 	connect(ListWgt, &QListWidget::itemClicked, this, &CSearchList::slotItemClicked);
@@ -18,6 +22,10 @@ void CSearchList::AfterSetListFunc()
 	//connect(&STcpMgr::GetInstance(), &STcpMgr::sigSearch, this, &CSearchList::slot_user_search);
 
     AddTipItem();
+}
+
+void CSearchList::SetSearchEdit(QWidget* edit)
+{
 }
 
 void CSearchList::AddTipItem()

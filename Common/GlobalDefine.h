@@ -105,4 +105,35 @@ namespace Infos
 
 }
 
+namespace Test
+{
+	inline std::vector<QString>  Messages = { "hello world !",
+					 "nice to meet u",
+					 "New year，new life",
+					"You have to love yourself",
+					"My love is written in the wind ever since the whole world is you" };
+
+	inline std::vector<QString> HeadIcons = {
+		":Skin/Image/HeadIcon01.jpg",
+		":Skin/Image/HeadIcon02.jpg",
+		":Skin/Image/HeadIcon03.jpg",
+		":Skin/Image/HeadIcon04.jpg",
+		":Skin/Image/HeadIcon05.jpg",
+		":Skin/Image/HeadIcon06.jpg",
+		":Skin/Image/HeadIcon07.jpg",
+		":Skin/Image/HeadIcon08.jpg"
+	};
+
+	inline std::vector<QString> Names = {
+		"llfc",
+		"zack",
+		"golang",
+		"cpp",
+		"java",
+		"nodejs",
+		"python",
+		"rust"
+	};
+}
+
 #endif

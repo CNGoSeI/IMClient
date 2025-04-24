@@ -18,5 +18,8 @@ public:
 
 protected:
 	void AppendWheelEvent(QWheelEvent* ,int ,int) override;
+	void slotAdd();
+	void SelfAddItems() override;
+	void AfterSetListFunc() override;
 };
 #endif // CHATUSERLIST_H

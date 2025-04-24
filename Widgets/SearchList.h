@@ -19,7 +19,7 @@ public slots:
     void slotItemClicked(QListWidgetItem* item);
 protected:
     void AfterSetListFunc() override;
-
+    void SelfAddItems() override{};
 };
 
 #endif // CONTROL_SEARCHLIST_H

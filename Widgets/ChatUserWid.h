@@ -10,6 +10,7 @@ class QLabel;
 
 class WChatUserWid: public IListItemWgt
 {
+    Q_OBJECT
 public:
 	WChatUserWid(QWidget* parent=nullptr);
 	void SetInfo(const QString& name, const QString& head, const QString& msg);

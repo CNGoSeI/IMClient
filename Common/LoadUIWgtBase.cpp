@@ -1,4 +1,4 @@
-#include "LoadUIWgtBase.h"
+﻿#include "LoadUIWgtBase.h"
 
 #include <QPainter>
 #include <QWidget>
@@ -33,6 +33,7 @@ QRect ILoadUIWgtBase::GetTitleRect(int W, int H) const
 void ILoadUIWgtBase::CreateWgt()
 {
 	Q_ASSERT(UI != nullptr, "ILoadUIWgtBase", "ILoadUIWgtBase::UI Load ERROR");
+	UI->setProperty("_owner", QVariant::fromValue(this));  // 存储基类指针[6](@ref)
 	InitControls();
 	ConnectSigSlot();
 }

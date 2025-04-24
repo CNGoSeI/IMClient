@@ -21,35 +21,7 @@
 #include "LoadingWgt.h"
 #include "ChatPageWgt.h"
 #include "SearchList.h"
-
-std::vector<QString>  strs = { "hello world !",
-                             "nice to meet u",
-                             "New year，new life",
-                            "You have to love yourself",
-                            "My love is written in the wind ever since the whole world is you" };
-
-std::vector<QString> heads = {
-    ":Skin/Image/HeadIcon01.jpg",
-    ":Skin/Image/HeadIcon02.jpg",
-    ":Skin/Image/HeadIcon03.jpg",
-    ":Skin/Image/HeadIcon04.jpg",
-    ":Skin/Image/HeadIcon05.jpg",
-	":Skin/Image/HeadIcon06.jpg",
-    ":Skin/Image/HeadIcon07.jpg",
-    ":Skin/Image/HeadIcon08.jpg"
-};
-
-std::vector<QString> names = {
-    "llfc",
-    "zack",
-    "golang",
-    "cpp",
-    "java",
-    "nodejs",
-    "python",
-    "rust"
-};
-
+#include "ContactUserList.h"
 
 WChatWgt::WChatWgt(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::MainChatUI, parent)
@@ -62,22 +34,6 @@ WChatWgt::~WChatWgt()
 
 }
 
-void WChatWgt::slotLoadingChatUser()
-{
-    //TODO::最大加载数量了不再加载
-    if (bLoading) {
-        return;
-    }
-
-    bLoading = true;
-    SLoadingWgt::Instance().PopShow(UI);
-    qDebug() << "添加新的用户Item.....";
-    AddChatUserList();
-
-    SLoadingWgt::Instance().HideStop();
-    bLoading = false;
-
-}
 
 bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
 {
@@ -180,6 +136,7 @@ bool WChatWgt::AddFriendEvent(QObject* watched, QEvent* event)
 		UIHelper::RePolish(Wgt_AddFriendAear);
 		return true;
 	}
+    return true;
 }
 
 void WChatWgt::InitControls()
@@ -224,6 +181,9 @@ void WChatWgt::InitControls()
     List_Search->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser"));
     UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser")->adjustSize();
 
+    LstContactUser = std::make_unique<CContactUserList>();
+    LstContactUser->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "List_ConUser"));
+
     Btn_ResizeSizeFlag = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_ResizeSizeFlag");
 
     Wgt_WndTitle= UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_WndTitle");
@@ -259,7 +219,6 @@ void WChatWgt::ConnectSigSlot()
 		ShowSearch(false);
 	});
 
-    connect(List_ChatUser.get(), &ICustomList::sigLoadingItems, this, &WChatWgt::slotLoadingChatUser);
 
 	connect(this, &WChatWgt::sigMainChatWgtSizeChanged, ChatPage, &WChatPage::slotMainChatSizeChanged);
 
@@ -305,23 +264,7 @@ void WChatWgt::ShowSearch(bool bsearch)
 void WChatWgt::AddChatUserList()
 {
     // 创建QListWidgetItem，并设置自定义的widget
-    for (int i = 0; i < 13; i++) {
-        int randomValue = QRandomGenerator::global()->bounded(100); // 生成0到99之间的随机整数
-        int str_i = randomValue % strs.size();
-        int head_i = randomValue % heads.size();
-        int name_i = randomValue % names.size();
-
-        auto* chat_user_wid = new WChatUserWid(List_ChatUser->ListWgt);
-        chat_user_wid->CreateWgt();
-        chat_user_wid->SetInfo(names[name_i], heads[head_i], strs[str_i]);
-        QListWidgetItem* item = new QListWidgetItem();
-        //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
-        item->setSizeHint(chat_user_wid->GetUI()->sizeHint());
-
-        List_ChatUser->ListWgt->addItem(item);
-        List_ChatUser->ListWgt->setItemWidget(item, chat_user_wid->GetUI());
-        //TODO::项目采用的UI不包含逻辑，因此添加一个QListWidgetItem到IListItemWgt的映射
-    }
+   
 }
 
 void WChatWgt::HandleWindowResize(const QPoint& globalPos) {

@@ -9,7 +9,7 @@
 #include "Common/GlobalDefine.h"
 
 WCloseTitle::WCloseTitle(QWidget* parent):
- ILoadUIWgtBase(WgtFile::CloseTitle,parent)
+	ILoadUIWgtBase(WgtFile::CloseTitle, parent)
 {
 	FollowedWgt = parent;
 }
