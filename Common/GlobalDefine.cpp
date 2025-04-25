@@ -100,6 +100,14 @@ const QString& ErrorCodes::GetErrorStr(const int Code)
 	return gNoneErrorStr;
 }
 
+Infos::BaseUserInfo::BaseUserInfo(const QString& InUID, const QString& InName, const QString& InIconPath):
+	HeadIconPath(InIconPath),
+	Name(InName),
+	UID(InUID)
+{
+
+}
+
 Infos::FSearchInfo::FSearchInfo(int uid, QString name, QString nick, QString desc, int sex):
 	UID(uid),
 	Name(name),

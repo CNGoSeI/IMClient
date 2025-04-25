@@ -8,13 +8,13 @@
 class QPushButton;
 class QLineEdit;
 
-class WApplyFriend:public ILoadUIWgtBase
+class WReqApplyFriend:public ILoadUIWgtBase
 {
 	Q_OBJECT
 public:
-	WApplyFriend(QWidget* parent=nullptr);
+	WReqApplyFriend(QWidget* parent=nullptr);
 
-	~WApplyFriend() override=default;
+	~WReqApplyFriend() override=default;
 	void SetSearchInfo(const Infos::FSearchInfo& InInfo);
 
 protected:

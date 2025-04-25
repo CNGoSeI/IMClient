@@ -4,13 +4,19 @@
 #include <QListWidget>
 #include <QRandomGenerator>
 
+#include "ChatUserWid.h"
 #include "LoadingWgt.h"
 #include "Common/GlobalDefine.h"
 
 CChatUserList::CChatUserList(QWidget* parent):
 	ICustomList(parent)
 {
+	
+}
 
+IUserInfoLstItem* CChatUserList::MakeNewUserItem()
+{
+	return new WChatUserWid(ListWgt);
 }
 
 void CChatUserList::AppendWheelEvent(QWheelEvent* event, int maxScrollValue, int currentValue)
@@ -22,7 +28,7 @@ void CChatUserList::AppendWheelEvent(QWheelEvent* event, int maxScrollValue, int
 		// 滚动到底部，加载新的联系人
 		qDebug("界面到底，加载更多联系人");
 		//发送信号通知聊天界面加载更多聊天内容
-		emit sigLoadingItems();
+		LoadingItems();
 	}
 }
 
@@ -33,7 +39,7 @@ void CChatUserList::slotAdd()
 		return;
 	}
 	bLoading = true;
-	SLoadingWgt::Instance().PopShow(nullptr);
+	SLoadingWgt::Instance().PopShow(ListWgt->parentWidget());
 	SelfAddItems();
 
 	SLoadingWgt::Instance().HideStop();
@@ -50,14 +56,21 @@ void CChatUserList::SelfAddItems()
 		int head_i = randomValue % Test::HeadIcons.size();
 		int name_i = randomValue % Test::Names.size();
 
-		//AddItemWithInfo(Test::Names[name_i], Test::HeadIcons[head_i], Test::Messages[str_i]);
+		auto Item=AddInfoItem(std::make_unique<Infos::BaseUserInfo>("", Test::Names[name_i], Test::HeadIcons[head_i]));
+		if(auto ChatUserItem = qobject_cast<WChatUserWid*>(Item))
+		{
+			ChatUserItem->SetMessage(Test::Messages[str_i]);
+		}
+
 	}
 }
 
 void CChatUserList::AfterSetListFunc()
 {
-	connect(this, &CChatUserList::sigLoadingItems, this, [this]()
-	{
-		slotAdd();
-	});
+	slotAdd();
+}
+
+void CChatUserList::LoadingItems()
+{
+	slotAdd();
 }

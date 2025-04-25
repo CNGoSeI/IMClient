@@ -1,12 +1,14 @@
 ﻿#ifndef CONTROL_ADDUSERITEM_H
 #define CONTROL_ADDUSERITEM_H
-#include "ListItemWgt.h"
 
-class CAddUserItem: public IListItemWgt
+#include "UserInfoLstItem.h"
+
+class CAddUserItem: public IUserInfoLstItem
 {
 	Q_OBJECT
 public:
 	CAddUserItem(QWidget* parent = nullptr);
+	void SetInfo(std::unique_ptr<Infos::BaseUserInfo> ) override;
 protected:
 	void InitControls() override;
 };

@@ -1,16 +1,17 @@
 ﻿#ifndef WGT_CONUSERITEM_H
 #define WGT_CONUSERITEM_H
 /* 联系人列表的Item */
-#include "ListItemWgt.h"
+#include "UserInfoLstItem.h"
 
 class QLabel;
 
-class WConUserItem: public IListItemWgt
+class WConUserItem: public IUserInfoLstItem
 {
 	Q_OBJECT
 public:
 	WConUserItem(QWidget* parent);
-	void SetInfo(const QString& Name, const QString& Slogen, const QString& IconPath);
+	void SetInfo(std::unique_ptr<Infos::BaseUserInfo>) override;
+
 protected:
 	void InitControls() override;
 	void ConnectSigSlot() override;

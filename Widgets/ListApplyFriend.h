@@ -1,6 +1,6 @@
 ﻿#ifndef CONTROL_LISTAPPLYFRIEND_H
 #define CONTROL_LISTAPPLYFRIEND_H
-#include "ApplyFriendLstItem.h"
+
 #include "CustomList.h"
 
 class CListApplyFriend:public ICustomList
@@ -14,6 +14,7 @@ protected:
 	void AppendWheelEvent(QWheelEvent* event, int, int) override;
 	void AfterSetListFunc() override;
 	void SelfAddItems() override;
+	IUserInfoLstItem* MakeNewUserItem() override;
 
 private:
 	

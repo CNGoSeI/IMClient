@@ -13,6 +13,7 @@
 #include <QLayout>
 #include <QTimer>
 
+#include "ApplyFriendPage.h"
 #include "ChatUserWid.h"
 #include "Common/GlobalDefine.h"
 #include "ChatUserList.h"
@@ -117,13 +118,14 @@ bool WChatWgt::AddFriendEvent(QObject* watched, QEvent* event)
 		emit sigClickedAddFriendArear(); // 触发点击信号
 		UIHelper::RePolish(Wgt_AddFriendAear);
 
-		QTimer::singleShot(300, [watched]()
+		QTimer::singleShot(300, [this,watched]()
 		{
 			// 500ms后恢复
 			if (watched)
 			{
 				watched->setProperty("state", "normal");
 				UIHelper::RePolish(qobject_cast<QWidget*>(watched));
+				Stacked_Right->setCurrentWidget(Wgt_ApplyFriendPage->GetUI());
 			}
 		});
 
@@ -180,6 +182,10 @@ void WChatWgt::InitControls()
     List_Search = std::make_unique<CSearchList>();
     List_Search->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser"));
     UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser")->adjustSize();
+
+	Wgt_ApplyFriendPage = new WApplyFriendPage(UI);
+	Wgt_ApplyFriendPage->CreateWgt();
+	Stacked_Right->addWidget(Wgt_ApplyFriendPage->GetUI());
 
     LstContactUser = std::make_unique<CContactUserList>();
     LstContactUser->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "List_ConUser"));

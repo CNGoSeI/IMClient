@@ -4,17 +4,17 @@
 /*
  *  聊天列表联系人的显示控件
  */
-#include "ListItemWgt.h"
+#include "UserInfoLstItem.h"
 
 class QLabel;
 
-class WChatUserWid: public IListItemWgt
+class WChatUserWid: public IUserInfoLstItem
 {
     Q_OBJECT
 public:
 	WChatUserWid(QWidget* parent=nullptr);
-	void SetInfo(const QString& name, const QString& head, const QString& msg);
-
+    void SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo) override;
+    void SetMessage(const QString& msg);
 protected:
     void InitControls() override;
 

@@ -4,6 +4,9 @@
 #include <QScrollBar>
 #include <QListWidget>
 
+#include "UserInfoLstItem.h"
+#include "Common/GlobalDefine.h"
+
 ICustomList::ICustomList(QWidget* parent):
 	QObject(parent)
 {
@@ -25,9 +28,17 @@ void ICustomList::SetListWgt(QListWidget* Target)
 	AfterSetListFunc();
 }
 
-void ICustomList::AddInfoItem(Infos::BaseUserInfo* Info)
+IUserInfoLstItem* ICustomList::AddInfoItem(std::unique_ptr<Infos::BaseUserInfo> Info)
 {
+	auto* add_user_item = MakeNewUserItem();
+	add_user_item->CreateWgt();
+	add_user_item->SetInfo(std::move(Info));
+	QListWidgetItem* item = new QListWidgetItem;
+	item->setSizeHint(add_user_item->GetUI()->sizeHint());
+	ListWgt->addItem(item);
+	ListWgt->setItemWidget(item, add_user_item->GetUI());
 
+	return add_user_item;
 }
 
 bool ICustomList::eventFilter(QObject* watched, QEvent* event)
@@ -54,12 +65,9 @@ bool ICustomList::eventFilter(QObject* watched, QEvent* event)
 			// 设置滚动幅度
 			ListWgt->verticalScrollBar()->setValue(ListWgt->verticalScrollBar()->value() - numSteps);
 
-			// 检查是否滚动到底部
 			QScrollBar* scrollBar = ListWgt->verticalScrollBar();
-			int maxScrollValue = scrollBar->maximum();
-			int currentValue = scrollBar->value();
+			AppendWheelEvent(wheelEvent, scrollBar->maximum(), scrollBar->value());
 
-			AppendWheelEvent(wheelEvent, maxScrollValue, currentValue);
 			return true; // 停止事件传递
 		}
 

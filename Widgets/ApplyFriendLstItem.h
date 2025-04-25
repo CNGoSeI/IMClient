@@ -2,17 +2,18 @@
 #define WGT_APPLYFRIENDLSTITEM_H
 
 /* 添加好友同意界面的Item */
-#include "ListItemWgt.h"
+
+#include "UserInfoLstItem.h"
 
 class QLabel;
 class QPushButton;
 
-class WApplyFriendLstItem:public IListItemWgt
+class WApplyFriendLstItem:public IUserInfoLstItem
 {
 	Q_OBJECT
 public:
 	WApplyFriendLstItem(QWidget* parent);
-	void SetInfoImpl(const QString& Name, const QString& Message, const QString& IconPath);
+	void SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo) override;
 protected:
 	void InitControls() override;
 	void ConnectSigSlot() override;

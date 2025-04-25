@@ -1,7 +1,7 @@
-#ifndef CONTROL_USERINFOLSTITEM_H
+ï»¿#ifndef CONTROL_USERINFOLSTITEM_H
 #define CONTROL_USERINFOLSTITEM_H
 #include "ListItemWgt.h"
-
+#include "Common/GlobalDefine.h"
 namespace Infos
 {
 	struct BaseUserInfo;
@@ -12,10 +12,10 @@ class IUserInfoLstItem: public IListItemWgt
 	Q_OBJECT
 public:
 	explicit IUserInfoLstItem(const QString& UIRes, EListItemType InItemType, QWidget* parent = nullptr);
-	virtual void SetInfo(Infos::BaseUserInfo* Info) = 0;
-	virtual ~IUserInfoLstItem() = default;
+	virtual void SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo) = 0;//å°å¿ƒInfoå†…å­˜æ³„æ¼
+	virtual ~IUserInfoLstItem();
 
 protected:
-	std::unique_ptr<Infos::BaseUserInfo> Info{ nullptr };//ÈçÈôĞèÒª£¬Ó¦¸ÃÔÚSetInfoÖĞ¹¹½¨
+	std::unique_ptr<Infos::BaseUserInfo> Info{ nullptr };//å¦‚è‹¥éœ€è¦ï¼Œåº”è¯¥åœ¨SetInfoä¸­æ„å»º
 };
 #endif // CONTROL_USERINFOLSTITEM_H

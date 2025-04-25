@@ -9,11 +9,11 @@ class CContactUserList:public ICustomList
 public:
 	CContactUserList(QWidget* parent = nullptr);
 
-signals:
-		void sigLoadingItems();
 protected:
 	void AfterSetListFunc() override;
 	void SelfAddItems() override;
+	void LoadingItems() override;
 	void AppendWheelEvent(QWheelEvent* event, int, int) override;
+	IUserInfoLstItem* MakeNewUserItem() override;
 };
 #endif // CONTROL_CONTACTUSERLIST_H

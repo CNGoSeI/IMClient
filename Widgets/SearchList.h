@@ -13,8 +13,7 @@ public:
     CSearchList(QWidget* parent = nullptr);
     void CloseFindDlg();
     void SetSearchEdit(QWidget* edit);
-    void AddTipItem();
-
+    IUserInfoLstItem* MakeNewUserItem() override;
 public slots:
     void slotItemClicked(QListWidgetItem* item);
 protected:

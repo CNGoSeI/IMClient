@@ -7,9 +7,28 @@
 #include "Common/GlobalDefine.h"
 
 WChatUserWid::WChatUserWid(QWidget* parent) :
-	IListItemWgt(WgtFile::ChatUserItem,EListItemType::CHAT_USER_ITEM,parent)
+	IUserInfoLstItem(WgtFile::ChatUserItem,EListItemType::CHAT_USER_ITEM,parent)
 {
 
+}
+
+void WChatUserWid::SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo)
+{
+	if (!InInfo)return;
+
+	Name = InInfo->Name;
+	Head = InInfo->HeadIconPath;
+	QPixmap Icon(Head);
+
+	Lab_Icon->setPixmap(Icon.scaled(Lab_Icon->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+	Lab_Icon->setScaledContents(true);
+	Lab_UserName->setText(Name);
+}
+
+void WChatUserWid::SetMessage(const QString& msg)
+{
+	Lab_UserMsg->setText(msg);
+	Msg = msg;
 }
 
 void WChatUserWid::InitControls()
@@ -19,19 +38,5 @@ void WChatUserWid::InitControls()
 	Lab_UserMsg = UIHelper::AssertFindChild<QLabel*>(GetUI(), "Lab_UserMsg");
 	Lab_Time = UIHelper::AssertFindChild<QLabel*>(GetUI(), "Lab_Time");
 
-}
-
-void WChatUserWid::SetInfo(const QString& name, const QString& head, const QString& msg)
-{
-	Name = name;
-	Head = head;
-	Msg = msg;
-	QPixmap Icon(head);
-
-	Lab_Icon->setPixmap(Icon.scaled(Lab_Icon->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-	Lab_Icon->setScaledContents(true);
-
-	Lab_UserMsg->setText(msg);
-	Lab_UserName->setText(name);
 }
 

@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+class IUserInfoLstItem;
+
 namespace Infos
 {
 	struct BaseUserInfo;
@@ -18,14 +20,16 @@ class ICustomList : public QObject
 public:
 	ICustomList(QWidget* parent = nullptr);
 	void SetListWgt(QListWidget* Target);
-	void AddInfoItem(Infos::BaseUserInfo* Info);
+	IUserInfoLstItem* AddInfoItem(std::unique_ptr<Infos::BaseUserInfo> Info);
 protected:
 	bool eventFilter(QObject* watched, QEvent* event) override;
 	virtual void AppendWheelEvent(QWheelEvent* event,int,int){};//滚到最新处需要执行的函数
 	virtual void AfterSetListFunc(){};//设置listwgt之后执行的函数
 	virtual void SelfAddItems(){};
+	virtual IUserInfoLstItem* MakeNewUserItem() = 0;
+	virtual void LoadingItems(){};//通知控件加载子项
 signals:
-	void sigLoadingItems();//通知控件加载子项
+	
 
 public:
 	QListWidget* ListWgt{nullptr};

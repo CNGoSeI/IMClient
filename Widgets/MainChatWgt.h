@@ -6,6 +6,7 @@
 #include "Common/GlobalDefine.h"
 #include "Common/LoadUIWgtBase.h"
 
+class WApplyFriendPage;
 class CSearchList;
 class CChatUserList;
 class WChatArea;
@@ -60,7 +61,7 @@ private:
     QListWidget* List_ConUserr{ nullptr };//联系人列表
     QListWidget* Lst_SearchUser{ nullptr };
     QStackedWidget* StateWgt_List{ nullptr };
-    QStackedWidget* Stacked_Right{ nullptr };
+    QStackedWidget* Stacked_Right{ nullptr };//好友申请处理界面
     QWidget* Wgt_UserLst{ nullptr };
     QWidget* Wgt_SearchLst{ nullptr };
     QWidget* Wgt_ConLst{ nullptr };
@@ -72,6 +73,7 @@ private:
     QWidget* Wgt_WndTitle{ nullptr };
     WChatPage* ChatPage{ nullptr };//ChatPage.ui
     WCloseTitle* Wgt_CloseTitle{ nullptr };
+    WApplyFriendPage* Wgt_ApplyFriendPage{ nullptr };
 
     EChatUIMode Mode{EChatUIMode::ChatMode };//当前界面显示的模式，聊天界面，联系人界面
     EChatUIMode State{ EChatUIMode::ChatMode };//不同模式(聊天界面、联系人界面)下存在搜索状态

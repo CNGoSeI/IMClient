@@ -25,6 +25,7 @@ void WCloseTitle::InitControls()
 	Btn_Close = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_Close");
 
 	UI->setAttribute(Qt::WA_TransparentForMouseEvents, false); // 鼠标事件穿透
+
 }
 
 void WCloseTitle::ConnectSigSlot()

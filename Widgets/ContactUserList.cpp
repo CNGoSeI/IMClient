@@ -18,14 +18,18 @@ void CContactUserList::AppendWheelEvent(QWheelEvent* event, int maxScrollValue, 
         // 滚动到底部，加载新的联系人
         qDebug("界面到底，加载更多联系人");
         //发送信号通知聊天界面加载更多聊天内容
-        emit sigLoadingItems();
+        LoadingItems();
     }
+}
+
+IUserInfoLstItem* CContactUserList::MakeNewUserItem()
+{
+    return new WConUserItem(ListWgt);
 }
 
 void CContactUserList::AfterSetListFunc()
 {
     SelfAddItems();
-    connect(this, &CContactUserList::sigLoadingItems, this, &CContactUserList::SelfAddItems);
 }
 
 void CContactUserList::SelfAddItems()
@@ -37,6 +41,14 @@ void CContactUserList::SelfAddItems()
         int head_i = randomValue % Test::HeadIcons.size();
         int name_i = randomValue % Test::Names.size();
 
-        //AddItemWithInfo(Test::Names[name_i], Test::Messages[str_i], Test::HeadIcons[head_i]);
+        auto info = std::make_unique<Infos::BaseUserInfo>("", Test::Names[name_i], Test::HeadIcons[head_i]);
+        info->Desc = Test::Messages[str_i];//当作slogen吧
+        AddInfoItem(std::move(info));
+
     }
+}
+
+void CContactUserList::LoadingItems()
+{
+    SelfAddItems();
 }

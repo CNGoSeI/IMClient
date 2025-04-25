@@ -39,6 +39,11 @@ QWidget {
 	border-bottom: 1px solid #EFEFEF; /* 设置下边框颜色和宽度 */
 	border-top: 1px solid #EFEFEF;
 }
+#Wgt_ChatName,#friend_apply_lb
+{
+	border-bottom: 1px solid #66bee0ff;
+	border-radius: 0px;
+}
 
 /* 基础按钮样式 */
 QPushButton {

@@ -95,7 +95,8 @@ namespace Infos
 {
 	struct BaseUserInfo
 	{
-
+		BaseUserInfo()=default;
+		BaseUserInfo(const QString& InUID, const QString& InName, const QString& InIconPath);
 		QString UID{ "" };
 		QString Name{""};//昵称
 		QString HeadIconPath{ "" };

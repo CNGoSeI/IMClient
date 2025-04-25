@@ -7,19 +7,20 @@
 #include "Common/GlobalDefine.h"
 
 WApplyFriendLstItem::WApplyFriendLstItem(QWidget* parent) :
-	IListItemWgt(WgtFile::ApplyFriendLstItem, EListItemType::APPLY_FRIEND_ITEM, parent)
+	IUserInfoLstItem(WgtFile::ApplyFriendLstItem, EListItemType::APPLY_FRIEND_ITEM, parent)
 {
 
 }
 
-void WApplyFriendLstItem::SetInfoImpl(const QString& Name, const QString& Message, const QString& IconPath)
+void WApplyFriendLstItem::SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo)
 {
-	Lab_AddName->setText(Name);
-	Lab_AddMsg->setText(Message);
+	Lab_AddName->setText(InInfo->Name);
+	Lab_AddMsg->setText(InInfo->Desc);//当作添加时候的招呼语吧
 
-	QPixmap Icon(IconPath);
+	QPixmap Icon(InInfo->HeadIconPath);
 	Lab_Icon->setPixmap(Icon.scaled(Lab_Icon->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 	Lab_Icon->setScaledContents(true);
+	Btn_AddState->setVisible(true);
 }
 
 void WApplyFriendLstItem::InitControls()

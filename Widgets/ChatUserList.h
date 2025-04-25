@@ -17,9 +17,11 @@ public:
 	CChatUserList(QWidget* parent = nullptr);
 
 protected:
+	IUserInfoLstItem* MakeNewUserItem() override;
 	void AppendWheelEvent(QWheelEvent* ,int ,int) override;
 	void slotAdd();
 	void SelfAddItems() override;
 	void AfterSetListFunc() override;
+	void LoadingItems() override;
 };
 #endif // CHATUSERLIST_H

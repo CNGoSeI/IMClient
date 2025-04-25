@@ -6,16 +6,16 @@
 #include "Common/GlobalDefine.h"
 
 WConUserItem::WConUserItem(QWidget* parent):
-	IListItemWgt(WgtFile::ContactUserItem,EListItemType::CONTACT_USER_ITEM,parent)
+	IUserInfoLstItem(WgtFile::ContactUserItem,EListItemType::CONTACT_USER_ITEM,parent)
 {
 }
 
-void WConUserItem::SetInfo(const QString& Name, const QString& Slogen, const QString& IconPath)
+void WConUserItem::SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo)
 {
-	Lab_BigName->setText(Name);
-	Lab_UserSlogen->setText(Slogen);
+	Lab_BigName->setText(InInfo->Name);
+	Lab_UserSlogen->setText(InInfo->Desc);//t填写时以此为slogen
 
-	QPixmap Icon(IconPath);
+	QPixmap Icon(InInfo->HeadIconPath);
 	Lab_Icon->setPixmap(Icon.scaled(Lab_Icon->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 	Lab_Icon->setScaledContents(true);
 }
@@ -29,7 +29,7 @@ void WConUserItem::InitControls()
 
 void WConUserItem::ConnectSigSlot()
 {
-	IListItemWgt::ConnectSigSlot();
+	
 }
 
 WConUserItem::~WConUserItem()

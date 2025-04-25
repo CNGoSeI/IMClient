@@ -1,4 +1,4 @@
-﻿#include "ApplyFriend.h"
+﻿#include "ReqApplyFriend.h"
 
 #include <QLineEdit>
 #include <QPushButton>
@@ -7,14 +7,14 @@
 #include "Common/GlobalDefine.h"
 #include "Common/UserMgr.h"
 
-WApplyFriend::WApplyFriend(QWidget* parent):
+WReqApplyFriend::WReqApplyFriend(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::AddFriendWgt,parent)
 {
 	UI->setWindowFlags(UI->windowFlags()/* | Qt::FramelessWindowHint*/ | Qt::Window);
 	UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
 }
 
-void WApplyFriend::SetSearchInfo(const Infos::FSearchInfo& InInfo)
+void WReqApplyFriend::SetSearchInfo(const Infos::FSearchInfo& InInfo)
 {
 	Si = InInfo;
 	QString applyname = SUserMgr::GetInstance().GetName();
@@ -23,7 +23,7 @@ void WApplyFriend::SetSearchInfo(const Infos::FSearchInfo& InInfo)
 	Edt_BackName->setText(Si.Name);
 }
 
-void WApplyFriend::InitControls()
+void WReqApplyFriend::InitControls()
 {
 	Edt_AddLab = UIHelper::AssertFindChild<QLineEdit*>(UI, "Edt_AddLab");
 	Edt_BackName = UIHelper::AssertFindChild<QLineEdit*>(UI, "Edt_BackName");
@@ -33,7 +33,7 @@ void WApplyFriend::InitControls()
 
 }
 
-void WApplyFriend::ConnectSigSlot()
+void WReqApplyFriend::ConnectSigSlot()
 {
 	connect(Btn_OK, &QPushButton::clicked, [this]()
 	{

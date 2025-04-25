@@ -24,3 +24,34 @@ QWidget
    font-size: 12px;
    font-family: "Microsoft YaHei";
 }
+
+/* 基础按钮样式 */
+QPushButton {
+    background-color: #FA6594; /* 粉红基础色 */
+    border: 1px solid #FFB6C1; /* 浅粉色边框 */
+    border-radius: 4px;
+    color: white;
+	padding:4px;
+	font-size: 12px;
+    font-family: "Microsoft YaHei";
+}
+
+/* 悬停状态 */
+QPushButton:hover {
+    background-color: #FF1493; /* 深粉色 */
+    border-color: #FF69B4;
+}
+
+/* 按下状态 */
+QPushButton:pressed {
+    background-color: #C71585; /* 紫红色 */
+    border-color: #DB7093;
+	/*padding:4px;*/
+}
+
+/* 禁用状态 */
+QPushButton:disabled {
+    background-color: #FFB6C1; /* 浅粉色 */
+    border-color: #DDA0DD;
+    color: #2C2C2C;
+}
