@@ -3,6 +3,11 @@
 
 #include <QObject>
 
+namespace Infos
+{
+	struct BaseUserInfo;
+}
+
 class QListWidgetItem;
 class QWheelEvent;
 class QListWidget;
@@ -13,7 +18,7 @@ class ICustomList : public QObject
 public:
 	ICustomList(QWidget* parent = nullptr);
 	void SetListWgt(QListWidget* Target);
-
+	void AddInfoItem(Infos::BaseUserInfo* Info);
 protected:
 	bool eventFilter(QObject* watched, QEvent* event) override;
 	virtual void AppendWheelEvent(QWheelEvent* event,int,int){};//滚到最新处需要执行的函数

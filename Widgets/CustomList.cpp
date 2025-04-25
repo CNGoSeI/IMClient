@@ -25,6 +25,11 @@ void ICustomList::SetListWgt(QListWidget* Target)
 	AfterSetListFunc();
 }
 
+void ICustomList::AddInfoItem(Infos::BaseUserInfo* Info)
+{
+
+}
+
 bool ICustomList::eventFilter(QObject* watched, QEvent* event)
 {
 	if (watched == ListWgt->viewport())
