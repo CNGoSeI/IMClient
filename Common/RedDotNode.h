@@ -21,7 +21,7 @@ public:
 	 */
 	void SetShowEvent(FShowFunc Func) { ShowEvent = std::move(Func); };
 private:
-	CRedDotNode(const std::string& TotalNodeName, FShowFunc NotifyFunc);
+	CRedDotNode(const std::string& TotalNodeName, FShowFunc NotifyFunc);//由mgr创建
 	void InitNodeName();
 	void UpdateParentCounter(int delta);
 	void UpdateDisplayState(bool bNewState, bool bTriggerEvent);
@@ -49,6 +49,13 @@ public:
 	CRedDotNode* FindTarget(CRedDotNode* Target);
 	CRedDotNode* FindTargetByTotalName(const std::string& TargetName);
 	bool NotifyTargetShow(bool bShow, CRedDotNode* Target);
+
+	/**
+	 * 创建一个新的节点，如果节点已经存在，则设置新的显示回调函数
+	 * @param name 节点全名称
+	 * @param func 节点状态改变时，调用的回调
+	 * @return 
+	 */
 	CRedDotNode* CreateNode(const std::string& name, FShowFunc func);
 
 	std::list<CRedDotNode*> TotalNodes;

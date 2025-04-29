@@ -79,12 +79,17 @@ void CRedDotNode::InitNodeName()
 	{
 		// 截取点号后的子字符串
 		NodeName = TotalName.substr(dotPos + 1);
-		ParentTotalName = TotalName.substr(0, dotPos - 1);
+		ParentTotalName = TotalName.substr(0, dotPos);
 
 		//设置父项
 		if (!ParentTotalName.empty())
 		{
-			ParentNode = SRedDotMgr::Ins().CreateNode(ParentTotalName, [](bool) {});
+			ParentNode = SRedDotMgr::Ins().FindTargetByTotalName(ParentTotalName);
+			if(!ParentNode)
+			{
+				ParentNode = SRedDotMgr::Ins().CreateNode(ParentTotalName, [](bool) {});
+			}
+			
 		}
 	}
 	else

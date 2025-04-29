@@ -13,7 +13,7 @@ QWidget {
 }
 
 /* 透明背景 */
-#List_ChatUser,#Lst_SearchUser,#Wgt_UserLst,#Wgt_SearchLst,#Wgt_ConLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_EditChat
+#List_ChatUser,#Lst_SearchUser,#Wgt_UserLst,#Wgt_SearchLst,#Wgt_ConLst,#Stacke_List,#Edt_Chat,#send_wid,#Wgt_EditChat,#Wgt_ChatMode,#Lab_RedDotMsg
 {
 	background: transparent;
 	
@@ -28,6 +28,12 @@ QWidget {
     border-top-right-radius: 0px;   /* 右上角归零 */
     border-bottom-right-radius: 0px;/* 右下角归零 */
 	border: none;                   /* 去除默认边框 */
+}
+
+/* 侧边栏信息提示颜色 */
+#Lab_RedDotMsg
+{
+	color:#FAFAFA;
 }
 
 /* 大背景中的小背景 */

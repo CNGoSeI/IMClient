@@ -54,15 +54,17 @@ void WChatUserWid::InitControls()
 	Lab_Red= UIHelper::AssertFindChild<QLabel*>(GetUI(), "Lab_Red");
 	Lab_Red->setVisible(false);
 
-	RedControl = SRedDotMgr::Ins().CreateNode((QString("ChatMsg.") + UI->objectName()).toStdString(), [this](bool bShow)
+	QString TempNodeName = QString("ChatMsg.%1_%2").arg(UI->objectName()).arg(RedCount);
+	RedControl = SRedDotMgr::Ins().CreateNode(TempNodeName.toStdString(), [this](bool bShow)
 	{
-		Lab_Red->setVisible(bShow);
+		bShow? Lab_Red->show():Lab_Red->hide();
 	});
+
 	if (RedCount < 4)
 	{
 		Lab_Red->setVisible(true);
 		RedControl->NotifyShow(true);
-		RedCount++;
 	}
+	RedCount++;
 }
 

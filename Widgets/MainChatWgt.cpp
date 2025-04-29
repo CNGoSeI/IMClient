@@ -5,6 +5,7 @@
 #include <QAction>
 #include <qcoreevent.h>
 #include <qeventloop.h>
+#include <QLabel>
 #include <qlistwidget.h>
 #include <QMouseEvent>
 #include <QStackedWidget>
@@ -23,6 +24,7 @@
 #include "ChatPageWgt.h"
 #include "SearchList.h"
 #include "ContactUserList.h"
+#include "Common/RedDotNode.h"
 
 WChatWgt::WChatWgt(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::MainChatUI, parent)
@@ -159,6 +161,13 @@ void WChatWgt::InitControls()
 
     Btn_MsgModel = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_MsgModel");
     Btn_UserModel= UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_UserModel");
+
+	Lab_RedDotMsg = UIHelper::AssertFindChild<QLabel*>(UI, "Lab_RedDotMsg");
+	Lab_RedDotMsg->setVisible(false);
+    SRedDotMgr::Ins().CreateNode("ChatMsg", [this](bool bShow)
+    {
+	    Lab_RedDotMsg->setVisible(bShow);
+    });
 
     //添加搜索按钮
     SearchAction = new QAction(QIcon(":/Skin/Image/Search.png"), "搜索", Edt_Search);

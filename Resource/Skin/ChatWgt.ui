@@ -182,7 +182,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QPushButton" name="Btn_MsgModel">
+               <widget class="QWidget" name="Wgt_ChatMode" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -191,38 +191,120 @@
                 </property>
                 <property name="minimumSize">
                  <size>
-                  <width>38</width>
-                  <height>38</height>
+                  <width>39</width>
+                  <height>39</height>
                  </size>
                 </property>
                 <property name="maximumSize">
                  <size>
-                  <width>38</width>
-                  <height>38</height>
+                  <width>39</width>
+                  <height>39</height>
                  </size>
                 </property>
-                <property name="text">
-                 <string/>
+                <property name="styleSheet">
+                 <string notr="true"/>
                 </property>
-                <property name="icon">
-                 <iconset resource="../Assets.qrc">
-                  <normaloff>:/Skin/Image/MessageModel.png</normaloff>:/Skin/Image/MessageModel.png</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>25</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="checkable">
-                 <bool>true</bool>
-                </property>
-                <property name="autoRepeat">
-                 <bool>true</bool>
-                </property>
-                <property name="autoExclusive">
-                 <bool>true</bool>
-                </property>
+                <widget class="QPushButton" name="Btn_MsgModel">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>38</width>
+                   <height>38</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>38</width>
+                   <height>38</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>38</width>
+                   <height>38</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../Assets.qrc">
+                   <normaloff>:/Skin/Image/MessageModel.png</normaloff>:/Skin/Image/MessageModel.png</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>25</width>
+                   <height>25</height>
+                  </size>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoRepeat">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="Lab_RedDotMsg">
+                 <property name="geometry">
+                  <rect>
+                   <x>16</x>
+                   <y>-2</y>
+                   <width>24</width>
+                   <height>24</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>幼圆</family>
+                   <pointsize>16</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true"/>
+                 </property>
+                 <property name="text">
+                  <string>·</string>
+                 </property>
+                 <property name="scaledContents">
+                  <bool>false</bool>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="wordWrap">
+                  <bool>false</bool>
+                 </property>
+                </widget>
                </widget>
               </item>
               <item>

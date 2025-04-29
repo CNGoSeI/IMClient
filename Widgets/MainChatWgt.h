@@ -80,6 +80,8 @@ private:
     QPoint DragStartPos;//拖动操作在点击时的坐标
     QRect OriginalGeometry;//缩放操作开始时的窗口大小信息
 
+    QLabel* Lab_RedDotMsg{ nullptr };
+
     const int ResizeBorderWidth = 20;//光标检测区域补正
     bool bInDragBtn{ false };//在拖拽按钮中
     bool bLoading{ false };//是否在加载用户信息中
