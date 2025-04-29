@@ -22,6 +22,15 @@ void ICustomList::SetListWgt(QListWidget* Target)
 	ListWgt->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	ListWgt->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+	connect(ListWgt, &QListWidget::itemClicked, [this](QListWidgetItem* item)
+	{
+		QWidget* itemWidget = ListWgt->itemWidget(item);
+		if (auto ItemWgt = ILoadUIWgtBase::GetOwner<IListItemWgt>(itemWidget))
+		{
+			ItemWgt->BeClicked(item);
+		}
+	});
+
 	// 安装事件过滤器
 	ListWgt->viewport()->installEventFilter(this);
 
@@ -55,8 +64,7 @@ bool ICustomList::eventFilter(QObject* watched, QEvent* event)
 			// 鼠标离开，隐藏滚动条
 			ListWgt->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 		}
-
-		if (event->type() == QEvent::Wheel)
+		else if (event->type() == QEvent::Wheel)
 		{
 			QWheelEvent* wheelEvent = static_cast<QWheelEvent*>(event);
 			int numDegrees = wheelEvent->angleDelta().y() / 8;
@@ -68,7 +76,7 @@ bool ICustomList::eventFilter(QObject* watched, QEvent* event)
 			QScrollBar* scrollBar = ListWgt->verticalScrollBar();
 			AppendWheelEvent(wheelEvent, scrollBar->maximum(), scrollBar->value());
 
-			return true; // 停止事件传递
+			return false; // 停止事件传递
 		}
 
 	}

@@ -6,6 +6,7 @@
  */
 #include "UserInfoLstItem.h"
 
+class CRedDotNode;
 class QLabel;
 
 class WChatUserWid: public IUserInfoLstItem
@@ -13,8 +14,10 @@ class WChatUserWid: public IUserInfoLstItem
     Q_OBJECT
 public:
 	WChatUserWid(QWidget* parent=nullptr);
+    ~WChatUserWid() override;
     void SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo) override;
     void SetMessage(const QString& msg);
+    void BeClicked(QListWidgetItem* item) override;
 protected:
     void InitControls() override;
 
@@ -26,6 +29,7 @@ private:
     QLabel* Lab_Time{ nullptr };
     QLabel* Lab_UserMsg{ nullptr };
     QLabel* Lab_UserName{ nullptr };
-
+    QLabel* Lab_Red{ nullptr };
+    CRedDotNode* RedControl{ nullptr };
 };
 #endif // CHATUSERWID_H

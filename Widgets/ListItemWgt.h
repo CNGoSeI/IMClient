@@ -3,6 +3,8 @@
 
 #include "Common/LoadUIWgtBase.h"
 
+class QListWidgetItem;
+
 enum class EListItemType
 {
     CHAT_USER_ITEM, //聊天用户
@@ -23,7 +25,7 @@ public:
     ~IListItemWgt() override = default;
     void SetItemType(EListItemType itemType) { ItemType = itemType;};
     EListItemType GetItemType() const { return ItemType; };
-
+    virtual void BeClicked(QListWidgetItem* item) {};
 protected:
     EListItemType ItemType;
 };
