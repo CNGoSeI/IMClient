@@ -131,6 +131,8 @@ CRedDotNode* SRedDotMgr::FindTargetByTotalName(const std::string& TargetName)
 
 bool SRedDotMgr::NotifyTargetShow(bool bShow, CRedDotNode* Target)
 {
+	if (!Target)return false;
+
 	if(auto pNode=FindTarget(Target))
 	{
 		pNode->NotifyShow(bShow);
@@ -138,6 +140,11 @@ bool SRedDotMgr::NotifyTargetShow(bool bShow, CRedDotNode* Target)
 	}
 
 	return false;
+}
+
+bool SRedDotMgr::NotifyTargetShow(bool bShow, const std::string& TotalName)
+{
+	return NotifyTargetShow(bShow, FindTargetByTotalName(TotalName));
 }
 
 CRedDotNode* SRedDotMgr::CreateNode(const std::string& name, FShowFunc func)

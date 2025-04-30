@@ -10,6 +10,7 @@
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
 #include "InputTextEdit.h"
+#include "Common/RedDotNode.h"
 
 WChatPage::WChatPage(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::ChatPageWgt,parent)
@@ -61,5 +62,10 @@ void WChatPage::ConnectSigSlot()
 		if (htmlContent.isEmpty())return;
 		ChatAreaControl->AddMsgItem(false, htmlContent.toUtf8());
 		Edt_Chat->clear();
+		static int index{ 1 };
+		QString TotalName = QString("ChatMsg.%1_%2").arg("ChatUserWid").arg(index);
+		SRedDotMgr::Ins().NotifyTargetShow(true,TotalName.toStdString());
+		index++;
+		if (index > 4)index = 1;
 	});
 }

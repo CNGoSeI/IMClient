@@ -49,6 +49,7 @@ public:
 	CRedDotNode* FindTarget(CRedDotNode* Target);
 	CRedDotNode* FindTargetByTotalName(const std::string& TargetName);
 	bool NotifyTargetShow(bool bShow, CRedDotNode* Target);
+	bool NotifyTargetShow(bool bShow, const std::string& TotalName);//通过节点名称通知红点
 
 	/**
 	 * 创建一个新的节点，如果节点已经存在，则设置新的显示回调函数

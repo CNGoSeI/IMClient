@@ -51,10 +51,7 @@ int main(int argc, char *argv[])
     w.show();
     ChatWgt.GetUI()->close();
 
-    WReqApplyFriend AddFr;
-    AddFr.GetUI()->show();
-
-    emit STcpMgr::GetInstance().sigSwitchChatWgt();
+    //emit STcpMgr::GetInstance().sigSwitchChatWgt();
 
     return a.exec();
 }
