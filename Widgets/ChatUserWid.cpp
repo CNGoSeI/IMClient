@@ -62,7 +62,7 @@ void WChatUserWid::InitControls()
 
 	if (RedCount < 4)
 	{
-		Lab_Red->setVisible(true);
+		//Lab_Red->setVisible(true);
 		RedControl->NotifyShow(true);
 	}
 	RedCount++;
