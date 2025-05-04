@@ -198,7 +198,7 @@ void DLoginDialog::slotTcpConFinish(bool bsuccess)
 		QString jsonString = doc.toJson(QJsonDocument::Indented);
 		
 		//发送tcp请求给chat server
-		emit STcpMgr::GetInstance().sigSendData(ReqID::ID_CHAT_LOGIN, jsonString);
+		emit STcpMgr::GetInstance().sigSendData(ReqID::ID_CHAT_LOGIN, jsonString.toUtf8());
 	}
 	else
 	{

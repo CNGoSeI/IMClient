@@ -20,6 +20,7 @@ public:
 protected:
 	void InitControls() override;
 	void ConnectSigSlot() override;
+	void ApplySure() const;//确认申请好友
 
 private:
 	//void ResetLabels();

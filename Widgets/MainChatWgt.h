@@ -32,11 +32,11 @@ class WChatWgt : public ILoadUIWgtBase
     Q_OBJECT
 
 public:
-    explicit WChatWgt(QWidget* parent = nullptr);
     virtual ~WChatWgt();
+    static WChatWgt& GetIns();
 
 public slots:
-
+    void slotTryFindUser();//搜索框的点击添加联系人之后，实行该函数
 signals:
     void sigMainChatWgtSizeChanged();
     void sigClickedAddFriendArear();
@@ -45,11 +45,15 @@ protected:
     bool eventFilter(QObject* watched, QEvent* event) override;
     bool AddFriendEvent(QObject* watched, QEvent* event);
 private:
+    WChatWgt() = delete;
+    explicit WChatWgt(QWidget* parent = nullptr);
     void InitControls() override;
     void ConnectSigSlot() override;
     void ShowSearch(bool bsearch = false);
-    void AddChatUserList();
     void HandleWindowResize(const QPoint& globalPos);//重设窗口大小
+    void InitPages();
+    void InitLists();
+    void InitRedDots();
 
 private:
     QLineEdit* Edt_Search{ nullptr };
@@ -81,6 +85,8 @@ private:
     QRect OriginalGeometry;//缩放操作开始时的窗口大小信息
 
     QLabel* Lab_RedDotMsg{ nullptr };
+    QLabel* Lab_RedDotCon{ nullptr };
+    QLabel* Lab_RedDotNewCon{ nullptr };
 
     const int ResizeBorderWidth = 20;//光标检测区域补正
     bool bInDragBtn{ false };//在拖拽按钮中

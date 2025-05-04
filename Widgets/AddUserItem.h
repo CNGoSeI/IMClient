@@ -11,5 +11,13 @@ public:
 	void SetInfo(std::unique_ptr<Infos::BaseUserInfo> ) override;
 protected:
 	void InitControls() override;
+
+public:
+	void BeClicked(QListWidgetItem* item) override;
+signals:
+	void sigBeClicked();
+
+protected:
+	void ConnectSigSlot() override;
 };
 #endif // control_ADDUSERITEM_H

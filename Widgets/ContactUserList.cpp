@@ -41,7 +41,7 @@ void CContactUserList::SelfAddItems()
         int head_i = randomValue % Test::HeadIcons.size();
         int name_i = randomValue % Test::Names.size();
 
-        auto info = std::make_unique<Infos::BaseUserInfo>("", Test::Names[name_i], Test::HeadIcons[head_i]);
+        auto info = std::make_unique<Infos::BaseUserInfo>(0, Test::Names[name_i], Test::HeadIcons[head_i]);
         info->Desc = Test::Messages[str_i];//当作slogen吧
         AddInfoItem(std::move(info));
 

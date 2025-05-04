@@ -4,6 +4,7 @@
 #include "CustomList.h"
 #include "Common/GlobalDefine.h"
 
+class WReqApplyFriend;
 class QListWidgetItem;
 using namespace Infos;
 class CSearchList: public ICustomList
@@ -15,10 +16,13 @@ public:
     void SetSearchEdit(QWidget* edit);
     IUserInfoLstItem* MakeNewUserItem() override;
 public slots:
-    void slotItemClicked(QListWidgetItem* item);
+    void slotUserSearch(const Infos::FSearchInfo& Info);
 protected:
     void AfterSetListFunc() override;
     void SelfAddItems() override{};
+
+private:
+    WReqApplyFriend* FriendApplayWgt{ nullptr };
 };
 
 #endif // CONTROL_SEARCHLIST_H

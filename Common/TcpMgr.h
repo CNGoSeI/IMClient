@@ -5,6 +5,16 @@
 
 #include "SingletonTemplate.h"
 
+namespace Infos
+{
+	struct FAddFriendApply;
+}
+
+namespace Infos
+{
+	struct FSearchInfo;
+}
+
 namespace Net
 {
 	struct ServerInfo;
@@ -18,19 +28,29 @@ class STcpMgr:public QObject,public TSingleton<STcpMgr>
 public slots:
     void slotTcpConnect(const Net::ServerInfo&);
 private slots:
-    void slotSendData(int reqId, const QString& data);
+    void slotSendData(int reqId, const QByteArray& data);
     void slotReadReceived();//读取收到的buff
     void slotGetConnectError(const QTcpSocket::SocketError& socketError);//该错误为QT套接字回调调用
 signals:
     void sigConSuccess(bool bSuccess);//该错误为QT套接字连接中错误回调转发的信号
-    void sigSendData(int reqId, const QString& data);
+    void sigSendData(int reqId, const QByteArray& data);
     void sigLoginFailed(int);//登录请求回调的错误
     void sigSwitchChatWgt();
+    void sigUserSearch(const Infos::FSearchInfo& info);
+    void sigFriendApply(const Infos::FAddFriendApply&);//提示好友申请通知
 private:
     STcpMgr();
 
     void InitHandlers();
     void HandleMsg(int ReqId, int len, QByteArray& data);
+
+    /**
+     * 收到数据之后解析包，判断有无错误，并且设置json
+     * @param data 解析的数据包
+     * @param JsonObj 要设置的json
+     * @return 
+     */
+    bool PaserBaseDate(int Id, const QByteArray& data, QJsonObject& JsonObj);
 
 private:
     QTcpSocket Socket;

@@ -6,6 +6,7 @@
 
 #include "GlobalDefine.h"
 #include "UserMgr.h"
+#include "Widgets/LoadingWgt.h"
 
 STcpMgr::STcpMgr()
 {
@@ -37,31 +38,9 @@ void STcpMgr::InitHandlers()
 {
 	ReqId2Callback.emplace(ReqID::ID_CHAT_LOGIN_RSP, [this](int Id, int Len, QByteArray& Data)
 	{
-			qDebug() << "回调ID：" << Id << " 数据：" << Data;
-			// 将QByteArray转换为QJsonDocument
-			QJsonDocument jsonDoc = QJsonDocument::fromJson(Data);
-
-			// 检查转换是否成功
-			if (jsonDoc.isNull()) {
-				qDebug() << "QJsonDocument 转换异常 于登录聊天室获取回复时.";
-				return;
-			}
-
-			QJsonObject jsonObj = jsonDoc.object();
-
-			if (!jsonObj.contains("error")) {
-				int err = ErrorCodes::ERR_JSON;
-				qDebug() << "Json解析异常 于登录聊天室获取回复时" << err;
-				emit sigLoginFailed(err);
-				return;
-			}
-
-			int err = jsonObj["error"].toInt();
-			if (err != ErrorCodes::SUCCESS) {
-				qDebug() << "于登录聊天室获取回复时 登陆错误：" << err;
-				emit sigLoginFailed(err);
-				return;
-			}
+			QJsonObject jsonObj;
+			bool Succes=PaserBaseDate(Id,Data, jsonObj);
+			if (!Succes)return;
 
 			SUserMgr::GetInstance().SetUid(jsonObj["uid"].toInt());
 			SUserMgr::GetInstance().SetName(jsonObj["name"].toString());
@@ -74,6 +53,45 @@ void STcpMgr::InitHandlers()
 
 			emit sigSwitchChatWgt();
 	});
+
+	ReqId2Callback.emplace(ReqID::ID_SEARCH_USER_RSP, [this](int Id, int Len, QByteArray& Data)
+	{
+		//收到服务器发包之后关闭模态
+		SLoadingWgt::Instance().HideStop();
+
+		QJsonObject jsonObj;
+		bool Succes = PaserBaseDate(Id, Data, jsonObj);
+		if (!Succes)return;
+
+		Infos::FSearchInfo search_info;
+		search_info.UID = jsonObj["uid"].toInt();
+		search_info.Name = jsonObj["name"].toString();
+		search_info.Nick = jsonObj["nick"].toString();
+		search_info.Desc = jsonObj["desc"].toString();
+		search_info.Sex = jsonObj["sex"].toInt();
+		search_info.Icon = jsonObj["icon"].toString();
+
+		emit sigUserSearch(search_info);
+
+	});
+
+	ReqId2Callback.emplace(ReqID::ID_NOTIFY_ADD_FRIEND_REQ, [this](int Id, int Len, QByteArray& Data)
+	{
+		QJsonObject jsonObj;
+		bool Succes = PaserBaseDate(Id, Data, jsonObj);
+		if (!Succes)return;
+
+		Infos::FAddFriendApply apply_info;
+		apply_info.FromUid = jsonObj["applyuid"].toInt();
+		apply_info.Name = jsonObj["name"].toString();
+		apply_info.Desc = jsonObj["desc"].toString();
+		apply_info.Icon = jsonObj["icon"].toString();
+		apply_info.Nick = jsonObj["nick"].toString();
+		apply_info.Sex = jsonObj["sex"].toInt();
+
+		emit sigFriendApply(apply_info);
+	});
+
 }
 
 void STcpMgr::HandleMsg(int ReqId, int len, QByteArray& data)
@@ -87,6 +105,36 @@ void STcpMgr::HandleMsg(int ReqId, int len, QByteArray& data)
 	find_iter->second(ReqId, len, data);
 }
 
+bool STcpMgr::PaserBaseDate(int Id, const QByteArray& data, QJsonObject& JsonObj)
+{
+	qDebug() << "回调ID：" << Id << " 数据：" << data;
+
+	// 将QByteArray转换为QJsonDocument
+	QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
+
+	// 检查转换是否成功
+	if (jsonDoc.isNull()) {
+		qDebug() << "QJsonDocument 转换异常 于登录聊天室获取回复时.";
+		return false;
+	}
+
+	JsonObj = jsonDoc.object();
+
+	if (!JsonObj.contains("error")) {
+		int err = ErrorCodes::ERR_JSON;
+		qDebug() << "Json解析异常" << err;
+		emit sigLoginFailed(err);
+		return false;
+	}
+
+	int err = JsonObj["error"].toInt();
+	if (err != ErrorCodes::SUCCESS) {
+		qDebug() << "请求不成功" << err;
+		emit sigLoginFailed(err);
+		return false;
+	}
+	return true;
+}
 
 void STcpMgr::slotTcpConnect(const Net::ServerInfo& si)
 {
@@ -98,10 +146,9 @@ void STcpMgr::slotTcpConnect(const Net::ServerInfo& si)
 	Socket.connectToHost(si.Host, Port);
 }
 
-void STcpMgr::slotSendData(int reqId, const QString& data)
+void STcpMgr::slotSendData(int reqId, const QByteArray& data)
 {
 	uint16_t id = reqId;
-	QByteArray dataBytes = data.toUtf8();// 将字符串转换为UTF-8编码的字节数组
 	quint16 len = static_cast<quint16>(data.size());// 计算长度（使用网络字节序转换）
 
 	// 创建一个QByteArray用于存储要发送的所有数据
@@ -110,7 +157,7 @@ void STcpMgr::slotSendData(int reqId, const QString& data)
 
 	out.setByteOrder(QDataStream::BigEndian);// 设置数据流使用网络字节序
 	out << id << len;// 写入ID和长度为头
-	block.append(dataBytes);// 再添加字符串数据
+	block.append(data);// 再添加字符串数据
 
 	// 发送数据
 	Socket.write(block);

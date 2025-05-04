@@ -18,14 +18,6 @@ void SetTotalQss(QApplication& A)
 	A.setStyleSheet(qssFile.readAll());
 }
 
-void ConnectSigSlot(QWidget& Main,QWidget& Chat)
-{
-	QObject::connect(&STcpMgr::GetInstance(), &STcpMgr::sigSwitchChatWgt, [&Main,&Chat]()
-	{
-		Main.close();
-		Chat.show();
-	});
-}
 
 int main(int argc, char *argv[])
 {
@@ -43,15 +35,13 @@ int main(int argc, char *argv[])
     SetTotalQss(a);
 
     MainWindow w;
-    WChatWgt ChatWgt;
-    ChatWgt.CreateWgt();
-
-    ConnectSigSlot(w, *ChatWgt.GetUI());
+    QObject::connect(&STcpMgr::GetInstance(), &STcpMgr::sigSwitchChatWgt, [&w]()
+    {
+	    w.close();
+	    WChatWgt::GetIns().GetUI()->show();
+    });
 
     w.show();
-    ChatWgt.GetUI()->close();
-
-    //emit STcpMgr::GetInstance().sigSwitchChatWgt();
 
     return a.exec();
 }

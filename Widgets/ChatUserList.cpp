@@ -6,6 +6,7 @@
 
 #include "ChatUserWid.h"
 #include "LoadingWgt.h"
+#include "MainChatWgt.h"
 #include "Common/GlobalDefine.h"
 
 CChatUserList::CChatUserList(QWidget* parent):
@@ -39,7 +40,7 @@ void CChatUserList::slotAdd()
 		return;
 	}
 	bLoading = true;
-	SLoadingWgt::Instance().PopShow(ListWgt->parentWidget());
+	SLoadingWgt::Instance().PopShow(WChatWgt::GetIns().GetUI());
 	SelfAddItems();
 
 	SLoadingWgt::Instance().HideStop();
@@ -56,7 +57,7 @@ void CChatUserList::SelfAddItems()
 		int head_i = randomValue % Test::HeadIcons.size();
 		int name_i = randomValue % Test::Names.size();
 
-		auto Item=AddInfoItem(std::make_unique<Infos::BaseUserInfo>("", Test::Names[name_i], Test::HeadIcons[head_i]));
+		auto Item=AddInfoItem(std::make_unique<Infos::BaseUserInfo>(0, Test::Names[name_i], Test::HeadIcons[head_i]));
 		if(auto ChatUserItem = qobject_cast<WChatUserWid*>(Item))
 		{
 			ChatUserItem->SetMessage(Test::Messages[str_i]);

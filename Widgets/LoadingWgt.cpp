@@ -22,8 +22,8 @@ SLoadingWgt& SLoadingWgt::Instance()
 
 	if (bFirst)
 	{
-		Ins.CreateWgt();
 		bFirst = false;
+		Ins.CreateWgt();
 	}
 
 	return Ins;
@@ -47,6 +47,7 @@ void SLoadingWgt::PopShow(QWidget* Parent)
 
 void SLoadingWgt::HideStop()
 {
+	if (!UI->isVisible())return;
 	UI->close();
 	if (Movie)Movie->stop();
 }

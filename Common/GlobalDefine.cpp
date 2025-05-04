@@ -100,7 +100,7 @@ const QString& ErrorCodes::GetErrorStr(const int Code)
 	return gNoneErrorStr;
 }
 
-Infos::BaseUserInfo::BaseUserInfo(const QString& InUID, const QString& InName, const QString& InIconPath):
+Infos::BaseUserInfo::BaseUserInfo(const int InUID, const QString& InName, const QString& InIconPath):
 	HeadIconPath(InIconPath),
 	Name(InName),
 	UID(InUID)
@@ -108,10 +108,41 @@ Infos::BaseUserInfo::BaseUserInfo(const QString& InUID, const QString& InName, c
 
 }
 
+Infos::BaseUserInfo::BaseUserInfo(const FAddFriendApply& AddFriendApply):
+	HeadIconPath(AddFriendApply.Icon),
+	Name(AddFriendApply.Name),
+	UID(AddFriendApply.FromUid)
+{
+
+}
+
+Infos::BaseUserInfo& Infos::BaseUserInfo::operator=(const BaseUserInfo& other)
+{
+	if (this != &other) // 防止自赋值
+	{
+		UID = other.UID; // QString深拷贝安全
+		Name = other.Name;
+		HeadIconPath = other.HeadIconPath;
+		Sex = other.Sex; // bool直接赋值
+		Desc = other.Desc;
+	}
+	return *this; // 返回左值引用
+}
+
 Infos::FSearchInfo::FSearchInfo(int uid, QString name, QString nick, QString desc, int sex):
 	UID(uid),
 	Name(name),
 	Desc(desc),
+	Sex(sex)
+{
+}
+
+Infos::FAddFriendApply::FAddFriendApply(int from_uid, const QString& name, const QString& desc, const QString& icon, const QString& nick, int sex):
+	FromUid(from_uid),
+	Name(name),
+	Desc(desc),
+	Icon(icon),
+	Nick(nick),
 	Sex(sex)
 {
 }

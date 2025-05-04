@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>693</width>
+    <width>558</width>
     <height>80</height>
    </rect>
   </property>
@@ -228,7 +228,7 @@
       </size>
      </property>
      <property name="text">
-      <string>已同意</string>
+      <string>同意</string>
      </property>
     </widget>
    </item>

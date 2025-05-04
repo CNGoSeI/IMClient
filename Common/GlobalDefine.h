@@ -50,12 +50,26 @@ namespace Net
 
 namespace ReqID
 {
-	constexpr int ID_GET_VARIFY_CODE{ 1001 };//获取验证码
-	constexpr int ID_REG_USER{ ID_GET_VARIFY_CODE+1 }; //注册用户
-	constexpr int ID_RESET_PWD{ ID_GET_VARIFY_CODE+2 }; //重置密码
-	constexpr int ID_LOGIN_USER{ ID_GET_VARIFY_CODE + 3 }; //登录
-	constexpr int ID_CHAT_LOGIN{ ID_GET_VARIFY_CODE + 4 }; //连接聊天服务器
-	constexpr int ID_CHAT_LOGIN_RSP{ ID_GET_VARIFY_CODE + 5}; //登陆聊天服务器回包
+	constexpr int ID_GET_VARIFY_CODE{1001}; //获取验证码
+	constexpr int ID_REG_USER{ID_GET_VARIFY_CODE + 1}; //注册用户
+	constexpr int ID_RESET_PWD{ID_GET_VARIFY_CODE + 2}; //重置密码
+	constexpr int ID_LOGIN_USER{ID_GET_VARIFY_CODE + 3}; //登录
+	constexpr int ID_CHAT_LOGIN{ID_GET_VARIFY_CODE + 4}; //连接聊天服务器
+	constexpr int ID_CHAT_LOGIN_RSP{ID_GET_VARIFY_CODE + 5}; //登陆聊天服务器回包
+	constexpr int ID_SEARCH_USER_REQ{1007}; //用户搜索请求
+	constexpr int ID_SEARCH_USER_RSP{1008}; //搜索用户回包
+	constexpr int ID_ADD_FRIEND_REQ{1009}; //添加好友申请
+	constexpr int ID_ADD_FRIEND_RSP{1010}; //申请添加好友回复
+	constexpr int ID_NOTIFY_ADD_FRIEND_REQ{1011}; //通知用户添加好友申请
+	constexpr int ID_AUTH_FRIEND_REQ{1013}; //认证好友请求
+	constexpr int ID_AUTH_FRIEND_RSP{1014}; //认证好友回复
+	constexpr int ID_NOTIFY_AUTH_FRIEND_REQ{1015}; //通知用户认证好友申请
+	constexpr int ID_TEXT_CHAT_MSG_REQ{1017}; //文本聊天信息请求
+	constexpr int ID_TEXT_CHAT_MSG_RSP{1018,}; //文本聊天信息回复
+	constexpr int ID_NOTIFY_TEXT_CHAT_MSG_REQ{1019}; //通知用户文本聊天信息
+	constexpr int ID_NOTIFY_OFF_LINE_REQ{1021}; //通知用户下线
+	constexpr int ID_HEART_BEAT_REQ{1023}; //心跳请求
+	constexpr int ID_HEARTBEAT_RSP{1024}; //心跳回复
 }
 
 namespace ErrorCodes
@@ -93,11 +107,15 @@ enum class EResizeArea {
 
 namespace Infos
 {
+	struct FAddFriendApply;
 	struct BaseUserInfo
 	{
 		BaseUserInfo()=default;
-		BaseUserInfo(const QString& InUID, const QString& InName, const QString& InIconPath);
-		QString UID{ "" };
+		BaseUserInfo(const int InUID, const QString& InName, const QString& InIconPath);
+		BaseUserInfo(const FAddFriendApply& AddFriendApply);
+		BaseUserInfo& operator=(const BaseUserInfo& other);
+
+		int UID{0};
 		QString Name{""};//昵称
 		QString HeadIconPath{ "" };
 		bool Sex{ 0 };//性别
@@ -112,6 +130,20 @@ namespace Infos
 		QString Nick{ "" };
 		QString Desc{ "" };
 		int Sex{ 0 };
+		QString Icon{ "" };
+	};
+
+	struct FAddFriendApply
+	{
+		FAddFriendApply(int from_uid, const QString& name, const QString& desc,
+		                const QString& icon, const QString& nick, int sex);
+		FAddFriendApply() {};
+		int FromUid{0};
+		QString Name{""};
+		QString Desc{""};
+		QString Icon{""};
+		QString Nick{""};
+		int Sex{0};
 	};
 
 }
@@ -147,4 +179,10 @@ namespace Test
 	};
 }
 
+namespace RedNodeName
+{
+	const QString ChatUsers{"ChatMsg"};
+	const QString ConUsers{ "ConMsg" };
+	const QString NewFriendReq{ ConUsers + '.' + "NewFriendReq" };
+}
 #endif

@@ -5,6 +5,8 @@
 #include <QAction>
 #include <qcoreevent.h>
 #include <qeventloop.h>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QLabel>
 #include <qlistwidget.h>
 #include <QMouseEvent>
@@ -25,6 +27,7 @@
 #include "SearchList.h"
 #include "ContactUserList.h"
 #include "Common/RedDotNode.h"
+#include "Common/TcpMgr.h"
 
 WChatWgt::WChatWgt(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::MainChatUI, parent)
@@ -37,6 +40,34 @@ WChatWgt::~WChatWgt()
 
 }
 
+WChatWgt& WChatWgt::GetIns()
+{
+	static bool bFrist{ true };
+	static WChatWgt MainChat(nullptr);
+	if(bFrist)
+	{
+		bFrist = false;
+		MainChat.CreateWgt();
+	}
+	
+	return MainChat;
+}
+
+void WChatWgt::slotTryFindUser()
+{
+	const auto& TargetName = Edt_Search->text();
+	if (TargetName.isEmpty())return;
+
+	SLoadingWgt::Instance().PopShow(GetUI());
+
+	QJsonObject jsonObj;
+	jsonObj["uid"] = TargetName;
+
+	QJsonDocument doc(jsonObj);
+	QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
+	emit STcpMgr::GetInstance().sigSendData(ReqID::ID_SEARCH_USER_REQ,jsonData);
+
+}
 
 bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
 {
@@ -128,6 +159,7 @@ bool WChatWgt::AddFriendEvent(QObject* watched, QEvent* event)
 				watched->setProperty("state", "normal");
 				UIHelper::RePolish(qobject_cast<QWidget*>(watched));
 				Stacked_Right->setCurrentWidget(Wgt_ApplyFriendPage->GetUI());
+				SRedDotMgr::Ins().NotifyTargetShow(false, RedNodeName::NewFriendReq.toStdString());
 			}
 		});
 
@@ -145,74 +177,18 @@ bool WChatWgt::AddFriendEvent(QObject* watched, QEvent* event)
 
 void WChatWgt::InitControls()
 {
-    ChatPage = new WChatPage(UI);
-    ChatPage->CreateWgt();
-
-    Stacked_Right= UIHelper::AssertFindChild<QStackedWidget*>(UI, "Stacked_Right");
-    Stacked_Right->addWidget(ChatPage->GetUI());
-    Stacked_Right->setCurrentWidget(ChatPage->GetUI());
-
-    Edt_Search = UI->findChild<QLineEdit*>("Edt_Search");
-    Q_ASSERT(Edt_Search);
-
-    auto Splitter = UIHelper::AssertFindChild<QSplitter*>(UI, "splitter");
-    Splitter->setStretchFactor(0, 5);
-    Splitter->setStretchFactor(1, 3);
+	InitPages();
 
     Btn_MsgModel = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_MsgModel");
     Btn_UserModel= UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_UserModel");
-
-	Lab_RedDotMsg = UIHelper::AssertFindChild<QLabel*>(UI, "Lab_RedDotMsg");
-	Lab_RedDotMsg->setVisible(false);
-    SRedDotMgr::Ins().CreateNode("ChatMsg", [this](bool bShow)
-    {
-	    Lab_RedDotMsg->setVisible(bShow);
-    });
+	Btn_ResizeSizeFlag = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_ResizeSizeFlag");
 
     //添加搜索按钮
     SearchAction = new QAction(QIcon(":/Skin/Image/Search.png"), "搜索", Edt_Search);
     Edt_Search->addAction(SearchAction, QLineEdit::LeadingPosition);
 
-    StateWgt_List = UI->findChild<QStackedWidget*>("Stacke_List");
-    Q_ASSERT(Edt_Search);
-
-    Wgt_UserLst = UI->findChild<QWidget*>("Wgt_UserLst");
-    Q_ASSERT(Wgt_UserLst);
-
-    Wgt_ConLst = UI->findChild<QWidget*>("Wgt_ConLst");
-    Q_ASSERT(Wgt_ConLst);
-
-    Wgt_SearchLst = UI->findChild<QWidget*>("Wgt_SearchLst");
-    Q_ASSERT(Wgt_SearchLst);
-
-    List_ChatUser = std::make_unique<CChatUserList>();
-    List_ChatUser->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "List_ChatUser"));
-
-    List_Search = std::make_unique<CSearchList>();
-    List_Search->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser"));
-    UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser")->adjustSize();
-
-	Wgt_ApplyFriendPage = new WApplyFriendPage(UI);
-	Wgt_ApplyFriendPage->CreateWgt();
-	Stacked_Right->addWidget(Wgt_ApplyFriendPage->GetUI());
-
-    LstContactUser = std::make_unique<CContactUserList>();
-    LstContactUser->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "List_ConUser"));
-
-    Btn_ResizeSizeFlag = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_ResizeSizeFlag");
-
-    Wgt_WndTitle= UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_WndTitle");
-
-    if(auto LayoutTitle = Wgt_WndTitle->layout())
-    {
-        Wgt_CloseTitle = new WCloseTitle(UI);
-        Wgt_CloseTitle->GetUI()->setParent(UI);
-        Wgt_CloseTitle->CreateWgt();
-        LayoutTitle->addWidget(Wgt_CloseTitle->GetUI());
-    }
-
-    Wgt_AddFriendAear= UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_AddFriendAear");
-    Wgt_AddFriendAear->setProperty("state", "normal");
+	InitRedDots();
+	InitLists();
 
     UI->setWindowFlags(UI->windowFlags() | Qt::FramelessWindowHint|Qt::Window);
     UI->setAttribute(Qt::WA_TranslucentBackground);//透明背景
@@ -222,7 +198,6 @@ void WChatWgt::InitControls()
     Btn_ResizeSizeFlag->installEventFilter(this);
     Wgt_AddFriendAear->installEventFilter(this);
 
-    AddChatUserList();
     StateWgt_List->setCurrentWidget(Wgt_UserLst);
 }
 
@@ -258,6 +233,8 @@ void WChatWgt::ConnectSigSlot()
 	{
 		ShowSearch(!Edt_Search->text().isEmpty());
 	});
+
+	connect(&STcpMgr::GetInstance(), &STcpMgr::sigFriendApply, Wgt_ApplyFriendPage,&WApplyFriendPage::slotAddFriendReqItem);
 }
 
 void WChatWgt::ShowSearch(bool bsearch)
@@ -276,12 +253,6 @@ void WChatWgt::ShowSearch(bool bsearch)
     }
 }
 
-void WChatWgt::AddChatUserList()
-{
-    // 创建QListWidgetItem，并设置自定义的widget
-   
-}
-
 void WChatWgt::HandleWindowResize(const QPoint& globalPos) {
     QRect newGeo = OriginalGeometry;
     QPoint delta = globalPos - DragStartPos;
@@ -292,4 +263,84 @@ void WChatWgt::HandleWindowResize(const QPoint& globalPos) {
 
     UI->setGeometry(newGeo);
     emit sigMainChatWgtSizeChanged();
+}
+
+void WChatWgt::InitPages()
+{
+	ChatPage = new WChatPage(UI);
+	ChatPage->CreateWgt();
+	Wgt_ApplyFriendPage = new WApplyFriendPage(UI);
+	Wgt_ApplyFriendPage->CreateWgt();
+	Wgt_AddFriendAear = UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_AddFriendAear");
+	Wgt_AddFriendAear->setProperty("state", "normal");
+
+	StateWgt_List = UI->findChild<QStackedWidget*>("Stacke_List");
+	Q_ASSERT(StateWgt_List);
+
+	Edt_Search = UI->findChild<QLineEdit*>("Edt_Search");
+	Q_ASSERT(Edt_Search);
+
+	Wgt_WndTitle = UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_WndTitle");
+	if (auto LayoutTitle = Wgt_WndTitle->layout())
+	{
+		Wgt_CloseTitle = new WCloseTitle(UI);
+		Wgt_CloseTitle->GetUI()->setParent(UI);
+		Wgt_CloseTitle->CreateWgt();
+		LayoutTitle->addWidget(Wgt_CloseTitle->GetUI());
+	}
+
+	auto Splitter = UIHelper::AssertFindChild<QSplitter*>(UI, "splitter");
+	Splitter->setStretchFactor(0, 5);
+	Splitter->setStretchFactor(1, 3);
+
+	Stacked_Right = UIHelper::AssertFindChild<QStackedWidget*>(UI, "Stacked_Right");
+	Stacked_Right->addWidget(ChatPage->GetUI());
+	Stacked_Right->setCurrentWidget(ChatPage->GetUI());
+	Stacked_Right->addWidget(Wgt_ApplyFriendPage->GetUI());
+}
+
+void WChatWgt::InitLists()
+{
+	Wgt_UserLst = UI->findChild<QWidget*>("Wgt_UserLst");
+	Q_ASSERT(Wgt_UserLst);
+
+	Wgt_ConLst = UI->findChild<QWidget*>("Wgt_ConLst");
+	Q_ASSERT(Wgt_ConLst);
+
+	Wgt_SearchLst = UI->findChild<QWidget*>("Wgt_SearchLst");
+	Q_ASSERT(Wgt_SearchLst);
+
+	List_ChatUser = std::make_unique<CChatUserList>();
+	List_ChatUser->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "List_ChatUser"));
+
+	List_Search = std::make_unique<CSearchList>();
+	List_Search->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser"));
+	UIHelper::AssertFindChild<QListWidget*>(GetUI(), "Lst_SearchUser")->adjustSize();
+
+	LstContactUser = std::make_unique<CContactUserList>();
+	LstContactUser->SetListWgt(UIHelper::AssertFindChild<QListWidget*>(GetUI(), "List_ConUser"));
+}
+
+void WChatWgt::InitRedDots()
+{
+	Lab_RedDotMsg = UIHelper::AssertFindChild<QLabel*>(UI, "Lab_RedDotMsg");
+	Lab_RedDotMsg->setVisible(false);
+	SRedDotMgr::Ins().CreateNode(RedNodeName::ChatUsers.toStdString(), [this](bool bShow)
+		{
+			Lab_RedDotMsg->setVisible(bShow);
+		});
+
+	Lab_RedDotCon = UIHelper::AssertFindChild<QLabel*>(UI, "Lab_RedDotCon");
+	Lab_RedDotCon->setVisible(false);
+	SRedDotMgr::Ins().CreateNode(RedNodeName::ConUsers.toStdString(), [this](bool bShow)
+		{
+			Lab_RedDotCon->setVisible(bShow);
+		});
+
+	Lab_RedDotNewCon = UIHelper::AssertFindChild<QLabel*>(UI, "Lab_RedDotNewCon");
+	Lab_RedDotNewCon->setVisible(false);
+	SRedDotMgr::Ins().CreateNode(RedNodeName::NewFriendReq.toStdString(), [this](bool bShow)
+		{
+			Lab_RedDotCon->setVisible(bShow);
+		});
 }

@@ -1,5 +1,11 @@
 ﻿#ifndef COMMON_REDDOTNODE_H
 #define COMMON_REDDOTNODE_H
+
+/************************************************
+ *				树状红点通知系统					*
+ *	按 父节点.子节点.孙节点的新师做树状分割		*
+ ************************************************/
+
 #include <functional>
 #include <list>
 #include <map>
@@ -14,6 +20,13 @@ public:
 	const std::string& GetTotalName() const { return TotalName; };
 	const std::string& GetNodeName() const { return NodeName; };
 	void DeleteChild(CRedDotNode* Child);
+
+	/**
+	 * 此函数会改变节点显示状态和父节点的子节点显示的数量
+	 * 相应显示控件显示切换也只应该由该函数管理
+	 * 是否切换显示由当前显示状态和现存的字节的显示数量影响
+	 * @param bNeedShow 是否显示
+	 */
 	void NotifyShow(bool bNeedShow);
 
 	/*
@@ -33,6 +46,7 @@ private:
 	bool bShow{ false };//是否处于显示状态
 	std::list<CRedDotNode*> Children;
 	int ChildrenShowCount{ 0 };//存在多少个直接子节点还在显示
+
 	FShowFunc ShowEvent;//显示状态变化时，调用此函数通知界面切换显示状态
 };
 
