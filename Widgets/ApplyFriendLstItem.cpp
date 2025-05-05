@@ -29,6 +29,12 @@ void WApplyFriendLstItem::SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo)
 	Info = std::move(InInfo);
 }
 
+void WApplyFriendLstItem::SetAgreedAlready()
+{
+	Btn_AddState->setText(tr("已同意"));
+	Btn_AddState->setEnabled(false);
+}
+
 void WApplyFriendLstItem::InitControls()
 {
 	Btn_AddState = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_AddState");
@@ -55,7 +61,6 @@ void WApplyFriendLstItem::ConnectSigSlot()
 
 		//发送tcp请求给chat server
 		emit STcpMgr::GetInstance().sigSendData(ReqID::ID_AUTH_FRIEND_REQ, jsonData);
-		Btn_AddState->setText(tr("已同意"));
-		Btn_AddState->setEnabled(false);
+		SetAgreedAlready();
 	});
 }

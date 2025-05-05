@@ -28,6 +28,7 @@
 #include "ContactUserList.h"
 #include "Common/RedDotNode.h"
 #include "Common/TcpMgr.h"
+#include "Common/UserMgr.h"
 
 WChatWgt::WChatWgt(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::MainChatUI, parent)
@@ -51,6 +52,16 @@ WChatWgt& WChatWgt::GetIns()
 	}
 	
 	return MainChat;
+}
+
+void WChatWgt::AddApplayFriendItem(const Infos::FAddFriendApply& Info,bool bShowReddot)
+{
+	Wgt_ApplyFriendPage->slotAddFriendReqItem(Info, bShowReddot);
+}
+
+void WChatWgt::AddConFriendItem(const Infos::BaseUserInfo& info)
+{
+	LstContactUser->AddInfoItem(std::make_unique<Infos::BaseUserInfo>(info));
 }
 
 void WChatWgt::slotTryFindUser()
@@ -178,6 +189,15 @@ bool WChatWgt::AddFriendEvent(QObject* watched, QEvent* event)
 void WChatWgt::InitControls()
 {
 	InitPages();
+
+	//头像
+	Lab_HeadIcon= UIHelper::AssertFindChild<QLabel*>(UI, "Lab_HeadIcon");
+	int randomValue = QRandomGenerator::global()->bounded(100); // 生成0到99之间的随机整数
+	int head_i = randomValue % Test::HeadIcons.size();
+	SUserMgr::GetInstance().SetIcon(Test::HeadIcons[head_i]);
+	QPixmap Icon(SUserMgr::GetInstance().GetIcon());
+	Lab_HeadIcon->setPixmap(Icon.scaled(Lab_HeadIcon->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+	Lab_HeadIcon->setScaledContents(true);
 
     Btn_MsgModel = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_MsgModel");
     Btn_UserModel= UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_UserModel");

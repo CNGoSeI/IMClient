@@ -2,6 +2,8 @@
 
 #include <QListWidget>
 
+#include "ApplyFriendLstItem.h"
+#include "ConUserItem.h"
 #include "ListApplyFriend.h"
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
@@ -12,11 +14,17 @@ WApplyFriendPage::WApplyFriendPage(QWidget* parent):
 {
 }
 
-void WApplyFriendPage::slotAddFriendReqItem(const Infos::FAddFriendApply& Info)
+void WApplyFriendPage::slotAddFriendReqItem(const Infos::FAddFriendApply& Info,bool bNeedShowReddot)
 {
 	//auto UserInfo = s;
-	ApplyFriendLstMgr->AddInfoItem(std::make_unique<Infos::BaseUserInfo>(Info));
-	SRedDotMgr::Ins().NotifyTargetShow(true, RedNodeName::NewFriendReq.toStdString());
+	auto item=ApplyFriendLstMgr->AddInfoItem(std::make_unique<Infos::BaseUserInfo>(Info));
+	if(bNeedShowReddot)SRedDotMgr::Ins().NotifyTargetShow(true, RedNodeName::NewFriendReq.toStdString());
+	if(bNeedShowReddot)return;
+
+	if(auto AddFriendApplayItem= qobject_cast<WApplyFriendLstItem*>(item))
+	{
+		AddFriendApplayItem->SetAgreedAlready();
+	}
 }
 
 void WApplyFriendPage::InitControls()

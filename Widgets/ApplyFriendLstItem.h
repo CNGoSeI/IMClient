@@ -14,6 +14,7 @@ class WApplyFriendLstItem:public IUserInfoLstItem
 public:
 	WApplyFriendLstItem(QWidget* parent);
 	void SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo) override;
+	void SetAgreedAlready();//已经同意
 protected:
 	void InitControls() override;
 	void ConnectSigSlot() override;

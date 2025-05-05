@@ -8,6 +8,8 @@
 #include "LoadingWgt.h"
 #include "MainChatWgt.h"
 #include "Common/GlobalDefine.h"
+#include "Common/TcpMgr.h"
+#include "Common/UserMgr.h"
 
 CChatUserList::CChatUserList(QWidget* parent):
 	ICustomList(parent)
@@ -50,6 +52,7 @@ void CChatUserList::slotAdd()
 void CChatUserList::SelfAddItems()
 {
 	//TODO::最大加载数量了不再加载
+	/*
 	for (int i = 0; i < 13; i++)
 	{
 		int randomValue = QRandomGenerator::global()->bounded(100); // 生成0到99之间的随机整数
@@ -64,11 +67,23 @@ void CChatUserList::SelfAddItems()
 		}
 
 	}
+	*/
 }
 
 void CChatUserList::AfterSetListFunc()
 {
 	slotAdd();
+	connect(&STcpMgr::GetInstance(), &STcpMgr::sigAddAuthFriend, [this](const Infos::BaseUserInfo&  baseinfo)
+	{
+			//判断如果已经是好友则跳过
+		auto bfriend = SUserMgr::GetInstance().CheckFriendById(baseinfo.UID);
+		if (bfriend) {
+			return;
+		}
+
+		auto Item = AddInfoItem(std::make_unique<Infos::BaseUserInfo>(baseinfo.UID, baseinfo.Name, baseinfo.HeadIconPath));
+		UId2Item.emplace(baseinfo.UID, Item);
+	});
 }
 
 void CChatUserList::LoadingItems()

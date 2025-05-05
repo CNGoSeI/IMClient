@@ -23,5 +23,6 @@ protected:
 	void SelfAddItems() override;
 	void AfterSetListFunc() override;
 	void LoadingItems() override;
+
 };
 #endif // CHATUSERLIST_H

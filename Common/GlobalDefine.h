@@ -114,6 +114,7 @@ namespace Infos
 		BaseUserInfo(const int InUID, const QString& InName, const QString& InIconPath);
 		BaseUserInfo(const FAddFriendApply& AddFriendApply);
 		BaseUserInfo& operator=(const BaseUserInfo& other);
+		BaseUserInfo(const Infos::BaseUserInfo& other);
 
 		int UID{0};
 		QString Name{""};//昵称
@@ -177,6 +178,7 @@ namespace Test
 		"python",
 		"rust"
 	};
+
 }
 
 namespace RedNodeName

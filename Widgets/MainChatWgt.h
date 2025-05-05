@@ -34,7 +34,8 @@ class WChatWgt : public ILoadUIWgtBase
 public:
     virtual ~WChatWgt();
     static WChatWgt& GetIns();
-
+    void AddApplayFriendItem(const Infos::FAddFriendApply& Info,bool);//不提示红点的方式添加好友请求
+    void AddConFriendItem(const Infos::BaseUserInfo& info);
 public slots:
     void slotTryFindUser();//搜索框的点击添加联系人之后，实行该函数
 signals:
@@ -70,6 +71,7 @@ private:
     QWidget* Wgt_SearchLst{ nullptr };
     QWidget* Wgt_ConLst{ nullptr };
     QWidget* Wgt_AddFriendAear{ nullptr };
+    QLabel* Lab_HeadIcon{ nullptr };
     QPushButton* Btn_LineEdtClear{ nullptr };
     QPushButton* Btn_ResizeSizeFlag{ nullptr };//用来辅助界面缩放的按钮
     QPushButton* Btn_MsgModel{ nullptr };

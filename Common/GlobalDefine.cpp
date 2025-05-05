@@ -129,6 +129,14 @@ Infos::BaseUserInfo& Infos::BaseUserInfo::operator=(const BaseUserInfo& other)
 	return *this; // 返回左值引用
 }
 
+Infos::BaseUserInfo::BaseUserInfo(const Infos::BaseUserInfo& other)
+	: UID(other.UID),          // QString 隐式共享，深拷贝安全
+	Name(other.Name),
+	HeadIconPath(other.HeadIconPath),
+	Sex(other.Sex),          // bool 直接复制
+	Desc(other.Desc)
+{}
+
 Infos::FSearchInfo::FSearchInfo(int uid, QString name, QString nick, QString desc, int sex):
 	UID(uid),
 	Name(name),

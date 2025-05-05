@@ -3,6 +3,7 @@
 #include <qdatastream.h>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 #include "GlobalDefine.h"
 #include "UserMgr.h"
@@ -46,12 +47,24 @@ void STcpMgr::InitHandlers()
 			SUserMgr::GetInstance().SetName(jsonObj["name"].toString());
 			SUserMgr::GetInstance().SetToken(jsonObj["token"].toString());
 
+			SUserMgr::GetInstance().SetToken(jsonObj["token"].toString());
+
 			qDebug("于登录聊天室获取回复时 登陆成功,uid: %d Name %s Token: %s",
 			       SUserMgr::GetInstance().GetUid(),
 			       SUserMgr::GetInstance().GetName().toUtf8().data(),
 			       SUserMgr::GetInstance().GetToken().toUtf8().data());
 
 			emit sigSwitchChatWgt();
+
+			//好友申请列表
+			if (jsonObj.contains("apply_list")) {
+				SUserMgr::GetInstance().AppendApplyList(jsonObj["apply_list"].toArray());
+			}
+
+			//添加好友列表
+			if (jsonObj.contains("friend_list")) {
+				SUserMgr::GetInstance().AppendFriendList(jsonObj["friend_list"].toArray());
+			}
 	});
 
 	ReqId2Callback.emplace(ReqID::ID_SEARCH_USER_RSP, [this](int Id, int Len, QByteArray& Data)
@@ -89,9 +102,44 @@ void STcpMgr::InitHandlers()
 		apply_info.Nick = jsonObj["nick"].toString();
 		apply_info.Sex = jsonObj["sex"].toInt();
 
-		emit sigFriendApply(apply_info);
+		emit sigFriendApply(apply_info,true);
 	});
 
+	ReqId2Callback.emplace(ReqID::ID_AUTH_FRIEND_RSP, [this](int Id, int Len, QByteArray& Data)
+	{
+		QJsonObject jsonObj;
+		bool Succes = PaserBaseDate(Id, Data, jsonObj);
+		if (!Succes)return;
+
+		auto name = jsonObj["name"].toString();
+		auto nick = jsonObj["nick"].toString();
+		auto icon = jsonObj["icon"].toString();
+		auto sex = jsonObj["sex"].toInt();
+		auto uid = jsonObj["uid"].toInt();
+		Infos::BaseUserInfo BaseInfo(uid, name, icon);
+		BaseInfo.Sex = sex;
+		SUserMgr::GetInstance().AddFriend(BaseInfo);
+		emit sigAuthRsp(BaseInfo);
+	});
+
+	ReqId2Callback.emplace(ReqID::ID_NOTIFY_AUTH_FRIEND_REQ, [this](int Id, int Len, QByteArray& Data)
+		{
+			QJsonObject jsonObj;
+			bool Succes = PaserBaseDate(Id, Data, jsonObj);
+			if (!Succes)return;
+
+			int from_uid = jsonObj["fromuid"].toInt();//对方的id
+			QString name = jsonObj["name"].toString();
+			QString nick = jsonObj["nick"].toString();
+			QString icon = jsonObj["icon"].toString();
+			int sex = jsonObj["sex"].toInt();
+
+			Infos::BaseUserInfo BaseInfo(from_uid, name, icon);
+			BaseInfo.Sex = sex;
+			BaseInfo.Desc = nick;
+			SUserMgr::GetInstance().AddFriend(BaseInfo);
+			emit sigAddAuthFriend(BaseInfo);
+		});
 }
 
 void STcpMgr::HandleMsg(int ReqId, int len, QByteArray& data)

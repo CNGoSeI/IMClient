@@ -17,7 +17,7 @@ public:
 	WApplyFriendPage(QWidget* parent);
 
 public slots:
-	void slotAddFriendReqItem(const Infos::FAddFriendApply& Info);//添加一个好友请求item
+	void slotAddFriendReqItem(const Infos::FAddFriendApply& Info,bool bNeedShowReddot);//添加一个好友请求item
 protected:
 	void InitControls() override;
 	void ConnectSigSlot() override;

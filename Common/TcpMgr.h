@@ -7,6 +7,11 @@
 
 namespace Infos
 {
+	struct BaseUserInfo;
+}
+
+namespace Infos
+{
 	struct FAddFriendApply;
 }
 
@@ -37,7 +42,9 @@ signals:
     void sigLoginFailed(int);//登录请求回调的错误
     void sigSwitchChatWgt();
     void sigUserSearch(const Infos::FSearchInfo& info);
-    void sigFriendApply(const Infos::FAddFriendApply&);//提示好友申请通知
+    void sigFriendApply(const Infos::FAddFriendApply&,bool bNeedShowRed);//提示好友申请通知
+    void sigAuthRsp(const Infos::BaseUserInfo&);//好友认证通过通知
+    void sigAddAuthFriend(const Infos::BaseUserInfo&);//好友认证通过添加好友
 private:
     STcpMgr();
 

@@ -35,6 +35,7 @@ public:
 	QListWidget* ListWgt{nullptr};
 
 protected:
+	std::unordered_map<int, IUserInfoLstItem*>UId2Item;
 	bool bLoading{ false };
 };
 

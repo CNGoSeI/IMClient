@@ -5,6 +5,8 @@
 
 #include "ConUserItem.h"
 #include "Common/GlobalDefine.h"
+#include "Common/TcpMgr.h"
+#include "Common/UserMgr.h"
 
 CContactUserList::CContactUserList(QWidget* parent):
     ICustomList(parent)
@@ -30,12 +32,24 @@ IUserInfoLstItem* CContactUserList::MakeNewUserItem()
 void CContactUserList::AfterSetListFunc()
 {
     SelfAddItems();
+
+    connect(&STcpMgr::GetInstance(), &STcpMgr::sigAddAuthFriend, [this](const Infos::BaseUserInfo& baseinfo)
+        {
+            //判断如果已经是好友则跳过
+            auto bfriend = SUserMgr::GetInstance().CheckFriendById(baseinfo.UID);
+            if (bfriend) {
+                return;
+            }
+
+            auto Item = AddInfoItem(std::make_unique<Infos::BaseUserInfo>(baseinfo.UID, baseinfo.Name, baseinfo.HeadIconPath));
+            UId2Item.emplace(baseinfo.UID, Item);
+        });
 }
 
 void CContactUserList::SelfAddItems()
 {
     // 创建QListWidgetItem，并设置自定义的widget
-    for (int i = 0; i < 13; i++) {
+    /*for (int i = 0; i < 13; i++) {
         int randomValue = QRandomGenerator::global()->bounded(100); // 生成0到99之间的随机整数
         int str_i = randomValue % Test::Messages.size();
         int head_i = randomValue % Test::HeadIcons.size();
@@ -44,8 +58,8 @@ void CContactUserList::SelfAddItems()
         auto info = std::make_unique<Infos::BaseUserInfo>(0, Test::Names[name_i], Test::HeadIcons[head_i]);
         info->Desc = Test::Messages[str_i];//当作slogen吧
         AddInfoItem(std::move(info));
+    }*/
 
-    }
 }
 
 void CContactUserList::LoadingItems()
