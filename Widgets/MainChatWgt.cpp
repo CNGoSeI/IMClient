@@ -64,6 +64,35 @@ void WChatWgt::AddConFriendItem(const Infos::BaseUserInfo& info)
 	LstContactUser->AddInfoItem(std::make_unique<Infos::BaseUserInfo>(info));
 }
 
+void WChatWgt::SwitchToChatPage(const Infos::BaseUserInfo& info)
+{
+	WChatPage* Page = TryFindChatPage(info.UID);
+
+
+	Stacked_Right->setCurrentWidget(Page->GetUI());
+	Page->SetTargetInfo(info);
+}
+
+WChatPage* WChatWgt::TryFindChatPage(int uid)
+{
+	auto it = UId2ChatPage.find(uid);
+	WChatPage* Page{ nullptr };
+	if (it == UId2ChatPage.end())
+	{
+		Page = new WChatPage(UI);
+		Page->CreateWgt();
+		Stacked_Right->addWidget(Page->GetUI());
+		UId2ChatPage.emplace(uid, Page);
+		auto FrienInfo = SUserMgr::GetInstance().GetFriendById(uid);
+		Page->SetTargetInfo(*FrienInfo);
+	}
+	else
+	{
+		Page = it->second;
+	}
+	return Page;
+}
+
 void WChatWgt::slotTryFindUser()
 {
 	const auto& TargetName = Edt_Search->text();
@@ -78,6 +107,26 @@ void WChatWgt::slotTryFindUser()
 	QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
 	emit STcpMgr::GetInstance().sigSendData(ReqID::ID_SEARCH_USER_REQ,jsonData);
 
+}
+
+void WChatWgt::slotNotifyChatMsg(const QString& HtmlContent, const int UID,bool bSelf)
+{
+	WChatPage* Page= TryFindChatPage(UID);
+
+	auto itemIt = List_ChatUser->FindItemByUID(UID);
+	WChatUserWid* ChatItem{ nullptr };
+	if (!itemIt)
+	{
+		ChatItem = qobject_cast<WChatUserWid*>(
+			List_ChatUser->AddInfoItem(std::make_unique<Infos::BaseUserInfo>(Page->GetTargetInfo())));
+	}
+	else
+	{
+		ChatItem = qobject_cast<WChatUserWid*>(itemIt);
+	}
+
+	ChatItem->RedControl->NotifyShow(!bSelf);
+	Page->AddMessage(HtmlContent, bSelf);
 }
 
 bool WChatWgt::eventFilter(QObject* watched, QEvent* event)
@@ -255,6 +304,7 @@ void WChatWgt::ConnectSigSlot()
 	});
 
 	connect(&STcpMgr::GetInstance(), &STcpMgr::sigFriendApply, Wgt_ApplyFriendPage,&WApplyFriendPage::slotAddFriendReqItem);
+	connect(&STcpMgr::GetInstance(), &STcpMgr::sigTextChatMsg, this, &WChatWgt::slotNotifyChatMsg);
 }
 
 void WChatWgt::ShowSearch(bool bsearch)

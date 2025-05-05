@@ -42,7 +42,6 @@ void CContactUserList::AfterSetListFunc()
             }
 
             auto Item = AddInfoItem(std::make_unique<Infos::BaseUserInfo>(baseinfo.UID, baseinfo.Name, baseinfo.HeadIconPath));
-            UId2Item.emplace(baseinfo.UID, Item);
         });
 }
 

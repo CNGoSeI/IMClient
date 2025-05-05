@@ -26,6 +26,7 @@ public:
     void SetItemType(EListItemType itemType) { ItemType = itemType;};
     EListItemType GetItemType() const { return ItemType; };
     virtual void BeClicked(QListWidgetItem* item) {};
+    virtual void BeDoubelClicked(QListWidgetItem* item) {};
 protected:
     EListItemType ItemType;
 };

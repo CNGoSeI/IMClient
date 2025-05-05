@@ -21,6 +21,7 @@ public:
 	ICustomList(QWidget* parent = nullptr);
 	void SetListWgt(QListWidget* Target);
 	IUserInfoLstItem* AddInfoItem(std::unique_ptr<Infos::BaseUserInfo> Info);
+	IUserInfoLstItem* FindItemByUID(int uid);
 protected:
 	bool eventFilter(QObject* watched, QEvent* event) override;
 	virtual void AppendWheelEvent(QWheelEvent* event,int,int){};//滚到最新处需要执行的函数

@@ -36,8 +36,11 @@ public:
     static WChatWgt& GetIns();
     void AddApplayFriendItem(const Infos::FAddFriendApply& Info,bool);//不提示红点的方式添加好友请求
     void AddConFriendItem(const Infos::BaseUserInfo& info);
+    void SwitchToChatPage(const Infos::BaseUserInfo& info);//切换到聊天界面，并且设置聊天信息
+    WChatPage* TryFindChatPage(int uid);//查找聊天界面，没有则添加
 public slots:
     void slotTryFindUser();//搜索框的点击添加联系人之后，实行该函数
+    void slotNotifyChatMsg(const QString& HtmlContent,const int UID,bool bSelf);
 signals:
     void sigMainChatWgtSizeChanged();
     void sigClickedAddFriendArear();
@@ -89,6 +92,8 @@ private:
     QLabel* Lab_RedDotMsg{ nullptr };
     QLabel* Lab_RedDotCon{ nullptr };
     QLabel* Lab_RedDotNewCon{ nullptr };
+
+    std::unordered_map<int, WChatPage*>UId2ChatPage;//用户对应的聊天框
 
     const int ResizeBorderWidth = 20;//光标检测区域补正
     bool bInDragBtn{ false };//在拖拽按钮中

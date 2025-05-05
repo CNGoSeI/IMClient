@@ -2,6 +2,7 @@
 
 #include <QLabel>
 
+#include "MainChatWgt.h"
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
 
@@ -18,6 +19,8 @@ void WConUserItem::SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo)
 	QPixmap Icon(InInfo->HeadIconPath);
 	Lab_Icon->setPixmap(Icon.scaled(Lab_Icon->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 	Lab_Icon->setScaledContents(true);
+
+	Info = std::move(InInfo);
 }
 
 void WConUserItem::InitControls()
@@ -34,4 +37,9 @@ void WConUserItem::ConnectSigSlot()
 
 WConUserItem::~WConUserItem()
 {
+}
+
+void WConUserItem::BeDoubelClicked(QListWidgetItem* item)
+{
+	WChatWgt::GetIns().SwitchToChatPage(*Info);
 }

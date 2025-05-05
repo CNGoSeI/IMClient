@@ -1,6 +1,9 @@
 ﻿#include "ChatPageWgt.h"
 
 #include <qboxlayout.h>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QLabel>
 #include <QPushButton>
 #include <QWidget>
 #include <QSplitter>
@@ -10,11 +13,25 @@
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
 #include "InputTextEdit.h"
+#include "MainChatWgt.h"
 #include "Common/RedDotNode.h"
+#include "Common/TcpMgr.h"
+#include "Common/UserMgr.h"
 
 WChatPage::WChatPage(QWidget* parent):
 	ILoadUIWgtBase(WgtFile::ChatPageWgt,parent)
 {
+}
+
+void WChatPage::SetTargetInfo(const Infos::BaseUserInfo& info)
+{
+	ChatTarget = info;
+	Lab_Title->setText(info.Name);
+}
+
+void WChatPage::AddMessage(const QString& HtmlCon, bool bSelf)
+{
+	ChatAreaControl->AddMsgItem(bSelf, HtmlCon.toUtf8());
 }
 
 void WChatPage::slotMainChatSizeChanged()
@@ -34,6 +51,8 @@ void WChatPage::InitControls()
 	Btn_Send = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_Send");
 	Btn_Recive = UIHelper::AssertFindChild<QPushButton*>(UI, "Btn_Recive");
 
+	Lab_Title = UIHelper::AssertFindChild<QLabel*>(UI, "Lab_Title");
+
 	Wgt_EditChat = UIHelper::AssertFindChild<QWidget*>(UI, "Wgt_EditChat");
 	Wgt_EditChat->setLayout(new QVBoxLayout);
 	
@@ -52,7 +71,14 @@ void WChatPage::ConnectSigSlot()
 	{
 		QString htmlContent = Edt_Chat->toHtml();
 		if (htmlContent.isEmpty())return;
-		ChatAreaControl->AddMsgItem(true, htmlContent.toUtf8());
+		WChatWgt::GetIns().slotNotifyChatMsg(htmlContent, ChatTarget.UID,true);
+		QJsonObject textObj;
+		textObj["fromuid"] = SUserMgr::GetInstance().GetUid();
+		textObj["touid"] = ChatTarget.UID;
+		textObj["text_array"] = htmlContent;
+		QJsonDocument doc(textObj);
+		QByteArray jsonData = doc.toJson(QJsonDocument::Compact);
+		emit STcpMgr::GetInstance().sigSendData(ReqID::ID_TEXT_CHAT_MSG_REQ, jsonData);
 		Edt_Chat->clear();
 	});
 

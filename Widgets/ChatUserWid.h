@@ -18,6 +18,8 @@ public:
     void SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo) override;
     void SetMessage(const QString& msg);
     void BeClicked(QListWidgetItem* item) override;
+    void BeDoubelClicked(QListWidgetItem* item) override;
+    CRedDotNode* RedControl{ nullptr };
 protected:
     void InitControls() override;
 
@@ -30,6 +32,6 @@ private:
     QLabel* Lab_UserMsg{ nullptr };
     QLabel* Lab_UserName{ nullptr };
     QLabel* Lab_Red{ nullptr };
-    CRedDotNode* RedControl{ nullptr };
+    
 };
 #endif // CHATUSERWID_H

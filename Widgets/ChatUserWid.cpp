@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <qpixmap.h>
 
+#include "MainChatWgt.h"
 #include "WidgetFilesHelper.h"
 #include "Common/GlobalDefine.h"
 #include "Common/RedDotNode.h"
@@ -32,6 +33,7 @@ void WChatUserWid::SetInfo(std::unique_ptr<Infos::BaseUserInfo> InInfo)
 	Lab_Icon->setPixmap(Icon.scaled(Lab_Icon->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
 	Lab_Icon->setScaledContents(true);
 	Lab_UserName->setText(Name);
+	Info = std::move(InInfo);
 }
 
 void WChatUserWid::SetMessage(const QString& msg)
@@ -43,6 +45,11 @@ void WChatUserWid::SetMessage(const QString& msg)
 void WChatUserWid::BeClicked(QListWidgetItem* item)
 {
 	RedControl->NotifyShow(false);
+}
+
+void WChatUserWid::BeDoubelClicked(QListWidgetItem* item)
+{
+	WChatWgt::GetIns().SwitchToChatPage(*Info);
 }
 
 void WChatUserWid::InitControls()

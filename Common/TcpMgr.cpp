@@ -140,6 +140,15 @@ void STcpMgr::InitHandlers()
 			SUserMgr::GetInstance().AddFriend(BaseInfo);
 			emit sigAddAuthFriend(BaseInfo);
 		});
+
+	ReqId2Callback.emplace(ReqID::ID_NOTIFY_TEXT_CHAT_MSG_REQ, [this](int Id, int Len, QByteArray& Data)
+		{
+			QJsonObject jsonObj;
+			bool Succes = PaserBaseDate(Id, Data, jsonObj);
+			if (!Succes)return;
+
+			emit sigTextChatMsg(jsonObj["text_array"].toString(), jsonObj["fromuid"].toInt());
+		});
 }
 
 void STcpMgr::HandleMsg(int ReqId, int len, QByteArray& data)

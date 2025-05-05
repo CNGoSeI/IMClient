@@ -18,6 +18,7 @@ protected:
 
 public:
 	~WConUserItem() override;
+	void BeDoubelClicked(QListWidgetItem* item) override;
 
 private:
 	QLabel* Lab_BigName{nullptr};

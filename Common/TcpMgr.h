@@ -45,6 +45,7 @@ signals:
     void sigFriendApply(const Infos::FAddFriendApply&,bool bNeedShowRed);//提示好友申请通知
     void sigAuthRsp(const Infos::BaseUserInfo&);//好友认证通过通知
     void sigAddAuthFriend(const Infos::BaseUserInfo&);//好友认证通过添加好友
+    void sigTextChatMsg(const QString& HtmlContent, const int FromUID,bool bSelf=false);//好友发来聊天信息
 private:
     STcpMgr();
 

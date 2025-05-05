@@ -31,6 +31,15 @@ void ICustomList::SetListWgt(QListWidget* Target)
 		}
 	});
 
+	connect(ListWgt, &QListWidget::itemDoubleClicked, [this](QListWidgetItem* item)
+		{
+			QWidget* itemWidget = ListWgt->itemWidget(item);
+			if (auto ItemWgt = ILoadUIWgtBase::GetOwner<IListItemWgt>(itemWidget))
+			{
+				ItemWgt->BeDoubelClicked(item);
+			}
+		});
+
 	// 安装事件过滤器
 	ListWgt->viewport()->installEventFilter(this);
 
@@ -41,13 +50,19 @@ IUserInfoLstItem* ICustomList::AddInfoItem(std::unique_ptr<Infos::BaseUserInfo> 
 {
 	auto* add_user_item = MakeNewUserItem();
 	add_user_item->CreateWgt();
-	add_user_item->SetInfo(std::move(Info));
+	if(Info)UId2Item.emplace(Info->UID, add_user_item);
 	QListWidgetItem* item = new QListWidgetItem;
 	item->setSizeHint(add_user_item->GetUI()->sizeHint());
+	add_user_item->SetInfo(std::move(Info));
 	ListWgt->addItem(item);
 	ListWgt->setItemWidget(item, add_user_item->GetUI());
-
 	return add_user_item;
+}
+
+IUserInfoLstItem* ICustomList::FindItemByUID(int uid)
+{
+	auto it = UId2Item.find(uid);
+	return it == UId2Item.end() ? nullptr : it->second;
 }
 
 bool ICustomList::eventFilter(QObject* watched, QEvent* event)
